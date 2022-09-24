@@ -2,8 +2,10 @@ name: dotnet package
 on: [push]
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
     strategy:
       matrix:
         dotnet-version: [ '6.0.x' ]
