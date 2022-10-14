@@ -1,19 +1,20 @@
 ﻿using Dybal.Utils.Guards;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Tests.Dybal.Utils.Guards;
 
-public class NotNullOrWhiteSpaceTests : TestBase
+public class NotNullOrWhiteSpaceTests : UnitTestsBase
 {
     [Fact]
     public void Should_NotThrows_When_VariableWithValue()
     {
         // Arrange
         var value = "non-empty";
-
+        
         // Act
-        Guard.NotNullOrWhiteSpace(value);
-
+        Guard.Argument(value).NotNullOrWhiteSpace();
+        
         // Assert
         // doesn't throw any exception
     }
@@ -25,29 +26,28 @@ public class NotNullOrWhiteSpaceTests : TestBase
         var sample = new { Value = "non-empty" };
 
         // Act
-        Guard.NotNullOrWhiteSpace(sample.Value);
+        Guard.Argument(sample.Value).NotNullOrWhiteSpace();
 
         // Assert
         // doesn't throw any exception
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_VariableWithoutValue()
+    public void ShouldThrows_ArgumentException_When_VariableNull()
     {
         // Arrange
         string? value = null;
-            
+
         void Act()
         {
-            Guard.NotNullOrWhiteSpace(value);
+            Guard.Argument(value).NotNullOrWhiteSpace();
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value cannot be null or white space string. (Parameter 'value')", ex.Message);
     }
-
-
+    
     [Theory]
     [InlineData(" ")]
     [InlineData("\t")]
@@ -56,7 +56,7 @@ public class NotNullOrWhiteSpaceTests : TestBase
     {
         void Act()
         {
-            Guard.NotNullOrWhiteSpace(value);
+            Guard.Argument(value).NotNullOrWhiteSpace();
         }
 
         // Assert
@@ -64,22 +64,68 @@ public class NotNullOrWhiteSpaceTests : TestBase
         Assert.Equal("Value cannot be null or white space string. (Parameter 'value')", ex.Message);
     }
 
-    [Theory]
-    [InlineData(" ")]
-    [InlineData("\t")]
-    [InlineData("\n")]
-    public void ShouldThrows_ArgumentException_When_PropertyWithoutValue(string value)
+
+    [Fact]
+    public void ShouldThrows_ArgumentException_When_PropertyNull()
     {
         // Arrange
-        var sample = new { Value = value };
-            
+        var sample = new { Value = (string?)null };
+
         void Act()
         {
-            Guard.NotNullOrWhiteSpace(sample.Value);
+            Guard.Argument(sample.Value).NotNullOrWhiteSpace();
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value cannot be null or white space string. (Parameter 'sample.Value')", ex.Message);
+    }
+
+    [Theory]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    [InlineData("\n")]
+    public void ShouldThrows_ArgumentException_When_PropertyWhitespace(string value)
+    {
+        // Arrange
+        var sample = new { Value = value };
+
+        void Act()
+        {
+            Guard.Argument(sample.Value).NotNullOrWhiteSpace();
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal("Value cannot be null or white space string. (Parameter 'sample.Value')", ex.Message);
+    }
+
+    [Fact]
+    public void Should_NotThrows_When_GuardIsNotActive()
+    {
+        // Arrange
+        string? value = null;
+
+        // Act
+        Guard.Argument(value).If(false).NotNullOrWhiteSpace();
+
+        // Assert
+        // doesn't throw any exception
+    }
+
+    [Fact]
+    public void ShouldThrows_ArgumentException_When_GuardIsActive()
+    {
+        // Arrange
+        string? value = null;
+
+        void Act()
+        {
+            Guard.Argument(value).If(true).NotNullOrWhiteSpace();
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal("Value cannot be null or white space string. (Parameter 'value')", ex.Message);
     }
 }

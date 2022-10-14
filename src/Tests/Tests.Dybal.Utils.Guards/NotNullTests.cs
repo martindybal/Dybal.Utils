@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards;
 
-public class NotNullTests : TestBase
+public class NotNullTests : UnitTestsBase
 {
     [Fact]
     public void Should_NotThrows_When_VariableHasValue()
@@ -12,7 +12,7 @@ public class NotNullTests : TestBase
         object value = "value";
 
         // Act
-        Guard.NotNull(value);
+        Guard.Argument(value).NotNull();
 
         // Assert
         // doesn't throw any exception
@@ -25,7 +25,7 @@ public class NotNullTests : TestBase
         int? value = 0;
 
         // Act
-        Guard.NotNull(value);
+        Guard.Argument(value).NotNull();
 
         // Assert
         // doesn't throw any exception
@@ -38,7 +38,7 @@ public class NotNullTests : TestBase
         var sample = new { Value = (object?)"value" };
 
         // Act
-        Guard.NotNull(sample.Value);
+        Guard.Argument(sample.Value).NotNull();
 
         // Assert
         // doesn't throw any exception
@@ -49,10 +49,10 @@ public class NotNullTests : TestBase
     {
         // Arrange
         object? value = null;
-            
+
         void Act()
         {
-            Guard.NotNull(value);
+            Guard.Argument(value).NotNull();
         }
 
         // Assert
@@ -65,10 +65,10 @@ public class NotNullTests : TestBase
     {
         // Arrange
         int? value = null;
-            
+
         void Act()
         {
-            Guard.NotNull(value);
+            Guard.Argument(value).NotNull();
         }
 
         // Assert
@@ -81,14 +81,43 @@ public class NotNullTests : TestBase
     {
         // Arrange
         var sample = new { Value = (object?)null };
-            
+
         void Act()
         {
-            Guard.NotNull(sample.Value);
+            Guard.Argument(sample.Value).NotNull();
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentNullException>(Act);
         Assert.Equal("Value cannot be null. (Parameter 'sample.Value')", ex.Message);
+    }
+
+    [Fact]
+    public void Should_NotThrows_When_GuardIsNotActive()
+    {
+        // Arrange
+        object? value = null;
+
+        // Act
+        Guard.Argument(value).If(false).NotNull();
+
+        // Assert
+        // doesn't throw any exception
+    }
+
+    [Fact]
+    public void ShouldThrows_ArgumentNullException_When_GuardIsActive()
+    {
+        // Arrange
+        object? value = null;
+
+        void Act()
+        {
+            Guard.Argument(value).If(true).NotNull();
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentNullException>(Act);
+        Assert.Equal("Value cannot be null. (Parameter 'value')", ex.Message);
     }
 }

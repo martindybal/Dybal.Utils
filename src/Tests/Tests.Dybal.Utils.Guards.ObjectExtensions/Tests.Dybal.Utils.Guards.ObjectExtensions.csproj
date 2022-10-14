@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utils\Dybal.Utils.Guards.ObjectExtensions\Dybal.Utils.Guards.ObjectExtensions.csproj" />
+	</ItemGroup>
+
+</Project>
