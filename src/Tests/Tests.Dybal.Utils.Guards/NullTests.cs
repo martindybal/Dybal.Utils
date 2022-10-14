@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards;
 
-public class NullTests : TestBase
+public class NullTests : UnitTestsBase
 {
     [Fact]
     public void Should_NotThrows_When_VariableNull()
@@ -12,7 +12,7 @@ public class NullTests : TestBase
         object? value = null;
 
         // Act
-        Guard.Null(value);
+        Guard.Argument(value).Null();
 
         // Assert
         // doesn't throw any exception
@@ -25,7 +25,7 @@ public class NullTests : TestBase
         int? value = null;
 
         // Act
-        Guard.Null(value);
+        Guard.Argument(value).Null();
 
         // Assert
         // doesn't throw any exception
@@ -38,7 +38,7 @@ public class NullTests : TestBase
         var sample = new { Value = (object?)null };
 
         // Act
-        Guard.Null(sample.Value);
+        Guard.Argument(sample.Value).Null();
 
         // Assert
         // doesn't throw any exception
@@ -52,7 +52,7 @@ public class NullTests : TestBase
 
         void Act()
         {
-            Guard.Null(value);
+            Guard.Argument(value).Null();
         }
 
         // Assert
@@ -68,7 +68,7 @@ public class NullTests : TestBase
 
         void Act()
         {
-            Guard.Null(value);
+            Guard.Argument(value).Null();
         }
 
         // Assert
@@ -84,11 +84,40 @@ public class NullTests : TestBase
 
         void Act()
         {
-            Guard.Null(sample.Value);
+            Guard.Argument(sample.Value).Null();
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value must be null. (Parameter 'sample.Value')", ex.Message);
+    }
+
+    [Fact]
+    public void Should_NotThrows_When_GuardIsNotActive()
+    {
+        // Arrange
+        object value = "value";
+
+        // Act
+        Guard.Argument(value).If(false).Null();
+
+        // Assert
+        // doesn't throw any exception
+    }
+
+    [Fact]
+    public void ShouldThrows_ArgumentException_When_GuardIsActive()
+    {
+        // Arrange
+        object? value = "value";
+
+        void Act()
+        {
+            Guard.Argument(value).If(true).Null();
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal("Value must be null. (Parameter 'value')", ex.Message);
     }
 }
