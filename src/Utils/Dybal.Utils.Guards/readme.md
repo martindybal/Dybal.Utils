@@ -2,13 +2,13 @@
 The primary purpose of Dybal.Utils.Guards is to simplify writing input data checks to the object.
 
 ## Expected breaking change
-First thing first. I wanted to implement this at the beginning, but was hampered by the lack of support for the nullable implicit operator in roslyn. Currently methods return TArgument directly. When https://github.com/dotnet/roslyn/issues/64638 is resolved, I want to change the return value to Guard with an explicit operator on TArgument. This allows the use of multiple guards at the same time. Prevention from this breaking change is not to use `var` but the explicit type.
+First thing first. I wanted to implement this at the beginning, but was hampered by the lack of support for the nullable implicit operator in roslyn. Currently methods return TArgument directly. When https://github.com/dotnet/roslyn/issues/64638 is resolved, I want to change the return value to Guard with an implicit operator on TArgument. This allows the use of multiple guards at the same time. Prevention from this breaking change is not to use `var` but the explicit type.
 
 ```
 Bar = Guard.Argument(bar).NotNullOrWhiteSpace().MaxLength(20); //Remains unchanged implicit conversion is used
 string b1 = Guard.Argument(bar).NotNullOrWhiteSpace().MaxLength(20); //Remains unchanged implicit conversion is used
 
-//Danger
+// Danger
 var b2 = Guard.Argument(bar).NotNullOrWhiteSpace().MaxLength(20); //This is where the change occurs, the type will change from TArgument to Guard<TArgument>.
 Bar = b2; // Once the change is implemented, it will need to be adjusted to `Bar = b2.Argument.Value;`
 ```
