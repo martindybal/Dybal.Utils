@@ -19,6 +19,6 @@ internal record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
         {
             IsActive = false;
         }
-        return this!;
+        return this;
     }
 }
