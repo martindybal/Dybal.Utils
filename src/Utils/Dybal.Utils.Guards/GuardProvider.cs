@@ -2,21 +2,29 @@
 
 namespace Dybal.Utils.Guards;
 
-public static class Guard
+/// <summary>
+/// This class serves as a shortcut for ArgumentGuard.Argument. If you want to use it, use static using.
+/// </summary>
+/// <code>
+/// using static Dybal.Utils.Guards.GuardProvider;
+///
+/// ArgumentGuard(value).NotNull();
+/// </code>
+public static class GuardProvider
 {
     /// <summary>
-    /// ArgumentGuard&lt;TArgument&gt; factory method. 
+    /// ArgumentGuard.Argument shortcut. 
     /// </summary>
     /// <typeparam name="TArgument"></typeparam>
     /// <param name="argumentValue">The argumentValue to be checked.</param>
     /// <param name="argumentName">DO NOT SET - Name of <c>argumentValue</c> parameter is self-replenishing.</param>
     /// <returns>Instance of ArgumentGuard&lt;TArgument&gt;</returns>
-    public static ArgumentGuard<TArgument> Argument<TArgument>(TArgument argumentValue, [CallerArgumentExpression("argumentValue")] string? argumentName = null)
+    public static ArgumentGuard<TArgument> Guard<TArgument>(TArgument argumentValue, [CallerArgumentExpression("argumentValue")] string? argumentName = null)
     {
-        return new ArgumentGuard<TArgument>(new Argument<TArgument>(argumentValue, argumentName!), true);
+        return Guards.Guard.Argument(argumentValue, argumentName);
     }
-
-    public static MultipleArgumentGuard Arguments<TArgument1, TArgument2>(
+    
+    public static MultipleArgumentGuard Guard<TArgument1, TArgument2>(
         TArgument1 firstValue,
         TArgument2 secondValue,
         [CallerArgumentExpression("firstValue")] string? firstParamName = null,
@@ -25,10 +33,10 @@ public static class Guard
         var firstArgument = new Argument<object?>(firstValue, firstParamName!);
         var secondArgument = new Argument<object?>(secondValue, secondParamName!);
 
-        return Arguments(new[] { firstArgument, secondArgument });
+        return Guard(new[] { firstArgument, secondArgument });
     }
 
-    public static MultipleArgumentGuard Arguments<TArgument1, TArgument2, TArgument3>(
+    public static MultipleArgumentGuard Guard<TArgument1, TArgument2, TArgument3>(
         TArgument1 firstValue,
         TArgument2 secondValue,
         TArgument3 thirdValue,
@@ -40,11 +48,11 @@ public static class Guard
         var secondArgument = new Argument<object?>(secondValue, secondParamName!);
         var thirdArgument = new Argument<object?>(thirdValue, thirdParamName!);
 
-        return Arguments(new[] { firstArgument, secondArgument, thirdArgument });
+        return Guard(new[] { firstArgument, secondArgument, thirdArgument });
     }
 
-    internal static MultipleArgumentGuard Arguments(Argument<object?>[] arguments)
+    public static MultipleArgumentGuard Guard(Argument<object?>[] arguments)
     {
-        return new MultipleArgumentGuard(arguments, true);
+        return Guards.Guard.Arguments(arguments);
     }
 }
