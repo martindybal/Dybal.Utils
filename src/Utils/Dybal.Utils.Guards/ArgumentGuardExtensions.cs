@@ -2,7 +2,7 @@
 
 public static partial class ArgumentGuardExtensions
 {
-    public static ArgumentGuard<TArgument?> IfHasValue<TArgument>(this ArgumentGuard<TArgument?> guard)
+    public static IArgumentGuard<TArgument?> IfHasValue<TArgument>(this IArgumentGuard<TArgument?> guard)
         where TArgument : struct
     {
         return guard.If(guard.ArgumentValue.HasValue);

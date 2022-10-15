@@ -1,6 +1,6 @@
 ﻿namespace Dybal.Utils.Guards;
 
-public record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
+internal record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
 {
     public bool IsActive { get; private set; }
     public TArgument ArgumentValue { get; }
@@ -14,7 +14,7 @@ public record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
         IsActive = isActive;
     }
 
-    public ArgumentGuard<TArgument?> If(bool condition)
+    public IArgumentGuard<TArgument?> If(bool condition)
     {
         if (!condition)
         {
