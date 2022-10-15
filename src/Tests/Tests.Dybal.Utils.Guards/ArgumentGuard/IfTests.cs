@@ -57,6 +57,7 @@ public class IfTests : UnitTestsBase
         AssertGuard.AssertArgument(value, guard.Argument);
     }
 
+    [Fact]
     public void MultipleIf_Should_ReturnNonActiveGuard_When_AllTrue()
     {
         // Arrange
