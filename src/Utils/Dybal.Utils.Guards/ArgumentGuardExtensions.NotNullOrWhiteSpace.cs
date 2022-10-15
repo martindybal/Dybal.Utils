@@ -6,9 +6,12 @@ public static partial class ArgumentGuardExtensions
         this IArgumentGuard<string?> guard, 
         string? message = null)
     {
-        if (guard.IsActive && string.IsNullOrWhiteSpace(guard.ArgumentValue))
+        if (guard.IsActive)
         {
-            throw new ArgumentException(message ?? "Value cannot be null or white space string.", guard.ArgumentName);
+            if (string.IsNullOrWhiteSpace(guard.ArgumentValue))
+            {
+                throw new ArgumentException(message ?? "Value cannot be null or white space string.", guard.ArgumentName);
+            }
         }
 
         return guard.ArgumentValue!;
