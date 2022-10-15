@@ -8,7 +8,12 @@ public class AssertGuard
 {
     public static void AssertArgument<T>(T value, Argument<object?> argument, [CallerArgumentExpression("value")] string? valueName = null)
     {
-        Assert.Equal(valueName, argument.Name);
-        Assert.Equal(value, argument.Value);
+        AssertArgument(value, argument.Value, argument.Name, valueName);
+    }
+
+    public static void AssertArgument<T>(T value, T argumentValue, string argumentName, [CallerArgumentExpression("value")] string? valueName = null)
+    {
+        Assert.Equal(valueName, argumentName);
+        Assert.Equal(value, argumentValue);
     }
 }
