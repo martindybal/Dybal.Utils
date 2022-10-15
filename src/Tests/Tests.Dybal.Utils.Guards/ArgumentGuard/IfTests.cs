@@ -41,7 +41,7 @@ public class IfTests : UnitTestsBase
         var guard = Guard.Argument(value).If(true);
 
         // Assert
-        AssertGuard.AssertArgument(value, guard.Argument);
+        AssertGuard.AssertArgument(value, new Argument<object?>(guard.ArgumentValue, guard.ArgumentName));
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class IfTests : UnitTestsBase
         var guard = Guard.Argument(value).If(false);
 
         // Assert
-        AssertGuard.AssertArgument(value, guard.Argument);
+        AssertGuard.AssertArgument(value, new Argument<object?>(guard.ArgumentValue, guard.ArgumentName));
     }
 
     [Fact]

@@ -28,7 +28,7 @@ public class ArgumentTests : UnitTestsBase
         var guard = Guard.Argument(value);
 
         // Assert
-        Assert.Equal(nameof(value), guard.Argument.Name);
+        Assert.Equal(nameof(value), guard.ArgumentName);
     }
 
     [Fact]
@@ -41,6 +41,6 @@ public class ArgumentTests : UnitTestsBase
         var guard = Guard.Argument(value);
 
         // Assert
-        Assert.Equal(value, guard.Argument.Value);
+        Assert.Equal(value, guard.ArgumentValue);
     }
 }

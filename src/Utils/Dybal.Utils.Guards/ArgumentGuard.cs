@@ -2,16 +2,16 @@
 
 public class ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
 {
-    public Argument<TArgument> Argument { get; }
     public bool IsActive { get; }
+    public TArgument ArgumentValue { get; }
+    public string ArgumentName { get; }
 
-    TArgument IArgumentGuard<TArgument>.ArgumentValue => Argument.Value;
 
-    string IArgumentGuard<TArgument>.ArgumentName => Argument.Name;
-
-    internal ArgumentGuard(Argument<TArgument> argument, bool isActive)
+    internal ArgumentGuard(TArgument argumentValue, string argumentName, bool isActive)
     {
-        Argument = argument;
+        ArgumentValue = argumentValue;
+        ArgumentName = argumentName;
+        IsActive = isActive;
         IsActive = isActive;
     }
     
@@ -22,6 +22,6 @@ public class ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
             return this!;
         }
 
-        return new ArgumentGuard<TArgument?>(Argument!, false);
+        return new ArgumentGuard<TArgument?>(ArgumentValue, ArgumentName, false);
     }
 }

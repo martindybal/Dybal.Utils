@@ -29,7 +29,7 @@ public class GuardObjectExtensionTests
         var guard = value.Guard();
 
         // Assert
-        Assert.Equal(nameof(value), guard.Argument.Name);
+        Assert.Equal(nameof(value), guard.ArgumentName);
     }
 
     [Fact]
@@ -42,6 +42,6 @@ public class GuardObjectExtensionTests
         var guard = value.Guard();
 
         // Assert
-        Assert.Equal(value, guard.Argument.Value);
+        Assert.Equal(value, guard.ArgumentValue);
     }
 }
