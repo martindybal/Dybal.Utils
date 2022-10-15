@@ -32,7 +32,7 @@ public class IfTests : UnitTestsBase
     }
     
     [Fact]
-    public void Should_ReturnGuardWithArgumentName_When_True()
+    public void Should_ReturnGuardWithCorrectArgument_When_True()
     {
         // Arrange
         object? value = null;
@@ -41,24 +41,11 @@ public class IfTests : UnitTestsBase
         var guard = Guard.Argument(value).If(true);
 
         // Assert
-        Assert.Equal(nameof(value), guard.Argument.Name);
-    }
-
-    [Fact]
-    public void Should_ReturnGuardWithArgumentValue_When_True()
-    {
-        // Arrange
-        object? value = null;
-
-        // Act
-        var guard = Guard.Argument(value).If(true);
-
-        // Assert
-        Assert.Equal(value, guard.Argument.Value);
+        AssertGuard.AssertArgument(value, guard.Argument);
     }
     
     [Fact]
-    public void Should_ReturnGuardWithArgumentName_When_False()
+    public void Should_ReturnGuardWithCorrectArgument_When_False()
     {
         // Arrange
         object? value = null;
@@ -67,19 +54,34 @@ public class IfTests : UnitTestsBase
         var guard = Guard.Argument(value).If(false);
 
         // Assert
-        Assert.Equal(nameof(value), guard.Argument.Name);
+        AssertGuard.AssertArgument(value, guard.Argument);
     }
 
-    [Fact]
-    public void Should_ReturnGuardWithArgumentValue_When_False()
+    public void MultipleIf_Should_ReturnNonActiveGuard_When_AllTrue()
     {
         // Arrange
         object? value = null;
 
         // Act
-        var guard = Guard.Argument(value).If(false);
+        var guard = Guard.Argument(value).If(true).If(true);
 
         // Assert
-        Assert.Equal(value, guard.Argument.Value);
+        Assert.True(guard.IsActive);
+    }
+
+    [Theory]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(false, false)]
+    public void MultipleIf_Should_ReturnNonActiveGuard_When_AnyFalse(bool firstCondition, bool secondCondition)
+    {
+        // Arrange
+        object? value = null;
+
+        // Act
+        var guard = Guard.Argument(value).If(firstCondition).If(secondCondition);
+
+        // Assert
+        Assert.False(guard.IsActive);
     }
 }
