@@ -2,9 +2,5 @@
 
 public static partial class ArgumentGuardExtensions
 {
-    public static IArgumentGuard<TArgument?> IfHasValue<TArgument>(this IArgumentGuard<TArgument?> guard)
-        where TArgument : struct
-    {
-        return guard.If(guard.ArgumentValue.HasValue);
-    }
+    //ReSharper is trying to rename the other Guard files to Guard.cs. This file is here to prevent it from succeeding
 }
