@@ -1,6 +1,6 @@
 ﻿namespace Dybal.Utils.Guards;
 
-public class ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
+public record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
 {
     public bool IsActive { get; }
     public TArgument ArgumentValue { get; }
