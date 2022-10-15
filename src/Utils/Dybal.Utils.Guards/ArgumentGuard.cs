@@ -2,11 +2,10 @@
 
 public record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
 {
-    public bool IsActive { get; }
+    public bool IsActive { get; private set; }
     public TArgument ArgumentValue { get; }
     public string ArgumentName { get; }
-
-
+    
     internal ArgumentGuard(TArgument argumentValue, string argumentName, bool isActive)
     {
         ArgumentValue = argumentValue;
@@ -14,14 +13,13 @@ public record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
         IsActive = isActive;
         IsActive = isActive;
     }
-    
+
     public ArgumentGuard<TArgument?> If(bool condition)
     {
-        if (condition)
+        if (!condition)
         {
-            return this!;
+            IsActive = false;
         }
-
-        return new ArgumentGuard<TArgument?>(ArgumentValue, ArgumentName, false);
+        return this!;
     }
 }
