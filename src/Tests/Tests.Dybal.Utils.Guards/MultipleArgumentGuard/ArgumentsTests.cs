@@ -1,7 +1,8 @@
 ﻿using Dybal.Utils.Guards;
+using Tests.Dybal.Utils.Guards.ArgumentGuard;
 using Xunit;
 
-namespace Tests.Dybal.Utils.Guards;
+namespace Tests.Dybal.Utils.Guards.MultipleArgumentGuard;
 
 public class ArgumentsTests : UnitTestsBase
 {

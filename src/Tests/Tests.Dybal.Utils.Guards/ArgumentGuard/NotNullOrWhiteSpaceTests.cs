@@ -1,7 +1,7 @@
 ﻿using Dybal.Utils.Guards;
 using Xunit;
 
-namespace Tests.Dybal.Utils.Guards;
+namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
 public class NotNullOrWhiteSpaceTests : UnitTestsBase
 {
@@ -10,10 +10,10 @@ public class NotNullOrWhiteSpaceTests : UnitTestsBase
     {
         // Arrange
         var value = "non-empty";
-        
+
         // Act
         Guard.Argument(value).NotNullOrWhiteSpace();
-        
+
         // Assert
         // doesn't throw any exception
     }
@@ -46,7 +46,7 @@ public class NotNullOrWhiteSpaceTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value cannot be null or white space string. (Parameter 'value')", ex.Message);
     }
-    
+
     [Theory]
     [InlineData(" ")]
     [InlineData("\t")]
