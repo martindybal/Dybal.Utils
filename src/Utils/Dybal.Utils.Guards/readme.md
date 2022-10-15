@@ -15,20 +15,27 @@ Bar = b2; // Once the change is implemented, it will need to be adjusted to `Bar
 
 # Make your code readable as much as you can
 ```C#
-Foo(string bar)
+Foo(Guid? id, string bar)
 {
+    if(id.HasValue && id.Value == Guid.Empty)
+    {
+        throw new ArgumentException("Value cannot be an empty GUID.", nameof(Id));
+    }
+
     if(string.NotNullOrWhiteSpace())
     {
         throw new ArgumentException("Value cannot be null or white space string.", nameof(Bar));
     }
 
+    Id = id.HasValue ? id.Value : Guid.NewGuid();
     Bar = bar;
 }
 ```
 
 ```C#
-Foo(string bar)
+Foo(Guid? id, string bar)
 {
+    Id = Guard.Argument(id).IfHasValue().NotDefault() ?? Guid.NewGuid();
     Bar = Guard.Argument(bar).NotNullOrWhiteSpace();
 }
 ```
