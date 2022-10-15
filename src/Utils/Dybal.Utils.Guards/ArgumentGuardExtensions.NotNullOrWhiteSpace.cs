@@ -1,12 +1,10 @@
-﻿using System.Runtime.CompilerServices;
+﻿namespace Dybal.Utils.Guards;
 
-namespace Dybal.Utils.Guards;
-
-public static partial class GuardExtensions
+public static partial class ArgumentGuardExtensions
 {
     public static string NotNullOrWhiteSpace(
-#nullable disable // to disable Warning CS8620  Argument of type 'Guard<string?>' cannot be used for parameter 'guard' of type 'Guard<string>' due to differences in the nullability of reference types.
-        this Guard<string> guard, 
+#nullable disable // to disable Warning CS8620  Argument of type 'ArgumentGuard<string?>' cannot be used for parameter 'guard' of type 'ArgumentGuard<string>' due to differences in the nullability of reference types.
+        this ArgumentGuard<string> guard, 
 #nullable enable
         string? message = null)
     {
