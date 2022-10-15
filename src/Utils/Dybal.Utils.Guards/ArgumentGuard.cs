@@ -11,7 +11,6 @@ internal record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
         ArgumentValue = argumentValue;
         ArgumentName = argumentName;
         IsActive = isActive;
-        IsActive = isActive;
     }
 
     public IArgumentGuard<TArgument?> If(bool condition)
