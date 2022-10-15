@@ -4,7 +4,6 @@ namespace Dybal.Utils.Guards;
 
 public static partial class ArgumentGuardExtensions
 {
-
     public static IEnumerable<TArgument> Contain<TArgument>(this IArgumentGuard<IEnumerable<TArgument>> guard, TArgument? value, string? message = null)
     {
         return guard.Contain(item => Equals(item, value), message ?? $"Collection has to contain '{value}'.");
