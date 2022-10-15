@@ -1,6 +1,6 @@
 ﻿namespace Dybal.Utils.Guards;
 
-public class MultipleArgumentGuard
+public record struct MultipleArgumentGuard
 {
     public Argument<object?>[] Arguments { get; }
     public bool IsActive { get; private set; }
