@@ -1,7 +1,7 @@
 ﻿using Dybal.Utils.Guards;
 using Xunit;
 
-namespace Tests.Dybal.Utils.Guards;
+namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
 public class IfTests : UnitTestsBase
 {
@@ -30,7 +30,7 @@ public class IfTests : UnitTestsBase
         // Assert
         Assert.False(guard.IsActive);
     }
-    
+
     [Fact]
     public void Should_ReturnGuardWithCorrectArgument_When_True()
     {
@@ -43,7 +43,7 @@ public class IfTests : UnitTestsBase
         // Assert
         AssertGuard.AssertArgument(value, guard.Argument);
     }
-    
+
     [Fact]
     public void Should_ReturnGuardWithCorrectArgument_When_False()
     {

@@ -1,7 +1,7 @@
 ﻿using Dybal.Utils.Guards;
 using Xunit;
 
-namespace Tests.Dybal.Utils.Guards;
+namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
 public class NotNullOrEmptyTests : UnitTestsBase
 {
@@ -10,10 +10,10 @@ public class NotNullOrEmptyTests : UnitTestsBase
     {
         // Arrange
         var value = "non-empty";
-        
+
         // Act
         Guard.Argument(value).NotNullOrEmpty();
-        
+
         // Assert
         // doesn't throw any exception
     }
