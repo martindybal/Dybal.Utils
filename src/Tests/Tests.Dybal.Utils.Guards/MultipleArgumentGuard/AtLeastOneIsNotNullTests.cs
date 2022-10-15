@@ -1,5 +1,4 @@
 ﻿using Dybal.Utils.Guards;
-using Tests.Dybal.Utils.Guards.ArgumentGuard;
 using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.MultipleArgumentGuard;
