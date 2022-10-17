@@ -58,7 +58,7 @@ public class ContainTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(source).Contain(_ => false);
+            Guard.Argument(source).Contain(static _ => false);
         }
 
         // Assert
