@@ -15,7 +15,7 @@ public static partial class ArgumentGuardExtensions
         {
             if (!guard.ArgumentValue.Any(filter))
             {
-                throw new ArgumentException(message ?? "Collection does not contain required item.", guard.ArgumentName);
+                ThrowHelper.ThrowArgumentException(message ?? "Collection does not contain required item.", guard.ArgumentName);
             }
         }
 

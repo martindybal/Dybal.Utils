@@ -10,7 +10,7 @@ public static partial class ArgumentGuardExtensions
         {
             if (string.IsNullOrEmpty(guard.ArgumentValue))
             {
-                throw new ArgumentException(message ?? "Value cannot be null or empty string.", guard.ArgumentName);
+                ThrowHelper.ThrowArgumentException(message ?? "Value cannot be null or empty string.", guard.ArgumentName);
             }
         }
 
