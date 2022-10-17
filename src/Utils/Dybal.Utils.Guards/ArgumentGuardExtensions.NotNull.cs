@@ -13,9 +13,10 @@ public static partial class ArgumentGuardExtensions
         {
             if (guard.ArgumentValue is null)
             {
-                throw message == null
-                    ? new ArgumentNullException(guard.ArgumentName)
-                    : new ArgumentNullException(guard.ArgumentName, message);
+                if (message == null)
+                    ThrowHelper.ThrowArgumentNullException(guard.ArgumentName);
+
+                ThrowHelper.ThrowArgumentNullException(guard.ArgumentName, message);
             }
         }
 
