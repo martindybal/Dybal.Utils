@@ -25,7 +25,7 @@ public static class Guard
         var firstArgument = new Argument<object?>(firstValue, firstParamName!);
         var secondArgument = new Argument<object?>(secondValue, secondParamName!);
 
-        return Arguments(new CompactList<Argument<object?>> { firstArgument, secondArgument });
+        return Arguments(new CompactList<Argument<object?>>(firstArgument, secondArgument));
     }
 
     public static MultipleArgumentGuard Arguments<TArgument1, TArgument2, TArgument3>(
@@ -40,7 +40,7 @@ public static class Guard
         var secondArgument = new Argument<object?>(secondValue, secondParamName!);
         var thirdArgument = new Argument<object?>(thirdValue, thirdParamName!);
 
-        return Arguments(new CompactList<Argument<object?>> { firstArgument, secondArgument, thirdArgument });
+        return Arguments(new CompactList<Argument<object?>>(firstArgument, secondArgument, thirdArgument));
     }
 
     internal static MultipleArgumentGuard Arguments(CompactList<Argument<object?>> arguments)
