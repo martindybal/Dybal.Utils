@@ -8,12 +8,12 @@ public static partial class ArgumentGuardExtensions
     {
         if (guard.IsActive)
         {
-            if (string.IsNullOrWhiteSpace(guard.ArgumentValue))
+            if (string.IsNullOrWhiteSpace(guard.Argument.Value))
             {
-                throw new ArgumentException(message ?? "Value cannot be null or white space string.", guard.ArgumentName);
+                ThrowHelper.Throw<ArgumentException>(guard.Argument.Name, message ?? "Value cannot be null or white space string.");
             }
         }
 
-        return guard.ArgumentValue!;
+        return guard.Argument.Value!;
     }
 }

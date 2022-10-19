@@ -6,10 +6,10 @@ public static partial class MultipleArgumentGuardExtensions
     {
         if (guard.IsActive)
         {
-            if (guard.Arguments.Select(argument => argument.Value).All(value => value is null))
+            if (guard.Arguments.Select(static argument => argument.Value).All(static value => value is null))
             {
-                var argumentNames = string.Join(", ", guard.Arguments.Select(argument => argument.Name));
-                throw new ArgumentException(message ?? $"Some of {argumentNames} must be not null.", argumentNames);
+                var argumentNames = string.Join(", ", guard.Arguments.Select(static argument => argument.Name));
+                ThrowHelper.Throw<ArgumentException>(argumentNames, message ?? $"Some of {argumentNames} must be not null.");
             }
         }
     }

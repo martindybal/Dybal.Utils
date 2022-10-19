@@ -11,14 +11,12 @@ public static partial class ArgumentGuardExtensions
     {
         if (guard.IsActive)
         {
-            if (guard.ArgumentValue is null)
+            if (guard.Argument.Value is null)
             {
-                throw message == null
-                    ? new ArgumentNullException(guard.ArgumentName)
-                    : new ArgumentNullException(guard.ArgumentName, message);
+                ThrowHelper.Throw<ArgumentNullException>(guard.Argument.Name, message);
             }
         }
 
-        return guard.ArgumentValue!;
+        return guard.Argument.Value!;
     }
 }

@@ -13,7 +13,7 @@ public static class Guard
     /// <returns>Instance of ArgumentGuard&lt;TArgument&gt;</returns>
     public static IArgumentGuard<TArgument> Argument<TArgument>(TArgument argumentValue, [CallerArgumentExpression("argumentValue")] string? argumentName = null)
     {
-        return new ArgumentGuard<TArgument>(argumentValue, argumentName!, true);
+        return new ArgumentGuard<TArgument>(new Argument<TArgument>(argumentValue, argumentName!), true);
     }
 
     public static MultipleArgumentGuard Arguments<TArgument1, TArgument2>(
@@ -25,7 +25,7 @@ public static class Guard
         var firstArgument = new Argument<object?>(firstValue, firstParamName!);
         var secondArgument = new Argument<object?>(secondValue, secondParamName!);
 
-        return Arguments(new[] { firstArgument, secondArgument });
+        return Arguments(new CompactList<IArgument<object?>>(firstArgument, secondArgument));
     }
 
     public static MultipleArgumentGuard Arguments<TArgument1, TArgument2, TArgument3>(
@@ -40,10 +40,10 @@ public static class Guard
         var secondArgument = new Argument<object?>(secondValue, secondParamName!);
         var thirdArgument = new Argument<object?>(thirdValue, thirdParamName!);
 
-        return Arguments(new[] { firstArgument, secondArgument, thirdArgument });
+        return Arguments(new CompactList<IArgument<object?>>(firstArgument, secondArgument, thirdArgument));
     }
 
-    internal static MultipleArgumentGuard Arguments(Argument<object?>[] arguments)
+    internal static MultipleArgumentGuard Arguments(CompactList<IArgument<object?>> arguments)
     {
         return new MultipleArgumentGuard(arguments, true);
     }

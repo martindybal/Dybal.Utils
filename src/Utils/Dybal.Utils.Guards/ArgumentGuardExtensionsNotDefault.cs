@@ -6,16 +6,16 @@ public static partial class ArgumentGuardExtensions
     {
         if (guard.IsActive)
         {
-            if (EqualityComparer<TArgument>.Default.Equals(guard.ArgumentValue, default))
+            if (EqualityComparer<TArgument>.Default.Equals(guard.Argument.Value, default))
             {
-                var defaultMessage = guard.ArgumentValue is Guid ?
+                var defaultMessage = guard.Argument.Value is Guid ?
                                         "Value cannot be an empty GUID." :
                                         "Value cannot be the default value.";
-                throw new ArgumentException(message ?? defaultMessage, guard.ArgumentName);
+                ThrowHelper.Throw<ArgumentException>(guard.Argument.Name, message ?? defaultMessage);
             }
         }
 
-        return guard.ArgumentValue;
+        return guard.Argument.Value;
     }
 
     public static TArgument? NotDefault<TArgument>(this IArgumentGuard<TArgument?> guard, string? message = null)
@@ -23,14 +23,15 @@ public static partial class ArgumentGuardExtensions
     {
         if (guard.IsActive)
         {
-            if (guard.ArgumentValue.HasValue)
+            if (guard.Argument.Value.HasValue)
             {
-                return Guard.Argument(guard.ArgumentValue.Value, guard.ArgumentName).NotDefault();
+                return Guard.Argument(guard.Argument.Value.Value, guard.Argument.Name).NotDefault();
             }
 
-            throw new ArgumentException(message ?? "Nullable object must have a value.", guard.ArgumentName);
+            string message1 = message ?? "Nullable object must have a value.";
+            ThrowHelper.Throw<ArgumentException>(guard.Argument.Name, message1);
         }
 
-        return guard.ArgumentValue;
+        return guard.Argument.Value;
     }
 }

@@ -2,10 +2,10 @@
 
 public record struct MultipleArgumentGuard
 {
-    public Argument<object?>[] Arguments { get; }
+    public IReadOnlyList<IArgument<object?>> Arguments { get; }
     public bool IsActive { get; private set; }
 
-    internal MultipleArgumentGuard(Argument<object?>[] arguments, bool isActive)
+    internal MultipleArgumentGuard(IReadOnlyList<IArgument<object?>> arguments, bool isActive)
     {
         Arguments = arguments;
         IsActive = isActive;

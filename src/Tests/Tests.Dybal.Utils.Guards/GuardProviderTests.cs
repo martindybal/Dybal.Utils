@@ -29,7 +29,7 @@ public class GuardProviderTests : UnitTestsBase
         var guard = Guard(value);
 
         // Assert
-        Assert.Equal(nameof(value), guard.ArgumentName);
+        Assert.Equal(nameof(value), guard.Argument.Name);
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class GuardProviderTests : UnitTestsBase
         var guard = Guard(value);
 
         // Assert
-        Assert.Equal(value, guard.ArgumentValue);
+        Assert.Equal(value, guard.Argument.Value);
     }
 
 

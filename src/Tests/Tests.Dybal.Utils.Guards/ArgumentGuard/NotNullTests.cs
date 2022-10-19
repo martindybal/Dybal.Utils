@@ -93,6 +93,23 @@ public class NotNullTests : UnitTestsBase
     }
 
     [Fact]
+    public void ShouldThrows_ArgumentNullExceptionWithCustomMessage_When_PropertyWithoutValue()
+    {
+        // Arrange
+        var customMessage = "Custom message";
+        var sample = new { Value = (object?)null };
+
+        void Act()
+        {
+            Guard.Argument(sample.Value).NotNull(customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentNullException>(Act);
+        Assert.Equal($"{customMessage} (Parameter 'sample.Value')", ex.Message);
+    }
+
+    [Fact]
     public void Should_NotThrows_When_GuardIsNotActive()
     {
         // Arrange
@@ -141,7 +158,7 @@ public class NotNullTests : UnitTestsBase
     {
         // Arrange
         object? nullableValue = null;
-        
+
         void Act()
         {
             object value = Guard.Argument(nullableValue).NotNull();

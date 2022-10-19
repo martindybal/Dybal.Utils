@@ -41,7 +41,7 @@ public class IfHasValueTests : UnitTestsBase
         var guard = Guard.Argument(value).IfHasValue();
 
         // Assert
-        Assert.Equal(nameof(value), guard.ArgumentName);
+        Assert.Equal(nameof(value), guard.Argument.Name);
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class IfHasValueTests : UnitTestsBase
         var guard = Guard.Argument(value).IfHasValue();
 
         // Assert
-        Assert.Equal(value, guard.ArgumentValue);
+        Assert.Equal(value, guard.Argument.Value);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class IfHasValueTests : UnitTestsBase
         var guard = Guard.Argument(value).IfHasValue();
 
         // Assert
-        Assert.Equal(nameof(value), guard.ArgumentName);
+        Assert.Equal(nameof(value), guard.Argument.Name);
     }
 
     [Fact]
@@ -80,6 +80,6 @@ public class IfHasValueTests : UnitTestsBase
         var guard = Guard.Argument(value).IfHasValue();
 
         // Assert
-        Assert.Equal(value, guard.ArgumentValue);
+        Assert.Equal(value, guard.Argument.Value);
     }
 }
