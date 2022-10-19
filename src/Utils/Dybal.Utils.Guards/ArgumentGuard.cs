@@ -5,7 +5,9 @@ namespace Dybal.Utils.Guards;
 internal readonly record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
 {
     public IArgument<TArgument> Argument { get; }
-    private Type? ExceptionOverrideType { get; init; }
+    
+    Type? IExceptionOverride.ExceptionOverrideType => ExceptionOverrideType;
+    internal Type? ExceptionOverrideType { get; private init; }
 
     internal ArgumentGuard(IArgument<TArgument> argument)
     {
@@ -13,23 +15,12 @@ internal readonly record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgum
         ExceptionOverrideType = null;
     }
 
-    public IArgumentGuard<TArgument> With<TException>()
+    public IArgumentGuard<TArgument> Throws<TException>()
         where TException : Exception
     {
+#if DEBUG
+        ThrowHelper.EnsureRegistration<TException>();
+#endif
         return this with { ExceptionOverrideType = typeof(TException) };
-    }
-
-    [DoesNotReturn]
-    public void Throw<TException>(string? message) 
-        where TException : Exception
-    {
-        if (ExceptionOverrideType is null)
-        {
-            ThrowHelper.Throw<TException>(Argument.Name, message);
-        }
-        else
-        {
-            ThrowHelper.Throw(ExceptionOverrideType, Argument.Name, message);
-        }
     }
 }

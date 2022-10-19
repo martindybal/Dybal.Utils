@@ -53,6 +53,6 @@ public static class GuardProvider
 
     public static MultipleArgumentGuard Guard(params IArgument<object?>[] arguments)
     {
-        return new MultipleArgumentGuard(arguments, true);
+        return new MultipleArgumentGuard(arguments);
     }
 }

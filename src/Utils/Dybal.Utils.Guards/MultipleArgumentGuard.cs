@@ -1,44 +1,28 @@
-﻿namespace Dybal.Utils.Guards;
+﻿using System;
 
-public record struct MultipleArgumentGuard
+namespace Dybal.Utils.Guards;
+
+public record struct MultipleArgumentGuard : IExceptionOverride
 {
     public IReadOnlyList<IArgument<object?>> Arguments { get; }
-    public bool IsActive { get; private set; }
-    private Type? ExceptionOverrideType { get; init; }
 
-    internal MultipleArgumentGuard(IReadOnlyList<IArgument<object?>> arguments, bool isActive)
+    string IExceptionOverride.ArgumentName => string.Join(", ", Arguments.Select(static argument => argument.Name));
+
+    Type? IExceptionOverride.ExceptionOverrideType => ExceptionOverrideType;
+    internal Type? ExceptionOverrideType { get; private init; }
+
+    internal MultipleArgumentGuard(IReadOnlyList<IArgument<object?>> arguments)
     {
         Arguments = arguments;
-        IsActive = isActive;
         ExceptionOverrideType = null;
     }
     
-    public MultipleArgumentGuard If(bool condition)
-    {
-        if (!condition)
-        {
-            IsActive = false;
-        }
-        return this;
-    }
-
-
-    public MultipleArgumentGuard With<TException>()
+    public MultipleArgumentGuard Throws<TException>()
         where TException : Exception
     {
+#if DEBUG
+        ThrowHelper.EnsureRegistration<TException>();
+#endif
         return this with { ExceptionOverrideType = typeof(TException) };
-    }
-
-    public void Throw<TException>(string? message) where TException : Exception
-    {
-        var argumentNames = string.Join(", ", Arguments.Select(static argument => argument.Name));
-        if (ExceptionOverrideType is null)
-        {
-            ThrowHelper.Throw<TException>(argumentNames, message);
-        }
-        else
-        {
-            ThrowHelper.Throw(ExceptionOverrideType, argumentNames, message);
-        }
     }
 }

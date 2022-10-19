@@ -20,7 +20,7 @@ public class GuardProviderTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_ReturnActiveGuardWithCorrectArguments2()
+    public void Should_ReturnGuardWithCorrectArguments2()
     {
         // Arrange
         string? value1 = null;
@@ -30,14 +30,12 @@ public class GuardProviderTests : UnitTestsBase
         var guard = Guard(value1, value2);
 
         // Assert
-        Assert.True(guard.IsActive);
-
         AssertGuard.AssertArgument(value1, guard.Arguments[0]);
         AssertGuard.AssertArgument(value2, guard.Arguments[1]);
     }
 
     [Fact]
-    public void Should_ReturnActiveGuardWithCorrectArguments3()
+    public void Should_ReturnGuardWithCorrectArguments3()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
@@ -48,8 +46,6 @@ public class GuardProviderTests : UnitTestsBase
         var guard = Guard(value1, value2, value3);
 
         // Assert
-        Assert.True(guard.IsActive);
-
         AssertGuard.AssertArgument(value1, guard.Arguments[0]);
         AssertGuard.AssertArgument(value2, guard.Arguments[1]);
         AssertGuard.AssertArgument(value3, guard.Arguments[2]);

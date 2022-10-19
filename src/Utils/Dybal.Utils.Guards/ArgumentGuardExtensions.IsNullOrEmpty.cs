@@ -6,7 +6,7 @@ public static partial class ArgumentGuardExtensions
     {
         if (string.IsNullOrEmpty(guard.Argument.Value))
         {
-            guard.Throw<ArgumentException>(message ?? "Value cannot be null or empty string.");
+            ThrowHelper.Throw<ArgumentException>(guard, message ?? "Value cannot be null or empty string.");
         }
 
         return guard.Argument.Value;

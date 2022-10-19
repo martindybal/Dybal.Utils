@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Dybal.Utils.Guards
 {
@@ -16,10 +17,34 @@ namespace Dybal.Utils.Guards
             Register(ArgumentOutOfRangeExceptionFactory);
         }
 
-        public static void Register<TException>(ExceptionFactory<TException> exceptionFactory) 
+        internal static void EnsureRegistration<TException>() where TException : Exception
+        {
+            var exceptionType = typeof(TException);
+            if (!supportedExceptions.ContainsKey(exceptionType))
+            {
+                throw new ExceptionNotRegisteredException(exceptionType);
+            }
+        }
+
+        public static void Register<TException>(ExceptionFactory<TException> exceptionFactory)
             where TException : Exception
         {
             supportedExceptions.Add(typeof(TException), exceptionFactory);
+        }
+
+        [DoesNotReturn]
+        public static void Throw<TException>(IExceptionOverride guard, string? message)
+            where TException : Exception
+        {
+            var exceptionType = guard.ExceptionOverrideType ?? typeof(TException);
+            Throw(exceptionType, guard.ArgumentName, message);
+        }
+
+        public static void Throw<TException>(MultipleArgumentGuard guard, string message)
+        {
+            var argumentNames = string.Join(", ", guard.Arguments.Select(static argument => argument.Name));
+            var exceptionType = guard.ExceptionOverrideType ?? typeof(TException);
+            Throw(exceptionType, argumentNames, message);
         }
 
         [DoesNotReturn]
@@ -30,14 +55,14 @@ namespace Dybal.Utils.Guards
         }
 
         [DoesNotReturn]
-        public static void Throw(Type exceptionOverrideType, string paramName, string? message = null)
+        public static void Throw(Type exceptionType, string paramName, string? message = null)
         {
-            if (supportedExceptions.TryGetValue(exceptionOverrideType, out var exceptionFactory))
+            if (supportedExceptions.TryGetValue(exceptionType, out var exceptionFactory))
             {
                 throw exceptionFactory(paramName, message);
             }
 
-            throw new ExceptionNotRegisteredException(exceptionOverrideType);
+            throw new ExceptionNotRegisteredException(exceptionType);
         }
 
         private static ArgumentException ArgumentExceptionFactory(string paramName, string? message)

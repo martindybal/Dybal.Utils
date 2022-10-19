@@ -45,6 +45,6 @@ public static class Guard
 
     internal static MultipleArgumentGuard Arguments(CompactList<IArgument<object?>> arguments)
     {
-        return new MultipleArgumentGuard(arguments, true);
+        return new MultipleArgumentGuard(arguments);
     }
 }
