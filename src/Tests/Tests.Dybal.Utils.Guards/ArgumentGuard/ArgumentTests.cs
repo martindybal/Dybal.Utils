@@ -74,21 +74,35 @@ public class ArgumentTests : UnitTestsBase
         var exceptionNotRegisteredException = Assert.Throws<ExceptionNotRegisteredException>(Act);
         Assert.Equal("Exception System.NotSupportedException was not registered. Use ThrowHelper.Register(NotSupportedExceptionFactory).", exceptionNotRegisteredException.Message);
     }
+    
+    class CustomException : Exception
+    {
+        public string ParamName { get; }
+
+        public CustomException(string paramName, string? message)
+            : base(message)
+        {
+            ParamName = paramName;
+        }
+    }
 
     [Fact]
     public void With_Should_ThrowCustomException()
     {
         // Arrange
-        DateTime? value = null;
+        DateTime? value = new DateTime(2009, 09, 01);
         var argumentGuard = Guard.Argument(value);
-        
+
         void Act()
         {
-            ThrowHelper.Register((paramName, message) => new NullReferenceException(message));
-            var value = argumentGuard.With<NullReferenceException>().NotNull();
+            ThrowHelper.Register((paramName, message) => new CustomException(paramName, message));
+
+            var value = argumentGuard.With<CustomException>().Null();
         }
 
         // Assert
-        var nullException = Assert.Throws<NullReferenceException>(Act);
+        var customException = Assert.Throws<CustomException>(Act);
+        Assert.Equal("value", customException.ParamName);
+        Assert.Equal("Value must be null.", customException.Message);
     }
 }

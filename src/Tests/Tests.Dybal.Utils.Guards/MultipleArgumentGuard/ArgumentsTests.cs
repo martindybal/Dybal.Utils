@@ -68,12 +68,23 @@ public class ArgumentsTests : UnitTestsBase
 
         void Act()
         {
-           guard.With<NotSupportedException>().AtLeastOneIsNotNull();
+            guard.With<NotSupportedException>().AtLeastOneIsNotNull();
         }
 
         // Assert
         var exceptionNotRegisteredException = Assert.Throws<ExceptionNotRegisteredException>(Act);
         Assert.Equal("Exception System.NotSupportedException was not registered. Use ThrowHelper.Register(NotSupportedExceptionFactory).", exceptionNotRegisteredException.Message);
+    }
+
+    class CustomException : Exception
+    {
+        public string ParamName { get; }
+
+        public CustomException(string paramName, string? message)
+            : base(message)
+        {
+            ParamName = paramName;
+        }
     }
 
     [Fact]
@@ -87,12 +98,14 @@ public class ArgumentsTests : UnitTestsBase
 
         void Act()
         {
-            ThrowHelper.Register((paramName, message) => new NullReferenceException(message));
+            ThrowHelper.Register((paramName, message) => new CustomException(paramName, message));
 
-            guard.With<NullReferenceException>().AtLeastOneIsNotNull();
+            guard.With<CustomException>().AtLeastOneIsNotNull();
         }
-        
+
         // Assert
-        var nullException = Assert.Throws<NullReferenceException>(Act);
+        var customException = Assert.Throws<CustomException>(Act);
+        Assert.Equal("value1, value2, value3", customException.ParamName);
+        Assert.Equal("Some of arguments must be not null.", customException.Message);
     }
 }
