@@ -48,6 +48,6 @@ public class AtLeastOneIsNotNullTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Some of sample.Value1, sample.Value2, sample.Value3 must be not null. (Parameter 'sample.Value1, sample.Value2, sample.Value3')", ex.Message);
+        Assert.Equal("Some of arguments must be not null. (Parameter 'sample.Value1, sample.Value2, sample.Value3')", ex.Message);
     }
 }
