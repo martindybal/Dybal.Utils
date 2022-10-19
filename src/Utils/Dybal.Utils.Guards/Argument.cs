@@ -1,3 +1,7 @@
 ﻿namespace Dybal.Utils.Guards;
 
-public record struct Argument<TArgument>(TArgument Value, string Name);
+public readonly record struct Argument<TArgument>(TArgument Value, string Name)
+{
+    public TArgument Value { get; } = Value;
+    public string Name { get; } = Name;
+}
