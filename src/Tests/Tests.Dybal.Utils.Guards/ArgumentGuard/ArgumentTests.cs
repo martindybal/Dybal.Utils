@@ -19,37 +19,42 @@ public class ArgumentTests : UnitTestsBase
         AssertGuard.AssertArgument(value, guard.Argument);
     }
 
+#if DEBUG
     [Fact]
-    public void With_Should_ReturnGuardWithSameArgument()
+    public void Throws_Should_EnsureExceptionRegistrationInDebug()
     {
         // Arrange
         DateTime? value = new DateTime(2009, 09, 01);
-        var argumentGuard = Guard.Argument(value);
 
         // Act
-        var guardWithException = argumentGuard.With<Exception>();
-
-        // Assert
-        Assert.Equal(argumentGuard.Argument, guardWithException.Argument);
-    }
-
-    [Fact]
-    public void With_Should_ThrowExceptionNotRegisteredException_When_ExceptionTypeIsUnknown()
-    {
-        // Arrange
-        DateTime? value = null;
-        var argumentGuard = Guard.Argument(value);
-        
         void Act()
         {
-            var value = argumentGuard.With<NotSupportedException>().NotNull();
+            Guard.Argument(value).Throws<NotSupportedException>();
         }
 
         // Assert
         var exceptionNotRegisteredException = Assert.Throws<ExceptionNotRegisteredException>(Act);
         Assert.Equal("Exception System.NotSupportedException was not registered. Use ThrowHelper.Register(NotSupportedExceptionFactory).", exceptionNotRegisteredException.Message);
     }
-    
+#endif
+
+    [Fact]
+    public void Throws_Should_ThrowExceptionNotRegisteredException_When_ExceptionTypeIsUnknown()
+    {
+        // Arrange
+        DateTime? value = null;
+        var argumentGuard = Guard.Argument(value);
+
+        void Act()
+        {
+            var value = argumentGuard.Throws<NotSupportedException>().NotNull();
+        }
+
+        // Assert
+        var exceptionNotRegisteredException = Assert.Throws<ExceptionNotRegisteredException>(Act);
+        Assert.Equal("Exception System.NotSupportedException was not registered. Use ThrowHelper.Register(NotSupportedExceptionFactory).", exceptionNotRegisteredException.Message);
+    }
+
     class CustomException : Exception
     {
         public string ParamName { get; }
@@ -62,7 +67,7 @@ public class ArgumentTests : UnitTestsBase
     }
 
     [Fact]
-    public void With_Should_ThrowCustomException()
+    public void Throws_Should_ThrowCustomException()
     {
         // Arrange
         DateTime? value = new DateTime(2009, 09, 01);
@@ -72,7 +77,7 @@ public class ArgumentTests : UnitTestsBase
         {
             ThrowHelper.Register((paramName, message) => new CustomException(paramName, message));
 
-            var value = argumentGuard.With<CustomException>().Null();
+            var value = argumentGuard.Throws<CustomException>().Null();
         }
 
         // Assert

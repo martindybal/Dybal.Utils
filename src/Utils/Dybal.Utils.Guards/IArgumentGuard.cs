@@ -2,14 +2,11 @@
 
 namespace Dybal.Utils.Guards;
 
-public interface IArgumentGuard<out TArgument>
+public interface IArgumentGuard<out TArgument> : IExceptionOverride
 {
     IArgument<TArgument> Argument { get; }
-    
-    IArgumentGuard<TArgument> With<TException>()
-        where TException : Exception;
+    string IExceptionOverride.ArgumentName => Argument.Name;
 
-    [DoesNotReturn]
-    void Throw<TException>(string? message)
+    IArgumentGuard<TArgument> Throws<TException>()
         where TException : Exception;
 }
