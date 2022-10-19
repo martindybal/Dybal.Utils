@@ -13,12 +13,12 @@ public static partial class ArgumentGuardExtensions
     {
         if (guard.IsActive)
         {
-            if (!guard.ArgumentValue.Any(filter))
+            if (!guard.Argument.Value.Any(filter))
             {
-                ThrowHelper.ThrowArgumentException(message ?? "Collection does not contain required item.", guard.ArgumentName);
+                ThrowHelper.ThrowArgumentException(message ?? "Collection does not contain required item.", guard.Argument.Name);
             }
         }
 
-        return guard.ArgumentValue;
+        return guard.Argument.Value;
     }
 }

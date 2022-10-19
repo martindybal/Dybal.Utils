@@ -3,7 +3,7 @@
 public interface IArgumentGuard<out TArgument>
 {
     bool IsActive { get; }
-    TArgument ArgumentValue { get; }
-    string ArgumentName { get; }
+    IArgument<TArgument> Argument { get; }
+
     IConditionalArgumentGuard<TArgument?> If(bool condition);
 }

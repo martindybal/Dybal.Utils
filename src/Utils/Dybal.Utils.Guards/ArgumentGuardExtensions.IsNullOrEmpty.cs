@@ -8,12 +8,12 @@ public static partial class ArgumentGuardExtensions
     {
         if (guard.IsActive)
         {
-            if (string.IsNullOrEmpty(guard.ArgumentValue))
+            if (string.IsNullOrEmpty(guard.Argument.Value))
             {
-                ThrowHelper.ThrowArgumentException(message ?? "Value cannot be null or empty string.", guard.ArgumentName);
+                ThrowHelper.ThrowArgumentException(message ?? "Value cannot be null or empty string.", guard.Argument.Name);
             }
         }
 
-        return guard.ArgumentValue!;
+        return guard.Argument.Value!;
     }
 }

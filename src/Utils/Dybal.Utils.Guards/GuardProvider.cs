@@ -33,7 +33,7 @@ public static class GuardProvider
         var firstArgument = new Argument<object?>(firstValue, firstParamName!);
         var secondArgument = new Argument<object?>(secondValue, secondParamName!);
 
-        return Guards.Guard.Arguments(new CompactList<Argument<object?>>(firstArgument, secondArgument));
+        return Guards.Guard.Arguments(new CompactList<IArgument<object?>>(firstArgument, secondArgument));
     }
 
     public static MultipleArgumentGuard Guard<TArgument1, TArgument2, TArgument3>(
@@ -48,10 +48,10 @@ public static class GuardProvider
         var secondArgument = new Argument<object?>(secondValue, secondParamName!);
         var thirdArgument = new Argument<object?>(thirdValue, thirdParamName!);
 
-        return Guards.Guard.Arguments(new CompactList<Argument<object?>>(firstArgument, secondArgument, thirdArgument));
+        return Guards.Guard.Arguments(new CompactList<IArgument<object?>>(firstArgument, secondArgument, thirdArgument));
     }
 
-    public static MultipleArgumentGuard Guard(params Argument<object?>[] arguments)
+    public static MultipleArgumentGuard Guard(params IArgument<object?>[] arguments)
     {
         return new MultipleArgumentGuard(arguments, true);
     }
