@@ -7,7 +7,7 @@ namespace Dybal.Utils.Guards
     /// Custom List implementation that does not make any dynamic allocation if Count <= 3
     /// </summary>
     /// <typeparam name="TElement"></typeparam>
-    public struct CompactList<TElement> : IReadOnlyList<TElement?>
+    public readonly struct CompactList<TElement> : IReadOnlyList<TElement?>
     {
         private readonly TElement? firstElement = default;
         private readonly TElement? secondElement = default;
