@@ -5,9 +5,9 @@ internal record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>, ICo
     public bool IsActive { get; private set; }
     public IArgument<TArgument> Argument { get; }
 
-    internal ArgumentGuard(TArgument argumentValue, string argumentName, bool isActive)
+    internal ArgumentGuard(IArgument<TArgument> argument, bool isActive)
     {
-        Argument = new Argument<TArgument>(argumentValue, argumentName);
+        Argument = argument;
         IsActive = isActive;
     }
     
