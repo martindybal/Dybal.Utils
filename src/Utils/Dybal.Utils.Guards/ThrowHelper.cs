@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Dybal.Utils.Guards
 {
@@ -8,18 +7,37 @@ namespace Dybal.Utils.Guards
         public delegate TException ExceptionFactory<out TException>(string paramName, string? message = null)
             where TException : Exception;
 
-        private static readonly Dictionary<Type, ExceptionFactory<Exception>> supportedExceptions = new()
+        private static readonly Dictionary<Type, ExceptionFactory<Exception>> supportedExceptions = new();
+
+        static ThrowHelper()
         {
-            { typeof(ArgumentException), ArgumentExceptionFactory },
-            {typeof(ArgumentNullException), ArgumentNullExceptionFactory }
-        };
+            Register(ArgumentExceptionFactory);
+            Register(ArgumentNullExceptionFactory);
+            Register(ArgumentOutOfRangeExceptionFactory);
+        }
+
+        public static void Register<TException>(ExceptionFactory<TException> exceptionFactory) 
+            where TException : Exception
+        {
+            supportedExceptions.Add(typeof(TException), exceptionFactory);
+        }
 
         [DoesNotReturn]
         public static void Throw<TException>(string paramName, string? message = null)
             where TException : Exception
         {
-            var exceptionFactory = supportedExceptions[typeof(TException)];
-            throw exceptionFactory(paramName, message);
+            Throw(typeof(TException), paramName, message);
+        }
+
+        [DoesNotReturn]
+        public static void Throw(Type exceptionOverrideType, string paramName, string? message = null)
+        {
+            if (supportedExceptions.TryGetValue(exceptionOverrideType, out var exceptionFactory))
+            {
+                throw exceptionFactory(paramName, message);
+            }
+
+            throw new ExceptionNotRegisteredException(exceptionOverrideType);
         }
 
         private static ArgumentException ArgumentExceptionFactory(string paramName, string? message)
@@ -34,6 +52,11 @@ namespace Dybal.Utils.Guards
                 return new ArgumentNullException(paramName);
             }
             return new ArgumentNullException(paramName, message);
+        }
+
+        private static ArgumentOutOfRangeException ArgumentOutOfRangeExceptionFactory(string paramName, string? message)
+        {
+            return new ArgumentOutOfRangeException(paramName, message);
         }
     }
 }

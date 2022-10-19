@@ -12,7 +12,7 @@ public static partial class ArgumentGuardExtensions
                 var defaultMessage = guard.Argument.Value is Guid ? 
                                         "Value must be an empty GUID." : 
                                         "Value must be a default value.";
-                ThrowHelper.Throw<ArgumentException>(guard.Argument.Name, message ?? defaultMessage);
+                guard.Throw<ArgumentException>(message ?? defaultMessage);
             }
         }
 
