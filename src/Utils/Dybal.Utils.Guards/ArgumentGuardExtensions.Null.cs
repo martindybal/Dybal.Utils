@@ -6,12 +6,12 @@ public static partial class ArgumentGuardExtensions
     {
         if (guard.IsActive)
         {
-            if (guard.ArgumentValue is not null)
+            if (guard.Argument.Value is not null)
             {
-                ThrowHelper.ThrowArgumentException(message ?? "Value must be null.", guard.ArgumentName);
+                ThrowHelper.ThrowArgumentException(message ?? "Value must be null.", guard.Argument.Name);
             }
         }
 
-        return guard.ArgumentValue;
+        return guard.Argument.Value;
     }
 }
