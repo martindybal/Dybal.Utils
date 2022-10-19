@@ -5,20 +5,35 @@ namespace Dybal.Utils.Guards
 {
     internal static class ThrowHelper
     {
+        public delegate TException ExceptionFactory<out TException>(string paramName, string? message = null)
+            where TException : Exception;
+
+        private static readonly Dictionary<Type, ExceptionFactory<Exception>> supportedExceptions = new()
+        {
+            { typeof(ArgumentException), ArgumentExceptionFactory },
+            {typeof(ArgumentNullException), ArgumentNullExceptionFactory }
+        };
+
         [DoesNotReturn]
-        public static void ThrowArgumentNullException(string paramName, string? message = null)
+        public static void Throw<TException>(string paramName, string? message = null)
+            where TException : Exception
+        {
+            var exceptionFactory = supportedExceptions[typeof(TException)];
+            throw exceptionFactory(paramName, message);
+        }
+
+        private static ArgumentException ArgumentExceptionFactory(string paramName, string? message)
+        {
+            return new ArgumentException(message, paramName);
+        }
+
+        private static ArgumentNullException ArgumentNullExceptionFactory(string paramName, string? message)
         {
             if (message is null)
             {
-                throw new ArgumentNullException(paramName);
+                return new ArgumentNullException(paramName);
             }
-            throw new ArgumentNullException(paramName, message);
-        }
-        
-        [DoesNotReturn]
-        public static void ThrowArgumentException(string message, string paramName)
-        {
-            throw new ArgumentException(message, paramName);
+            return new ArgumentNullException(paramName, message);
         }
     }
 }

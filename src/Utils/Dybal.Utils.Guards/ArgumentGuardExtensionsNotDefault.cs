@@ -11,7 +11,7 @@ public static partial class ArgumentGuardExtensions
                 var defaultMessage = guard.Argument.Value is Guid ?
                                         "Value cannot be an empty GUID." :
                                         "Value cannot be the default value.";
-                ThrowHelper.ThrowArgumentException(message ?? defaultMessage, guard.Argument.Name);
+                ThrowHelper.Throw<ArgumentException>(guard.Argument.Name, message ?? defaultMessage);
             }
         }
 
@@ -28,7 +28,8 @@ public static partial class ArgumentGuardExtensions
                 return Guard.Argument(guard.Argument.Value.Value, guard.Argument.Name).NotDefault();
             }
 
-            ThrowHelper.ThrowArgumentException(message ?? "Nullable object must have a value.", guard.Argument.Name);
+            string message1 = message ?? "Nullable object must have a value.";
+            ThrowHelper.Throw<ArgumentException>(guard.Argument.Name, message1);
         }
 
         return guard.Argument.Value;

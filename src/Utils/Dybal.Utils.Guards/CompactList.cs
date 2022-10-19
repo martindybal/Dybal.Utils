@@ -38,7 +38,7 @@ namespace Dybal.Utils.Guards
             {
                 if (index < 0 || index >= Count)
                 {
-                    ThrowHelper.ThrowArgumentException("Provided index was outside of the valid range.", nameof(index));
+                    ThrowHelper.Throw<ArgumentException>(nameof(index), "Provided index was outside of the valid range.");
                 }
 
                 return index switch
