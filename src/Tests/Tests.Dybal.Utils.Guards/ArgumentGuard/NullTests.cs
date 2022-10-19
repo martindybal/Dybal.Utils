@@ -91,33 +91,4 @@ public class NullTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value must be null. (Parameter 'sample.Value')", ex.Message);
     }
-
-    [Fact]
-    public void Should_NotThrows_When_GuardIsNotActive()
-    {
-        // Arrange
-        object value = "value";
-
-        // Act
-        Guard.Argument(value).If(false).Null();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_GuardIsActive()
-    {
-        // Arrange
-        object? value = "value";
-
-        void Act()
-        {
-            Guard.Argument(value).If(true).Null();
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value must be null. (Parameter 'value')", ex.Message);
-    }
 }

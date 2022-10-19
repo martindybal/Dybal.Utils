@@ -1,16 +1,16 @@
-﻿namespace Dybal.Utils.Guards;
+﻿using System.Diagnostics.CodeAnalysis;
 
-internal record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>, IConditionalArgumentGuard<TArgument>
+namespace Dybal.Utils.Guards;
+
+internal readonly record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>
 {
-    public bool IsActive { get; private set; }
     public IArgument<TArgument> Argument { get; }
     private Type? ExceptionOverrideType { get; init; }
 
-    internal ArgumentGuard(IArgument<TArgument> argument, bool isActive)
+    internal ArgumentGuard(IArgument<TArgument> argument)
     {
         Argument = argument;
         ExceptionOverrideType = null;
-        IsActive = isActive;
     }
 
     public IArgumentGuard<TArgument> With<TException>()
@@ -19,6 +19,7 @@ internal record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>, ICo
         return this with { ExceptionOverrideType = typeof(TException) };
     }
 
+    [DoesNotReturn]
     public void Throw<TException>(string? message) 
         where TException : Exception
     {
@@ -30,14 +31,5 @@ internal record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>, ICo
         {
             ThrowHelper.Throw(ExceptionOverrideType, Argument.Name, message);
         }
-    }
-
-    public IConditionalArgumentGuard<TArgument?> If(bool condition)
-    {
-        if (!condition)
-        {
-            IsActive = false;
-        }
-        return this;
     }
 }

@@ -108,36 +108,7 @@ public class NotNullTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentNullException>(Act);
         Assert.Equal($"{customMessage} (Parameter 'sample.Value')", ex.Message);
     }
-
-    [Fact]
-    public void Should_NotThrows_When_GuardIsNotActive()
-    {
-        // Arrange
-        object? value = null;
-
-        // Act
-        Guard.Argument(value).If(false).NotNull();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentNullException_When_GuardIsActive()
-    {
-        // Arrange
-        object? value = null;
-
-        void Act()
-        {
-            Guard.Argument(value).If(true).NotNull();
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentNullException>(Act);
-        Assert.Equal("Value cannot be null. (Parameter 'value')", ex.Message);
-    }
-
+    
 
     [Fact]
     public void ShouldThrows_NonNullable_When_NonNullableArgument()
@@ -169,38 +140,7 @@ public class NotNullTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentNullException>(Act);
         Assert.Equal("Value cannot be null. (Parameter 'nullableValue')", ex.Message);
     }
-
-    [Fact]
-    public void ShouldThrows_Nullable_When_NonNullableArgument_After_If()
-    {
-        // Arrange
-        object value = "value";
-
-        // Act
-        //NotNull after If has to return nullable TArgument? insteadof TArgument
-        var nullableValue = Guard.Argument(value).If(false).NotNull();
-
-        // Assert
-        var assertNullableType = (1, nullableValue);
-        // doesn't break build with error CS8625: Cannot convert null literal to non-nullable reference type.
-        assertNullableType.nullableValue = null;
-    }
-
-    [Fact]
-    public void ShouldThrows_Nullable_When_NullableArgument_After_If()
-    {
-        // Arrange
-        object? nullableValue = null;
-
-        // Act
-        var returnValue = Guard.Argument(nullableValue).If(false).NotNull(); // should be nullable
-
-        // Assert
-        var assertNullableType = (1, returnValue);
-        // doesn't break build with error CS8625: Cannot convert null literal to non-nullable reference type.
-        assertNullableType.returnValue = null;
-    }
-
+    
     private void AssertNonNullableType(object nonNullableValue)
     {
         // doesn't break build with error CS8600: Converting null literal or possible null value to non-nullable type.

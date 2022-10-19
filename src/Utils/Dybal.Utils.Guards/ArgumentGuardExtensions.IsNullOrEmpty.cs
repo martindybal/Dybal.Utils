@@ -2,18 +2,13 @@
 
 public static partial class ArgumentGuardExtensions
 {
-    public static string NotNullOrEmpty(
-        this IArgumentGuard<string?> guard,
-        string? message = null)
+    public static string NotNullOrEmpty(this IArgumentGuard<string?> guard, string? message = null)
     {
-        if (guard.IsActive)
+        if (string.IsNullOrEmpty(guard.Argument.Value))
         {
-            if (string.IsNullOrEmpty(guard.Argument.Value))
-            {
-                guard.Throw<ArgumentException>(message ?? "Value cannot be null or empty string.");
-            }
+            guard.Throw<ArgumentException>(message ?? "Value cannot be null or empty string.");
         }
 
-        return guard.Argument.Value!;
+        return guard.Argument.Value;
     }
 }
