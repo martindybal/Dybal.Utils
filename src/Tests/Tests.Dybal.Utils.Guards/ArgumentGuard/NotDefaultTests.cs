@@ -75,36 +75,7 @@ public class NotDefaultTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Nullable object must have a value. (Parameter 'value')", ex.Message);
     }
-
-    [Fact]
-    public void IfHasValue_ShouldThrows_ArgumentException_When_NullableGuidVariableDefault()
-    {
-        // Arrange
-        Guid? value = Guid.Empty;
-
-        void Act()
-        {
-            var id = Guard.Argument(value).IfHasValue().NotDefault();
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be an empty GUID. (Parameter 'value')", ex.Message);
-    }
-
-    [Fact]
-    public void IfHasValue_ShouldNotThrows_ArgumentException_When_NullableGuidNull()
-    {
-        // Arrange
-        Guid? value = null;
-
-        // Act
-        var id = Guard.Argument(value).IfHasValue().NotDefault() ?? Guid.NewGuid();
-        
-        // Assert
-        // doesn't throw any exception
-    }
-
+    
     [Fact]
     public void ShouldThrows_ArgumentException_When_VariableHasDefaultValue()
     {

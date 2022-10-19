@@ -91,33 +91,4 @@ public class NotNullOrEmptyTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value cannot be null or empty string. (Parameter 'sample.Value')", ex.Message);
     }
-
-    [Fact]
-    public void Should_NotThrows_When_GuardIsNotActive()
-    {
-        // Arrange
-        string? value = null;
-
-        // Act
-        Guard.Argument(value).If(false).NotNullOrEmpty();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_GuardIsActive()
-    {
-        // Arrange
-        string? value = null;
-
-        void Act()
-        {
-            Guard.Argument(value).If(true).NotNullOrEmpty();
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be null or empty string. (Parameter 'value')", ex.Message);
-    }
 }

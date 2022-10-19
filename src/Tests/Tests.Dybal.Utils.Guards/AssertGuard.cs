@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards;
 
 public class AssertGuard
 {
-    public static void AssertArgument<T>(T value, IArgument<object?> argument, [CallerArgumentExpression("value")] string? valueName = null)
+    public static void AssertArgument<T>(T value, IArgument<T> argument, [CallerArgumentExpression("value")] string? valueName = null)
     {
         AssertArgument(value, argument.Value, argument.Name, valueName);
     }

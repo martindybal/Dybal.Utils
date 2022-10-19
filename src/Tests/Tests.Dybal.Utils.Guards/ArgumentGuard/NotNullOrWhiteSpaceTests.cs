@@ -98,33 +98,4 @@ public class NotNullOrWhiteSpaceTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value cannot be null or white space string. (Parameter 'sample.Value')", ex.Message);
     }
-
-    [Fact]
-    public void Should_NotThrows_When_GuardIsNotActive()
-    {
-        // Arrange
-        string? value = null;
-
-        // Act
-        Guard.Argument(value).If(false).NotNullOrWhiteSpace();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_GuardIsActive()
-    {
-        // Arrange
-        string? value = null;
-
-        void Act()
-        {
-            Guard.Argument(value).If(true).NotNullOrWhiteSpace();
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be null or white space string. (Parameter 'value')", ex.Message);
-    }
 }

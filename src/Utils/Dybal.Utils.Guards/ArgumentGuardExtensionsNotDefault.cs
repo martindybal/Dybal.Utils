@@ -4,15 +4,12 @@ public static partial class ArgumentGuardExtensions
 {
     public static TArgument NotDefault<TArgument>(this IArgumentGuard<TArgument> guard, string? message = null)
     {
-        if (guard.IsActive)
+        if (EqualityComparer<TArgument>.Default.Equals(guard.Argument.Value, default))
         {
-            if (EqualityComparer<TArgument>.Default.Equals(guard.Argument.Value, default))
-            {
-                var defaultMessage = guard.Argument.Value is Guid ?
-                                        "Value cannot be an empty GUID." :
-                                        "Value cannot be the default value.";
-                guard.Throw<ArgumentException>(message ?? defaultMessage);
-            }
+            var defaultMessage = guard.Argument.Value is Guid ?
+                                    "Value cannot be an empty GUID." :
+                                    "Value cannot be the default value.";
+            guard.Throw<ArgumentException>(message ?? defaultMessage);
         }
 
         return guard.Argument.Value;
@@ -21,16 +18,12 @@ public static partial class ArgumentGuardExtensions
     public static TArgument? NotDefault<TArgument>(this IArgumentGuard<TArgument?> guard, string? message = null)
         where TArgument : struct
     {
-        if (guard.IsActive)
+        if (guard.Argument.Value.HasValue)
         {
-            if (guard.Argument.Value.HasValue)
-            {
-                return Guard.Argument(guard.Argument.Value.Value, guard.Argument.Name).NotDefault();
-            }
-
-            string message1 = message ?? "Nullable object must have a value.";
-            guard.Throw<ArgumentException>(message1);
+            return Guard.Argument(guard.Argument.Value.Value, guard.Argument.Name).NotDefault();
         }
+
+        guard.Throw<ArgumentException>(message ?? "Nullable object must have a value.");
 
         return guard.Argument.Value;
     }
