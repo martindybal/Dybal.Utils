@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Dybal.Utils.Guards;
+﻿namespace Dybal.Utils.Guards;
 
 public static partial class ArgumentGuardExtensions
 {

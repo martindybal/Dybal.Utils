@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Dybal.Utils.Guards;
+﻿namespace Dybal.Utils.Guards;
 
 internal record struct ArgumentGuard<TArgument> : IArgumentGuard<TArgument>, IConditionalArgumentGuard<TArgument>
 {
