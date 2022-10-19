@@ -6,4 +6,10 @@ public interface IArgumentGuard<out TArgument>
     IArgument<TArgument> Argument { get; }
 
     IConditionalArgumentGuard<TArgument?> If(bool condition);
+
+    IArgumentGuard<TArgument> With<TException>()
+        where TException : Exception;
+
+    void Throw<TException>(string? message)
+        where TException : Exception;
 }

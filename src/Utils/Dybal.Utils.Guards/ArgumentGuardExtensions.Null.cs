@@ -8,7 +8,7 @@ public static partial class ArgumentGuardExtensions
         {
             if (guard.Argument.Value is not null)
             {
-                ThrowHelper.Throw<ArgumentException>(guard.Argument.Name, message ?? "Value must be null.");
+                guard.Throw<ArgumentException>(message ?? "Value must be null.");
             }
         }
 
