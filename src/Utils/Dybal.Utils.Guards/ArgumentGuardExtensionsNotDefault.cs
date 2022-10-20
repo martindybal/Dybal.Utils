@@ -18,13 +18,11 @@ public static partial class ArgumentGuardExtensions
     public static TArgument? NotDefault<TArgument>(this IArgumentGuard<TArgument?> guard, string? message = null)
         where TArgument : struct
     {
-        if (guard.Argument.Value.HasValue)
+        if (guard.Argument.Value.HasValue == false)
         {
-            return Guard.Argument(guard.Argument.Value.Value, guard.Argument.Name).NotDefault();
+            ThrowHelper.Throw<ArgumentException>(guard, message ?? "Nullable object must have a value.");
         }
 
-        ThrowHelper.Throw<ArgumentException>(guard, message ?? "Nullable object must have a value.");
-
-        return guard.Argument.Value;
+        return Guard.Argument(guard.Argument.Value.Value, guard.Argument.Name).NotDefault();
     }
 }
