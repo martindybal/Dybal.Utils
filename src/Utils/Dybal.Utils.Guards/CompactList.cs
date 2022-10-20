@@ -13,23 +13,7 @@ namespace Dybal.Utils.Guards
         private readonly TElement? thirdElement = default;
         private readonly TElement?[]? otherElements = default;
 
-        public CompactList(TElement? firstElement, TElement? secondElement)
-        {
-            this.firstElement = firstElement;
-            this.secondElement = secondElement;
-            Count = 2;
-        }
-
-        public CompactList(TElement? firstElement, TElement? secondElement, TElement? thirdElement, params TElement?[] otherElements)
-            : this(firstElement, secondElement)
-        {
-            this.firstElement = firstElement;
-            this.secondElement = secondElement;
-            this.thirdElement = thirdElement;
-            this.otherElements = otherElements;
-
-            Count = 3 + otherElements.Length;
-        }
+        public int Count { get; }
         
         public TElement? this[int index]
         {
@@ -50,12 +34,30 @@ namespace Dybal.Utils.Guards
             }
         }
 
-        public int Count { get; }
+        public CompactList(TElement? firstElement, TElement? secondElement)
+        {
+            this.firstElement = firstElement;
+            this.secondElement = secondElement;
+            Count = 2;
+        }
 
+        public CompactList(TElement? firstElement, TElement? secondElement, TElement? thirdElement, params TElement?[] otherElements)
+            : this(firstElement, secondElement)
+        {
+            this.firstElement = firstElement;
+            this.secondElement = secondElement;
+            this.thirdElement = thirdElement;
+            this.otherElements = otherElements;
+
+            Count = 3 + otherElements.Length;
+        }
+        
         public IEnumerator<TElement?> GetEnumerator()
         {
             for (var index = 0; index < Count; index++)
+            {
                 yield return this[index];
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
