@@ -4,7 +4,7 @@ public static partial class ArgumentGuardExtensions
 {
     public static ArgumentGuard<TArgument> NotNull<TArgument>(this ICovariantArgumentGuard<TArgument?> covariantGuard, string? message = null)
     {
-        var guard = ArgumentGuard<TArgument>.From(covariantGuard);
+        var guard = ArgumentGuard<TArgument>.From(covariantGuard, covariantGuard.Argument!);
         if (guard.Argument.Value is null)
         {
             ThrowHelper.Throw<ArgumentNullException>(guard, message);

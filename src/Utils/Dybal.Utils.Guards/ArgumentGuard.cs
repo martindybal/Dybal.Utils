@@ -28,24 +28,8 @@ public readonly record struct ArgumentGuard<TArgument> : ICovariantArgumentGuard
         return this with { ExceptionOverrideType = typeof(TException) };
     }
     
-    public static ArgumentGuard<TArgument> From(ICovariantArgumentGuard<TArgument?> covariantGuard)
+    public static ArgumentGuard<TArgument> From(IExceptionOverride exceptionOverride, IArgument<TArgument> argument)
     {
-        static Type? GetExceptionOverrideType(ICovariantArgumentGuard<TArgument?> covariantGuard)
-        {
-            if (covariantGuard is IExceptionOverride guard)
-            {
-                return guard.ExceptionOverrideType;
-            }
-
-            return null;
-        }
-
-        if (covariantGuard is ArgumentGuard<TArgument> guard)
-        {
-            return guard;
-        }
-
-        Type? exceptionOverrideType = GetExceptionOverrideType(covariantGuard);
-        return new ArgumentGuard<TArgument>(covariantGuard.Argument!, exceptionOverrideType);
+        return new ArgumentGuard<TArgument>(argument, exceptionOverride.ExceptionOverrideType);
     }
 }
