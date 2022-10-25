@@ -35,6 +35,25 @@ Foo(Guid? id, string bar)
     Bar = Guard.Argument(bar).NotNullOrWhiteSpace().MinLength(5).MaxLength(20);
 }
 ```
+
+If you like shortcodes, you can also use `using static Dybal.Utils.Guards.GuardProvider;`
+```C#
+Foo(Guid? id, string bar)
+{
+    Id = Guard(id).NotDefault();
+    Bar = Guard(bar).NotNullOrWhiteSpace().MinLength(5).MaxLength(20);
+}
+```
+
+Or an Extension method from `Dybal.Utils.Guards.ObjectExtensions` package.
+```C#
+Foo(Guid? id, string bar)
+{
+    Id = id.Guard().NotDefault();
+    Bar = bar.Guard().NotNullOrWhiteSpace().MinLength(5).MaxLength(20);
+}
+```
+
 ## Documentation
 ### Documentation written in C# may be harder to read, but it never lies and it's always up to date.
 https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.Guards
