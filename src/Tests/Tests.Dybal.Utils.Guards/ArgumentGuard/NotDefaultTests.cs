@@ -9,26 +9,26 @@ public class NotDefaultTests : UnitTestsBase
     public void Should_NotThrows_When_VariableWithValue()
     {
         // Arrange
-        var value = Guid.NewGuid();
+        var expectedValue = Guid.NewGuid();
 
         // Act
-        Guard.Argument(value).NotDefault();
+        Guid actualValue = Guard.Argument(expectedValue).NotDefault();
 
         // Assert
-        // doesn't throw any exception
+        Assert.Equal(expectedValue, actualValue);
     }
 
     [Fact]
     public void Should_NotThrows_When_NullableVariableWithValue()
     {
         // Arrange
-        Guid? value = Guid.NewGuid();
+        Guid? expectedValue = Guid.NewGuid();
 
         // Act
-        Guard.Argument(value).NotDefault();
+        Guid actualValue = Guard.Argument(expectedValue).NotDefault();
 
         // Assert
-        // doesn't throw any exception
+        Assert.Equal(expectedValue.Value, actualValue);
     }
 
     [Fact]

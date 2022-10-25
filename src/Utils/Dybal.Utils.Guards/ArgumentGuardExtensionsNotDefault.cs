@@ -9,7 +9,7 @@ public static partial class ArgumentGuardExtensions
         return guard;
     }
 
-    public static ArgumentGuard<TArgument?> NotDefault<TArgument>(this ArgumentGuard<TArgument?> guard, string? message = null)
+    public static ArgumentGuard<TArgument> NotDefault<TArgument>(this ArgumentGuard<TArgument?> guard, string? message = null)
         where TArgument : struct
     {
         if (guard.Argument.Value.HasValue == false)
@@ -19,7 +19,7 @@ public static partial class ArgumentGuardExtensions
 
         NotDefault(guard.Argument.Value.Value, guard, message);
 
-        return guard;
+        return ArgumentGuard<TArgument>.From(guard, new Argument<TArgument>(guard.Argument.Value.Value, guard.Argument.Name));
     }
     
     private static void NotDefault<TArgument>(TArgument argumentValue, IExceptionOverride guard, string? message)
