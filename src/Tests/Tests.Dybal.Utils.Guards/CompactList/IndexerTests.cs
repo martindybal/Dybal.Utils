@@ -16,10 +16,12 @@ public class IndexerTests : UnitTestsBase
     [InlineData(7)]
     [InlineData(8)]
     [InlineData(9)]
+    [InlineData(10)]
+    [InlineData(11)]
     public void ShouldReturn_ItemOnIndex_WhenIndexInRange(int index)
     {
         // Arrange
-        var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 
         // Act
         var actualItem = compactList[index];

@@ -9,8 +9,8 @@ public class GetEnumerator : UnitTestsBase
     [Fact]
     public void Generic_ShouldReturn_SequenceWithAllElements()
     {
-        var expectedSequence = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        var expectedSequence = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 
         // Act
         var actualSequence = new List<int>();
@@ -26,8 +26,8 @@ public class GetEnumerator : UnitTestsBase
     [Fact]
     public void NonGeneric_ShouldReturn_SequenceWithAllElements()
     {
-        var expectedSequence = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        IEnumerable compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        var expectedSequence = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        IEnumerable compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
 
         // Act
         var actualSequence = new List<int>();
