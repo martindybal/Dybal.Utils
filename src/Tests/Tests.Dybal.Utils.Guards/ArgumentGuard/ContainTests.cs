@@ -49,49 +49,4 @@ public class ContainTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Collection has to contain '5'. (Parameter 'source')", ex.Message);
     }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_CollectionEmptyPredicate()
-    {
-        // Arrange
-        var source = Array.Empty<string>();
-
-        void Act()
-        {
-            Guard.Argument(source).Contain(static _ => false);
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection does not contain required item. (Parameter 'source')", ex.Message);
-    }
-
-    [Fact]
-    public void Should_NotThrows_When_CollectionContainPredicate()
-    {
-        // Arrange
-        var source = new[] { "a", "b", " " };
-
-        // Act
-        Guard.Argument(source).Contain(string.IsNullOrWhiteSpace);
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_CollectionNotContainPredicate()
-    {
-        // Arrange
-        var source = new[] { "a", "b" };
-
-        void Act()
-        {
-            Guard.Argument(source).Contain(string.IsNullOrWhiteSpace);
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection does not contain required item. (Parameter 'source')", ex.Message);
-    }
 }
