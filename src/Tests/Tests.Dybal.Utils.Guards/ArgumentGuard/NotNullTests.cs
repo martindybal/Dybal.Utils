@@ -114,7 +114,7 @@ public class NotNullTests : UnitTestsBase
     public void ShouldThrows_NonNullable_When_NonNullableArgument()
     {
         // Arrange
-        object value = "value";
+        string value = "value";
 
         // Act
         value = Guard.Argument(value).NotNull();
@@ -128,11 +128,11 @@ public class NotNullTests : UnitTestsBase
     public void ShouldThrows_NonNullable_When_NullableArgument()
     {
         // Arrange
-        object? nullableValue = null;
+        string? nullableValue = null;
 
         void Act()
         {
-            object value = Guard.Argument(nullableValue).NotNull();
+            string value = Guard.Argument(nullableValue).NotNull();
             AssertNonNullableType(value);
         }
 
@@ -141,7 +141,7 @@ public class NotNullTests : UnitTestsBase
         Assert.Equal("Value cannot be null. (Parameter 'nullableValue')", ex.Message);
     }
     
-    private void AssertNonNullableType(object nonNullableValue)
+    private void AssertNonNullableType(string nonNullableValue)
     {
         // doesn't break build with error CS8600: Converting null literal or possible null value to non-nullable type.
         // doesn't break build with error CS8603: Possible null reference return.

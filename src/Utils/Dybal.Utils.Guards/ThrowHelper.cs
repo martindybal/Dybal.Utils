@@ -1,87 +1,71 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Dybal.Utils.Guards
+namespace Dybal.Utils.Guards;
+
+public static class ThrowHelper
 {
-    internal static class ThrowHelper
+    public delegate TException ExceptionFactory<out TException>(string paramName, string? message = null)
+        where TException : Exception;
+
+    private static readonly Dictionary<Type, ExceptionFactory<Exception>> supportedExceptions = new();
+
+    static ThrowHelper()
     {
-        public delegate TException ExceptionFactory<out TException>(string paramName, string? message = null)
-            where TException : Exception;
+        Register(ArgumentExceptionFactory);
+        Register(ArgumentNullExceptionFactory);
+        Register(ArgumentOutOfRangeExceptionFactory);
+    }
 
-        private static readonly Dictionary<Type, ExceptionFactory<Exception>> supportedExceptions = new();
-
-        static ThrowHelper()
+    internal static void EnsureRegistration<TException>() where TException : Exception
+    {
+        var exceptionType = typeof(TException);
+        if (!supportedExceptions.ContainsKey(exceptionType))
         {
-            Register(ArgumentExceptionFactory);
-            Register(ArgumentNullExceptionFactory);
-            Register(ArgumentOutOfRangeExceptionFactory);
-        }
-
-        internal static void EnsureRegistration<TException>() where TException : Exception
-        {
-            var exceptionType = typeof(TException);
-            if (!supportedExceptions.ContainsKey(exceptionType))
-            {
-                throw new ExceptionNotRegisteredException(exceptionType);
-            }
-        }
-
-        public static void Register<TException>(ExceptionFactory<TException> exceptionFactory)
-            where TException : Exception
-        {
-            supportedExceptions.Add(typeof(TException), exceptionFactory);
-        }
-
-        [DoesNotReturn]
-        public static void Throw<TException>(IExceptionOverride guard, string? message)
-            where TException : Exception
-        {
-            var exceptionType = guard.ExceptionOverrideType ?? typeof(TException);
-            Throw(exceptionType, guard.ArgumentName, message);
-        }
-
-        public static void Throw<TException>(MultipleArgumentGuard guard, string message)
-        {
-            var argumentNames = string.Join(", ", guard.Arguments.Select(static argument => argument.Name));
-            var exceptionType = guard.ExceptionOverrideType ?? typeof(TException);
-            Throw(exceptionType, argumentNames, message);
-        }
-
-        [DoesNotReturn]
-        public static void Throw<TException>(string paramName, string? message = null)
-            where TException : Exception
-        {
-            Throw(typeof(TException), paramName, message);
-        }
-
-        [DoesNotReturn]
-        public static void Throw(Type exceptionType, string paramName, string? message = null)
-        {
-            if (supportedExceptions.TryGetValue(exceptionType, out var exceptionFactory))
-            {
-                throw exceptionFactory(paramName, message);
-            }
-
             throw new ExceptionNotRegisteredException(exceptionType);
         }
+    }
 
-        private static ArgumentException ArgumentExceptionFactory(string paramName, string? message)
+    public static void Register<TException>(ExceptionFactory<TException> exceptionFactory)
+        where TException : Exception
+    {
+        supportedExceptions.Add(typeof(TException), exceptionFactory);
+    }
+
+    [DoesNotReturn]
+    public static void Throw<TException>(IExceptionOverride guard, string? message)
+        where TException : Exception
+    {
+        var exceptionType = guard.ExceptionOverrideType ?? typeof(TException);
+        Throw(exceptionType, guard.ArgumentName, message);
+    }
+        
+    [DoesNotReturn]
+    private static void Throw(Type exceptionType, string paramName, string? message = null)
+    {
+        if (supportedExceptions.TryGetValue(exceptionType, out var exceptionFactory))
         {
-            return new ArgumentException(message, paramName);
+            throw exceptionFactory(paramName, message);
         }
 
-        private static ArgumentNullException ArgumentNullExceptionFactory(string paramName, string? message)
-        {
-            if (message is null)
-            {
-                return new ArgumentNullException(paramName);
-            }
-            return new ArgumentNullException(paramName, message);
-        }
+        throw new ExceptionNotRegisteredException(exceptionType);
+    }
 
-        private static ArgumentOutOfRangeException ArgumentOutOfRangeExceptionFactory(string paramName, string? message)
+    private static ArgumentException ArgumentExceptionFactory(string paramName, string? message)
+    {
+        return new ArgumentException(message, paramName);
+    }
+
+    private static ArgumentNullException ArgumentNullExceptionFactory(string paramName, string? message)
+    {
+        if (message is null)
         {
-            return new ArgumentOutOfRangeException(paramName, message);
+            return new ArgumentNullException(paramName);
         }
+        return new ArgumentNullException(paramName, message);
+    }
+
+    private static ArgumentOutOfRangeException ArgumentOutOfRangeExceptionFactory(string paramName, string? message)
+    {
+        return new ArgumentOutOfRangeException(paramName, message);
     }
 }
