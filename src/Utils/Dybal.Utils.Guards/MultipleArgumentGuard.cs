@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Dybal.Utils.Guards;
+﻿namespace Dybal.Utils.Guards;
 
 public record struct MultipleArgumentGuard : IExceptionOverride
 {

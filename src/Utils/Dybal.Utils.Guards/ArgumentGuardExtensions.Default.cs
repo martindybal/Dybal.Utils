@@ -2,7 +2,7 @@
 
 public static partial class ArgumentGuardExtensions
 {
-    public static TArgument? Default<TArgument>(this IArgumentGuard<TArgument> guard, string? message = null)
+    public static ArgumentGuard<TArgument> Default<TArgument>(this ArgumentGuard<TArgument> guard, string? message = null)
         where TArgument : struct
     {
         if (!guard.Argument.Value.Equals(default(TArgument)))
@@ -13,6 +13,6 @@ public static partial class ArgumentGuardExtensions
             ThrowHelper.Throw<ArgumentException>(guard, message ?? defaultMessage);
         }
 
-        return guard.Argument.Value;
+        return guard;
     }
 }

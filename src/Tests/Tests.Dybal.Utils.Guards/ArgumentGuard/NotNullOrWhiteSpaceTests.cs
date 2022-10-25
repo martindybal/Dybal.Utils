@@ -22,7 +22,7 @@ public class NotNullOrWhiteSpaceTests : UnitTestsBase
     public void Should_NotThrows_When_PropertyWithValue()
     {
         // Arrange
-        var sample = new { Value = "non-empty" };
+        var sample = new { Value = (string?)"non-empty" };
 
         // Act
         Guard.Argument(sample.Value).NotNullOrWhiteSpace();

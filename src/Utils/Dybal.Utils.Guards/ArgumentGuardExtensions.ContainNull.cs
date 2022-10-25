@@ -2,14 +2,15 @@
 
 public static partial class ArgumentGuardExtensions
 {
-    public static IEnumerable<TArgument> ContainNull<TArgument>(this IArgumentGuard<IEnumerable<TArgument>> guard, string? message = null)
+    public static ArgumentGuard<IEnumerable<TArgument>> ContainNull<TArgument>(this ICovariantArgumentGuard<IEnumerable<TArgument>> guard, string? message = null)
     {
         return guard.ContainNull<IEnumerable<TArgument>, TArgument>();
     }
 
-    public static TEnumerable ContainNull<TEnumerable, TArgument>(this IArgumentGuard<TEnumerable> guard, string? message = null)
+    public static ArgumentGuard<TEnumerable> ContainNull<TEnumerable, TArgument>(this ICovariantArgumentGuard<TEnumerable> covariantGuard, string? message = null)
         where TEnumerable : IEnumerable<TArgument>
     {
+        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard);
         return guard.Contain<TEnumerable, TArgument>(static item => item is null, message ?? "Collection has to contain null.");
     }
 }

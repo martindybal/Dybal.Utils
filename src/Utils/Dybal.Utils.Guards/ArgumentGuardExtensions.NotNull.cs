@@ -2,13 +2,14 @@
 
 public static partial class ArgumentGuardExtensions
 {
-    public static TArgument NotNull<TArgument>(this IArgumentGuard<TArgument?> guard, string? message = null)
+    public static ArgumentGuard<TArgument> NotNull<TArgument>(this ICovariantArgumentGuard<TArgument?> covariantGuard, string? message = null)
     {
+        var guard = ArgumentGuard<TArgument>.From(covariantGuard);
         if (guard.Argument.Value is null)
         {
             ThrowHelper.Throw<ArgumentNullException>(guard, message);
         }
 
-        return guard.Argument.Value;
+        return guard;
     }
 }
