@@ -18,6 +18,19 @@ public class StartsWithTests : UnitTestsBase
         Assert.Equal(expectedValue, actualValue);
     }
 
+    [Theory]
+    [InlineData("abc")]
+    [InlineData("Abc")]
+    [InlineData("ABC")]
+    public void Should_NotThrows_When_CollectionContainValueIgnoreCase(string expectedValue)
+    {
+        // Act
+        var actualValue = Guard.Argument(expectedValue).StartsWith("abc", StringComparison.CurrentCultureIgnoreCase);
+
+        // Assert
+        Assert.Equal(expectedValue, actualValue);
+    }
+
     [Fact]
     public void ShouldThrows_ArgumentException_When_CollectionEmpty()
     {

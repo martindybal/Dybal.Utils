@@ -10,9 +10,9 @@ public static partial class ArgumentGuardExtensions
         return guard.Any<TEnumerable, TArgument>(item => Equals(item, value), message);
     }
 
-    public static ArgumentGuard<string> Contains(this ArgumentGuard<string> guard, string value, string? message = null)
+    public static ArgumentGuard<string> Contains(this ArgumentGuard<string> guard, string value, StringComparison comparisonType = StringComparison.CurrentCulture, string? message = null)
     {
-        if (!guard.Argument.Value.Contains(value))
+        if (!guard.Argument.Value.Contains(value, comparisonType))
         {
             message ??= $"\"{guard.Argument.Value}\" has to contain \"{value}\".";
             ThrowHelper.Throw<ArgumentException>(guard, message);
