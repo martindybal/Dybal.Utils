@@ -3,50 +3,50 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
-public class ContainTests : UnitTestsBase
+public class StringContainTests : UnitTestsBase
 {
     [Fact]
     public void Should_NotThrows_When_CollectionContainValue()
     {
         // Arrange
-        var source = new[] { 1, 2, 3, 4, 5 };
+        var expectedValue = "abc";
 
         // Act
-        var sourceWithFive = Guard.Argument(source).Contain(5);
+        var actualValue = Guard.Argument(expectedValue).Contain("abc");
 
         // Assert
-        Assert.Equal(source, sourceWithFive);
+        Assert.Equal(expectedValue, actualValue);
     }
 
     [Fact]
     public void ShouldThrows_ArgumentException_When_CollectionEmpty()
     {
         // Arrange
-        var source = Array.Empty<int>();
+        var value = string.Empty;
 
         void Act()
         {
-            Guard.Argument(source).Contain(5);
+            Guard.Argument(value).Contain("abc");
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection has to contain '5'. (Parameter 'source')", ex.Message);
+        Assert.Equal("\"\" has to contain \"abc\". (Parameter 'value')", ex.Message);
     }
 
     [Fact]
     public void ShouldThrows_ArgumentException_When_CollectionNotContainValue()
     {
         // Arrange
-        var source = new[] { 1, 2, 3, 4 };
+        var value = "abc";
 
         void Act()
         {
-            Guard.Argument(source).Contain(5);
+            Guard.Argument(value).Contain("d");
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection has to contain '5'. (Parameter 'source')", ex.Message);
+        Assert.Equal("\"abc\" has to contain \"d\". (Parameter 'value')", ex.Message);
     }
 }
