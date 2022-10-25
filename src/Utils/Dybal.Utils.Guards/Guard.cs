@@ -11,9 +11,9 @@ public static class Guard
     /// <param name="argumentValue">The argumentValue to be checked.</param>
     /// <param name="argumentName">DO NOT SET - Name of <c>argumentValue</c> parameter is self-replenishing.</param>
     /// <returns>Instance of ArgumentGuard&lt;TArgument&gt;</returns>
-    public static ArgumentGuard<TArgument> Argument<TArgument>(TArgument argumentValue, [CallerArgumentExpression("argumentValue")] string? argumentName = null)
+    public static ArgumentGuard<TArgument> Argument<TArgument>(TArgument argumentValue, [CallerArgumentExpression("argumentValue")] string argumentName = "")
     {
-        return new ArgumentGuard<TArgument>(new Argument<TArgument>(argumentValue, argumentName!));
+        return new ArgumentGuard<TArgument>(new Argument<TArgument>(argumentValue, argumentName));
     }
     
     public static MultipleArgumentGuard Arguments<TArgument1, TArgument2>(

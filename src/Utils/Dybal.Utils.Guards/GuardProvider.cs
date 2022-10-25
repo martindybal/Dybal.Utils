@@ -19,7 +19,7 @@ public static class GuardProvider
     /// <param name="argumentValue">The argumentValue to be checked.</param>
     /// <param name="argumentName">DO NOT SET - Name of <c>argumentValue</c> parameter is self-replenishing.</param>
     /// <returns>Instance of ArgumentGuard&lt;TArgument&gt;</returns>
-    public static ArgumentGuard<TArgument> Guard<TArgument>(TArgument argumentValue, [CallerArgumentExpression("argumentValue")] string? argumentName = null)
+    public static ArgumentGuard<TArgument> Guard<TArgument>(TArgument argumentValue, [CallerArgumentExpression("argumentValue")] string argumentName = "")
     {
         return Guards.Guard.Argument(argumentValue, argumentName);
     }
