@@ -24,9 +24,7 @@ public readonly record struct ArgumentGuard<TArgument> : ICovariantArgumentGuard
     public ArgumentGuard<TArgument> Throws<TException>()
         where TException : Exception
     {
-#if DEBUG
-        ThrowHelper.EnsureRegistration<TException>();
-#endif
+        ThrowHelper.EnsureRegistrationInDebug<TException>();
         return this with { ExceptionOverrideType = typeof(TException) };
     }
     

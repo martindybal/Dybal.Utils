@@ -21,6 +21,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dybal.Utils.Guards.ObjectEx
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Dybal.Utils.Guards.ObjectExtensions", "Tests\Tests.Dybal.Utils.Guards.ObjectExtensions\Tests.Dybal.Utils.Guards.ObjectExtensions.csproj", "{2240B9AC-6E48-4109-9F44-80C4C9FA9A5A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{BCE3C699-8EBF-412B-968C-8452F19CD545}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{B950007F-874D-4ABC-9486-365964A8758C}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\dotnet-build.yml = ..\.github\workflows\dotnet-build.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +59,7 @@ Global
 		{6A0EB9D9-451D-4847-90EF-8B3ACCEB7D41} = {6CF0900F-6B75-419D-9EE1-F1E502170755}
 		{B32CFAF0-7EE3-4912-99E4-7DBBCEA12064} = {6CF0900F-6B75-419D-9EE1-F1E502170755}
 		{2240B9AC-6E48-4109-9F44-80C4C9FA9A5A} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}
+		{B950007F-874D-4ABC-9486-365964A8758C} = {BCE3C699-8EBF-412B-968C-8452F19CD545}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {863B3DB7-8473-4AE9-9757-BF2FD7100893}

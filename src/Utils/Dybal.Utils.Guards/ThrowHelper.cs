@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Dybal.Utils.Guards;
 
@@ -16,7 +17,8 @@ public static class ThrowHelper
         Register(ArgumentOutOfRangeExceptionFactory);
     }
 
-    internal static void EnsureRegistration<TException>() where TException : Exception
+    [Conditional("DEBUG")]
+    internal static void EnsureRegistrationInDebug<TException>() where TException : Exception
     {
         var exceptionType = typeof(TException);
         if (!supportedExceptions.ContainsKey(exceptionType))
@@ -38,7 +40,7 @@ public static class ThrowHelper
         var exceptionType = guard.ExceptionOverrideType ?? typeof(TException);
         Throw(exceptionType, guard.ArgumentName, message);
     }
-        
+
     [DoesNotReturn]
     private static void Throw(Type exceptionType, string paramName, string? message = null)
     {

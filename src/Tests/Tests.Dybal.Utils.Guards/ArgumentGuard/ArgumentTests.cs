@@ -20,7 +20,7 @@ public class ArgumentTests : UnitTestsBase
 
 #if DEBUG
     [Fact]
-    public void Throws_Should_EnsureExceptionRegistrationInDebug()
+    public void Throws_Should_EnsureExceptionRegistration_When_DebugCompilation()
     {
         // Arrange
         DateTime? value = new DateTime(2009, 09, 01);
@@ -34,6 +34,19 @@ public class ArgumentTests : UnitTestsBase
         // Assert
         var exceptionNotRegisteredException = Assert.Throws<ExceptionNotRegisteredException>(Act);
         Assert.Equal("Exception System.NotSupportedException was not registered. Use ThrowHelper.Register(NotSupportedExceptionFactory).", exceptionNotRegisteredException.Message);
+    }
+#else
+    [Fact]
+    public void Throws_ShouldNot_EnsureExceptionRegistration_When_NotDebugCompilation()
+    {
+        // Arrange
+        DateTime? value = new DateTime(2009, 09, 01);
+
+        // Act
+        Guard.Argument(value).Throws<NotSupportedException>();
+
+        // Assert
+        // doesn't throw any exception
     }
 #endif
 
