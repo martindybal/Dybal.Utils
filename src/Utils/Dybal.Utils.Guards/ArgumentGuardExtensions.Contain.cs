@@ -9,4 +9,15 @@ public static partial class ArgumentGuardExtensions
         message ??= $"Collection has to contain '{value}'.";
         return guard.Any<TEnumerable, TArgument>(item => Equals(item, value), message);
     }
+
+    public static ArgumentGuard<string> Contain(this ArgumentGuard<string> guard, string value, string? message = null)
+    {
+        if (!guard.Argument.Value.Contains(value))
+        {
+            message ??= $"\"{guard.Argument.Value}\" has to contain \"{value}\".";
+            ThrowHelper.Throw<ArgumentException>(guard, message);
+        }
+
+        return guard;
+    }
 }
