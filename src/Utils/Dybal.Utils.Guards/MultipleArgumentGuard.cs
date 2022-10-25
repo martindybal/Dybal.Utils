@@ -18,9 +18,7 @@ public record struct MultipleArgumentGuard : IExceptionOverride
     public MultipleArgumentGuard Throws<TException>()
         where TException : Exception
     {
-#if DEBUG
-        ThrowHelper.EnsureRegistration<TException>();
-#endif
+        ThrowHelper.EnsureRegistrationInDebug<TException>();
         return this with { ExceptionOverrideType = typeof(TException) };
     }
 }
