@@ -12,7 +12,7 @@ public class ContainNullTests : UnitTestsBase
         var source = new int?[] { 1, 2, 3, 4, null };
 
         // Act
-        Guard.Argument(source).ContainNull();
+        Guard.Argument(source).ContainsNull();
 
         // Assert
         // doesn't throw any exception
@@ -26,7 +26,7 @@ public class ContainNullTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(source).ContainNull();
+            Guard.Argument(source).ContainsNull();
         }
 
         // Assert
@@ -42,7 +42,7 @@ public class ContainNullTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(source).ContainNull();
+            Guard.Argument(source).ContainsNull();
         }
 
         // Assert

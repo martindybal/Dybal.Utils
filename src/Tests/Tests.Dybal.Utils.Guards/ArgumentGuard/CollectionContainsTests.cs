@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
-public class CollectionContainTests : UnitTestsBase
+public class CollectionContainsTests : UnitTestsBase
 {
     [Fact]
     public void Should_NotThrows_When_CollectionContainValue()
@@ -12,7 +12,7 @@ public class CollectionContainTests : UnitTestsBase
         var source = new[] { 1, 2, 3, 4, 5 };
 
         // Act
-        var sourceWithFive = Guard.Argument(source).Contain(5);
+        var sourceWithFive = Guard.Argument(source).Contains(5);
 
         // Assert
         Assert.Equal(source, sourceWithFive);
@@ -26,7 +26,7 @@ public class CollectionContainTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(source).Contain(5);
+            Guard.Argument(source).Contains(5);
         }
 
         // Assert
@@ -42,7 +42,7 @@ public class CollectionContainTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(source).Contain(5);
+            Guard.Argument(source).Contains(5);
         }
 
         // Assert
