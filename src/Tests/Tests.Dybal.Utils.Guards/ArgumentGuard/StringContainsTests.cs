@@ -3,16 +3,17 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
-public class StringContainTests : UnitTestsBase
+public class StringContainsTests : UnitTestsBase
 {
-    [Fact]
-    public void Should_NotThrows_When_CollectionContainValue()
+    [Theory]
+    [InlineData("abc")]
+    [InlineData("abc ")]
+    [InlineData(" abc")]
+    [InlineData(" abc ")]
+    public void Should_NotThrows_When_CollectionContainValue(string expectedValue)
     {
-        // Arrange
-        var expectedValue = "abc";
-
         // Act
-        var actualValue = Guard.Argument(expectedValue).Contain("abc");
+        var actualValue = Guard.Argument(expectedValue).Contains("abc");
 
         // Assert
         Assert.Equal(expectedValue, actualValue);
@@ -26,7 +27,7 @@ public class StringContainTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(value).Contain("abc");
+            Guard.Argument(value).Contains("abc");
         }
 
         // Assert
@@ -42,7 +43,7 @@ public class StringContainTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(value).Contain("d");
+            Guard.Argument(value).Contains("d");
         }
 
         // Assert

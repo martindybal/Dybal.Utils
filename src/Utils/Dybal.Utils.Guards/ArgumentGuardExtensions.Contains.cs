@@ -2,7 +2,7 @@
 
 public static partial class ArgumentGuardExtensions
 {
-    public static ArgumentGuard<TEnumerable> Contain<TEnumerable, TArgument>(this ICovariantArgumentGuard<TEnumerable> covariantGuard, TArgument? value, string? message = null)
+    public static ArgumentGuard<TEnumerable> Contains<TEnumerable, TArgument>(this ICovariantArgumentGuard<TEnumerable> covariantGuard, TArgument? value, string? message = null)
         where TEnumerable : IEnumerable<TArgument>
     {
         var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.Argument);
@@ -10,7 +10,7 @@ public static partial class ArgumentGuardExtensions
         return guard.Any<TEnumerable, TArgument>(item => Equals(item, value), message);
     }
 
-    public static ArgumentGuard<string> Contain(this ArgumentGuard<string> guard, string value, string? message = null)
+    public static ArgumentGuard<string> Contains(this ArgumentGuard<string> guard, string value, string? message = null)
     {
         if (!guard.Argument.Value.Contains(value))
         {
