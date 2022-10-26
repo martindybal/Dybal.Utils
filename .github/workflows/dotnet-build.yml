@@ -30,4 +30,11 @@ jobs:
           path: src/TestResults-${{ matrix.configuration }}-${{ matrix.dotnet-version }}
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
-      # You can test your matrix by printing the current dotnet version
+
+      - name: Test Reporter
+        uses: dorny/test-reporter@v1.6.0
+        if: ${{ always() }}
+        with:
+          name: dotnet tests
+          path: src/TestResults-${{ matrix.configuration }}-${{ matrix.dotnet-version }}
+          reporter: dotnet-trx
