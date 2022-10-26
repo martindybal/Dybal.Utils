@@ -22,12 +22,12 @@ jobs:
       - name: Build
         run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
       - name: Test
-        run: dotnet test --no-restore --verbosity normal --logger trx --results-directory "TestResults-${{ matrix.configuration }}-${{ matrix.dotnet-version }}"
+        run: dotnet test --no-restore --verbosity normal --logger "trx;LogFileName=test-results.trx" --results-directory "TestResults/${{ matrix.configuration }}-${{ matrix.dotnet-version }}"
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v3
         with:
           name: dotnet-results-${{ matrix.configuration }}-${{ matrix.dotnet-version }}
-          path: src/TestResults-${{ matrix.configuration }}-${{ matrix.dotnet-version }}
+          path: src/TestResults/${{ matrix.configuration }}-${{ matrix.dotnet-version }}
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
 
@@ -36,5 +36,5 @@ jobs:
         if: ${{ always() }}
         with:
           name: dotnet tests
-          path: TestResults-${{ matrix.configuration }}-${{ matrix.dotnet-version }}
+          path: TestResults/${{ matrix.configuration }}-${{ matrix.dotnet-version }}/test-results.trx
           reporter: dotnet-trx
