@@ -17,20 +17,7 @@ public class NotDefaultTests : UnitTestsBase
         // Assert
         Assert.Equal(expectedValue, actualValue);
     }
-
-    [Fact]
-    public void Should_NotThrows_When_NullableVariableWithValue()
-    {
-        // Arrange
-        Guid? expectedValue = Guid.NewGuid();
-
-        // Act
-        Guid actualValue = Guard.Argument(expectedValue).NotDefault();
-
-        // Assert
-        Assert.Equal(expectedValue.Value, actualValue);
-    }
-
+    
     [Fact]
     public void Should_NotThrows_When_PropertyWithValue()
     {
@@ -58,22 +45,6 @@ public class NotDefaultTests : UnitTestsBase
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value cannot be an empty GUID. (Parameter 'value')", ex.Message);
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_NullableGuidVariableNull()
-    {
-        // Arrange
-        Guid? value = null;
-
-        void Act()
-        {
-            Guard.Argument(value).NotDefault();
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Nullable object must have a value. (Parameter 'value')", ex.Message);
     }
     
     [Fact]
@@ -113,64 +84,6 @@ public class NotDefaultTests : UnitTestsBase
     {
         // Arrange
         var sample = new { Value = 0 };
-
-        void Act()
-        {
-            Guard.Argument(sample.Value).NotDefault();
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be the default value. (Parameter 'sample.Value')", ex.Message);
-    }
-
-    [Fact]
-    public void Should_NotThrows_When_ReferenceVariableWithValue()
-    {
-        // Arrange
-        var value = new object();
-
-        // Act
-        Guard.Argument(value).NotDefault();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void Should_NotThrows_When_ReferencePropertyWithValue()
-    {
-        // Arrange
-        var sample = new { Value = new object() };
-
-        // Act
-        Guard.Argument(sample.Value).NotDefault();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_VariableHasNullVariable()
-    {
-        // Arrange
-        var value = (object)null!;
-
-        void Act()
-        {
-            Guard.Argument(value).NotDefault();
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be the default value. (Parameter 'value')", ex.Message);
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_PropertyHasNullValue()
-    {
-        // Arrange
-        var sample = new { Value = (object)null! };
 
         void Act()
         {
