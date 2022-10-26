@@ -19,4 +19,15 @@ public static partial class ArgumentGuardExtensions
 
         return guard;
     }
+    
+    public static ArgumentGuard<Guid> Empty(this ArgumentGuard<Guid> guard, string? message = null)
+    {
+        if (guard.Argument.Value != Guid.Empty)
+        {
+            message ??= "Value must be an empty GUID.";
+            ThrowHelper.Throw<ArgumentException>(guard, message);
+        }
+
+        return guard;
+    }
 }

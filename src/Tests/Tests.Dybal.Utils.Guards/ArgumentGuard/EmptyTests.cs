@@ -106,6 +106,73 @@ public class EmptyTests : UnitTestsBase
         Assert.Equal(customMessage, ex.Message);
     }
 
+    [Fact]
+    public void Should_NotThrow_When_ValueIsEmptyGuid()
+    {
+        // Arrange
+        var value = Guid.Empty;
+
+        // Act
+        var guardedValue = Guard.Argument(value).Empty();
+
+        // Assert
+        Assert.Equal(value, guardedValue);
+    }
+
+    [Fact]
+    public void Should_Throw_ArgumentException_When_ValueIsNotEmptyGuid()
+    {
+        // Arrange
+        var value = new Guid("D9394783-85D4-401D-A01F-58443840384F");
+
+        // Act
+        void Act()
+        {
+            Guard.Argument(value).Empty();
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal("Value must be an empty GUID. (Parameter 'value')", ex.Message);
+    }
+
+    [Fact]
+    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueIsNotEmptyGuidAndCustomMessageWasUsed()
+    {
+        // Arrange
+        var value = new Guid("D9394783-85D4-401D-A01F-58443840384F");
+        var customMessage = "Custom message.";
+
+        // Act
+        void Act()
+        {
+            Guard.Argument(value).Empty(customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal($"{customMessage} (Parameter 'value')", ex.Message);
+    }
+
+    [Fact]
+    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueIsNotEmptyGuidAndCustomExceptionAndMessageWasUsed()
+    {
+        // Arrange
+        var value = new Guid("D9394783-85D4-401D-A01F-58443840384F");
+        var customMessage = "Custom message.";
+
+        // Act
+        void Act()
+        {
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
+            Guard.Argument(value).Throws<CustomException>().Empty(customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<CustomException>(Act);
+        Assert.Equal(customMessage, ex.Message);
+    }
+
     class CustomException : Exception
     {
         public string ParamName { get; }
