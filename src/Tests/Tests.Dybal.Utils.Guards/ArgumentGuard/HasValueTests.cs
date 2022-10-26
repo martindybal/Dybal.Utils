@@ -32,7 +32,7 @@ public class HasValueTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Nullable object must have a value. (Parameter 'value')", ex.Message);
+        Assert.Equal("Nullable object must have a value. (Parameter 'nullableDateTime')", ex.Message);
     }
 
 
@@ -44,7 +44,7 @@ public class HasValueTests : UnitTestsBase
 
         void Act()
         {
-            ThrowHelper.Register((paramName, message) => new CustomException(paramName, message));
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
             Guard.Argument(nullableDateTime).Throws<CustomException>().HasValue();
         }
 
