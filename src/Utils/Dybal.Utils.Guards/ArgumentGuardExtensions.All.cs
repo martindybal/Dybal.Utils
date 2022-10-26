@@ -12,7 +12,7 @@ public static partial class ArgumentGuardExtensions
         where TEnumerable : IEnumerable<TArgument>
     {
         var source = guard.Argument.Value;
-        if (source.Any() && !source.All(filter))
+        if (!source.All(filter))
         {   
             message ??= "All items of collection must match predicate.";
             ThrowHelper.Throw<ArgumentException>(guard, message);
