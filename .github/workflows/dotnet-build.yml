@@ -36,5 +36,5 @@ jobs:
         if: ${{ always() }}
         with:
           name: dotnet tests
-          path: TestResults/${{ matrix.configuration }}-${{ matrix.dotnet-version }}/test-results.trx
+          path: src/TestResults/${{ matrix.configuration }}-${{ matrix.dotnet-version }}/test-results.trx
           reporter: dotnet-trx
