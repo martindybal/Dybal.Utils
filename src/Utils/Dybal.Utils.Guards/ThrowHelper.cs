@@ -33,6 +33,12 @@ public static class ThrowHelper
         supportedExceptions.Add(typeof(TException), exceptionFactory);
     }
 
+    public static bool TryRegister<TException>(ExceptionFactory<TException> exceptionFactory)
+        where TException : Exception
+    {
+        return supportedExceptions.TryAdd(typeof(TException), exceptionFactory);
+    }
+
     [DoesNotReturn]
     public static void Throw<TException>(IExceptionOverride guard, string? message)
         where TException : Exception
