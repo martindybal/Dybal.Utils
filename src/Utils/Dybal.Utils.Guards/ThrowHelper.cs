@@ -12,9 +12,9 @@ public static class ThrowHelper
 
     static ThrowHelper()
     {
-        Register(ArgumentExceptionFactory);
-        Register(ArgumentNullExceptionFactory);
-        Register(ArgumentOutOfRangeExceptionFactory);
+        TryRegister(ArgumentExceptionFactory);
+        TryRegister(ArgumentNullExceptionFactory);
+        TryRegister(ArgumentOutOfRangeExceptionFactory);
     }
 
     [Conditional("DEBUG")]
@@ -25,12 +25,6 @@ public static class ThrowHelper
         {
             throw new ExceptionNotRegisteredException(exceptionType);
         }
-    }
-
-    public static void Register<TException>(ExceptionFactory<TException> exceptionFactory)
-        where TException : Exception
-    {
-        supportedExceptions.Add(typeof(TException), exceptionFactory);
     }
 
     public static bool TryRegister<TException>(ExceptionFactory<TException> exceptionFactory)

@@ -274,7 +274,7 @@ public class ArgumentsTests : UnitTestsBase
 
         void Act()
         {
-            ThrowHelper.Register((paramName, message) => new CustomException(paramName, message));
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
 
             guard.Throws<CustomException>().AtLeastOneIsNotNull();
         }

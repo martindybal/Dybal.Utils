@@ -79,7 +79,7 @@ public class MinLengthTests : UnitTestsBase
 
         void Act()
         {
-            ThrowHelper.Register((paramName, message) => new CustomException(paramName, message));
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
             value = Guard.Argument(value).Throws<CustomException>().MinLength(3, customMessage);
         }
 

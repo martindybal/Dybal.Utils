@@ -87,7 +87,7 @@ public class ArgumentTests : UnitTestsBase
 
         void Act()
         {
-            ThrowHelper.Register((paramName, message) => new CustomException(paramName, message));
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
 
             var value = argumentGuard.Throws<CustomException>().Null();
         }

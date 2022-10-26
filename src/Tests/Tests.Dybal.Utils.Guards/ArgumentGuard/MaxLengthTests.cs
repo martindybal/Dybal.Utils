@@ -79,7 +79,7 @@ public class MaxLengthTests : UnitTestsBase
 
         void Act()
         {
-            ThrowHelper.Register((paramName, message) => new CustomException(paramName, message));
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
             value = Guard.Argument(value).Throws<CustomException>().MaxLength(3, customMessage);
         }
 
