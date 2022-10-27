@@ -4,7 +4,7 @@ public static partial class ArgumentGuardExtensions
 {
     public static ArgumentGuard<IEnumerable<TArgument>> ContainsNull<TArgument>(this ICovariantArgumentGuard<IEnumerable<TArgument>> guard, string? message = null)
     {
-        return guard.ContainsNull<IEnumerable<TArgument>, TArgument>();
+        return guard.ContainsNull<IEnumerable<TArgument>, TArgument>(message);
     }
 
     public static ArgumentGuard<TEnumerable> ContainsNull<TEnumerable, TArgument>(this ICovariantArgumentGuard<TEnumerable> covariantGuard, string? message = null)
