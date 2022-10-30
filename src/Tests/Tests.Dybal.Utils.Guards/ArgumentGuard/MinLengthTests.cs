@@ -86,6 +86,7 @@ public class MinLengthTests : UnitTestsBase
         // Assert
         var ex = Assert.Throws<CustomException>(Act);
         Assert.Equal(customMessage, ex.Message);
+        Assert.Equal(nameof(value), ex.ParamName);
     }
     
     class CustomException : Exception

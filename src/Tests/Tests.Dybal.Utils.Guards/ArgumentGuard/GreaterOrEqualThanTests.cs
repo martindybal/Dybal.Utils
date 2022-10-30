@@ -3,64 +3,61 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
-public class MaxLengthTests : UnitTestsBase
+public class GreaterOrEqualThanTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_ValueHasFewerCharacters()
+    public void Should_NotThrows_When_ValueIsGreater()
     {
         // Arrange
-        string value = "ab";
+        int value = 2;
 
         // Act
-        Guard.Argument(value).MaxLength(3);
+        int guardValue = Guard.Argument(value).GreaterOrEqualThan(1);
 
         // Assert
-        // doesn't throw any exception
+        Assert.Equal(value, guardValue);
     }
 
     [Fact]
-    public void Should_NotThrows_When_ValueHasMaximumCharacters()
+    public void Should_NotThrows_When_ValueIsEqual()
     {
         // Arrange
-        string value = "abc";
+        int value = 1;
 
         // Act
-        Guard.Argument(value).MaxLength(3);
+        int guardValue = Guard.Argument(value).GreaterOrEqualThan(1);
 
         // Assert
-        // doesn't throw any exception
+        Assert.Equal(value, guardValue);
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_ValueHasMoreCharacters()
+    public void ShouldThrows_ArgumentException_When_ValueIsLess()
     {
         // Arrange
-        string value = "abcD";
-
-        // Act
-
+        int value = 1;
+        
         void Act()
         {
-            Guard.Argument(value).MaxLength(3);
+            var greaterValue = 2;
+            value = Guard.Argument(value).GreaterOrEqualThan(greaterValue);
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("The length of 'value' must be 3 characters or fewer. Parameter 4 has characters. (Parameter 'value')", ex.Message);
+        Assert.Equal("Value of parameter 'value' (1) must be greater or equal than value of parameter 'greaterValue' (2). (Parameter 'value')", ex.Message);
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueHasMoreCharactersAndCustomMessageWasUsed()
+    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueIsLessAndCustomMessageWasUsed()
     {
         // Arrange
-        string value = "abcD";
+        int value = 1;
         var customMessage = "Custom message.";
-
-        // Act
-
+        
         void Act()
         {
-            value = Guard.Argument(value).MaxLength(3, customMessage);
+            value = Guard.Argument(value).GreaterOrEqualThan(2, customMessage);
         }
 
         // Assert
@@ -69,18 +66,16 @@ public class MaxLengthTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueHasMoreCharactersAndCustomExceptionAndMessageWasUsed()
+    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueIsLessAndCustomExceptionAndMessageWasUsed()
     {
         // Arrange
-        string value = "abcD";
+        int value = 1;
         var customMessage = "Custom message.";
-
-        // Act
-
+        
         void Act()
         {
             ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
-            value = Guard.Argument(value).Throws<CustomException>().MaxLength(3, customMessage);
+            value = Guard.Argument(value).Throws<CustomException>().GreaterOrEqualThan(2, customMessage);
         }
 
         // Assert
@@ -88,7 +83,7 @@ public class MaxLengthTests : UnitTestsBase
         Assert.Equal(customMessage, ex.Message);
         Assert.Equal(nameof(value), ex.ParamName);
     }
-
+    
     class CustomException : Exception
     {
         public string ParamName { get; }

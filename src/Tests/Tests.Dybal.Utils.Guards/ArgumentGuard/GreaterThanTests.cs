@@ -3,82 +3,66 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
-public class EmptyTests : UnitTestsBase
+public class GreaterThanTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_CollectionIsEmpty()
+    public void Should_NotThrows_When_ValueIsGreater()
     {
         // Arrange
-        var value = Array.Empty<string>();
+        int value = 2;
 
         // Act
-        Guard.Argument(value).Empty();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void Should_NotThrows_When_CollectionIsEmpty_Typed()
-    {
-        // Arrange
-        var value = Array.Empty<string>();
-
-        // Act
-        string[] guardValue = Guard.Argument(value).Empty<string[], string>();
+        int guardValue = Guard.Argument(value).GreaterThan(1);
 
         // Assert
         Assert.Equal(value, guardValue);
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_CollectionIsNotEmpty()
+    public void ShouldThrows_ArgumentException_When_ValueIsEqual()
     {
         // Arrange
-        var value = new[] { "" };
-
-        // Act
-
+        int value = 1;
+        
         void Act()
         {
-            Guard.Argument(value).Empty();
+            value = Guard.Argument(value).GreaterThan(value);
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection has to be empty. (Parameter 'value')", ex.Message);
+        Assert.Equal("Value of parameter 'value' (1) must be greater than value of parameter 'value' (1). (Parameter 'value')", ex.Message);
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_CollectionContainsNull()
+    public void ShouldThrows_ArgumentException_When_ValueIsLess()
     {
         // Arrange
-        var value = new string?[] { null };
-
-        // Act
-
+        int value = 1;
+        
         void Act()
         {
-            Guard.Argument(value).Empty();
+            var lessValue = 2;
+            value = Guard.Argument(value).GreaterThan(lessValue);
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection has to be empty. (Parameter 'value')", ex.Message);
+        Assert.Equal("Value of parameter 'value' (1) must be greater than value of parameter 'lessValue' (2). (Parameter 'value')", ex.Message);
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueHasFewerCharactersAndCustomMessageWasUsed()
+    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueIsLessAndCustomMessageWasUsed()
     {
         // Arrange
-        var value = new[] { "" };
+        int value = 1;
         var customMessage = "Custom message.";
 
         // Act
 
         void Act()
         {
-            Guard.Argument(value).Empty(customMessage);
+            value = Guard.Argument(value).GreaterThan(2, customMessage);
         }
 
         // Assert
@@ -87,10 +71,10 @@ public class EmptyTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueHasFewerCharactersAndCustomExceptionAndMessageWasUsed()
+    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueIsLessAndCustomExceptionAndMessageWasUsed()
     {
         // Arrange
-        var value = new[] { "" };
+        int value = 1;
         var customMessage = "Custom message.";
 
         // Act
@@ -98,7 +82,7 @@ public class EmptyTests : UnitTestsBase
         void Act()
         {
             ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
-            Guard.Argument(value).Throws<CustomException>().Empty(customMessage);
+            value = Guard.Argument(value).Throws<CustomException>().GreaterThan(2, customMessage);
         }
 
         // Assert
@@ -106,7 +90,7 @@ public class EmptyTests : UnitTestsBase
         Assert.Equal(customMessage, ex.Message);
         Assert.Equal(nameof(value), ex.ParamName);
     }
-
+    
     class CustomException : Exception
     {
         public string ParamName { get; }
