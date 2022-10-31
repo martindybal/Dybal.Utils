@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class EqualToTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_ValueIsEqual()
+    public void NotThrow_When_value_is_equal()
     {
         // Arrange
         int value = 1;
@@ -17,9 +17,9 @@ public class EqualToTests : UnitTestsBase
         // Assert
         Assert.Equal(value, guardValue);
     }
-
+    
     [Fact]
-    public void ShouldThrows_ArgumentException_When_ValueIsLess()
+    public void Throw_ArgumentException_When_value_is_less()
     {
         // Arrange
         int value = 1;
@@ -35,7 +35,7 @@ public class EqualToTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_ValueIsGreater()
+    public void Throw_ArgumentException_When_value_is_greater()
     {
         // Arrange
         int value = 2;
@@ -52,14 +52,12 @@ public class EqualToTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueIsGreaterAndCustomMessageWasUsed()
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
     {
         // Arrange
         int value = 2;
         var customMessage = "Custom message.";
-
-        // Act
-
+        
         void Act()
         {
             value = Guard.Argument(value).EqualTo(1, customMessage);
@@ -71,14 +69,12 @@ public class EqualToTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueIsGreaterAndCustomExceptionAndMessageWasUsed()
+    public void Throw_CustomException_When_Throws_was_used()
     {
         // Arrange
         int value = 2;
         var customMessage = "Custom message.";
-
-        // Act
-
+        
         void Act()
         {
             ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));

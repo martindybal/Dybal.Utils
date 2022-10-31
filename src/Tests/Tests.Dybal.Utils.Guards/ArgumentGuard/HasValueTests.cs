@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class HasValueTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_ObjectHasValue()
+    public void NotThrow_When_nullable_has_value()
     {
         // Arrange
         var expectedValue = new DateTime(2009, 09, 01);
@@ -20,7 +20,7 @@ public class HasValueTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_Null()
+    public void Throw_ArgumentException_When_nullable_is_null()
     {
         // Arrange
         DateTime? nullableDateTime = null;
@@ -37,7 +37,24 @@ public class HasValueTests : UnitTestsBase
 
 
     [Fact]
-    public void Throws_Should_ThrowCustomException()
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
+    {
+        // Arrange
+        DateTime? nullableDateTime = null;
+        var customMessage = "Custom message.";
+
+        void Act()
+        {
+            Guard.Argument(nullableDateTime).HasValue(customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal($"{customMessage} (Parameter 'nullableDateTime')", ex.Message);
+    }
+
+    [Fact]
+    public void Throw_CustomException_When_Throws_was_used()
     {
         // Arrange
         DateTime? nullableDateTime = null;

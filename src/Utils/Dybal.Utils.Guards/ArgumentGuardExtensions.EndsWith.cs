@@ -2,7 +2,12 @@
 
 public static partial class ArgumentGuardExtensions
 {
-    public static ArgumentGuard<string> EndsWith(this ArgumentGuard<string> guard, string value, StringComparison comparisonType = StringComparison.CurrentCulture, string? message = null)
+    public static ArgumentGuard<string> EndsWith(this ArgumentGuard<string> guard, string value, string? message = null)
+    {
+        return EndsWith(guard, value, StringComparison.CurrentCulture, message);
+    }
+
+    public static ArgumentGuard<string> EndsWith(this ArgumentGuard<string> guard, string value, StringComparison comparisonType, string? message = null)
     {
         if (!guard.Argument.Value.EndsWith(value, comparisonType))
         {

@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class LessThanTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_ValueIsLess()
+    public void NotThrow_When_value_is_less()
     {
         // Arrange
         int value = 1;
@@ -19,7 +19,7 @@ public class LessThanTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_ValueIsEqual()
+    public void Throw_ArgumentException_When_value_is_equal()
     {
         // Arrange
         int value = 1;
@@ -35,7 +35,7 @@ public class LessThanTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_ValueIsGreater()
+    public void Throw_ArgumentException_When_value_is_greater()
     {
         // Arrange
         int value = 2;
@@ -52,7 +52,7 @@ public class LessThanTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueIsGreaterAndCustomMessageWasUsed()
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
     {
         // Arrange
         int value = 2;
@@ -71,7 +71,7 @@ public class LessThanTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueIsGreaterAndCustomExceptionAndMessageWasUsed()
+    public void Throw_CustomException_When_Throws_was_used()
     {
         // Arrange
         int value = 2;

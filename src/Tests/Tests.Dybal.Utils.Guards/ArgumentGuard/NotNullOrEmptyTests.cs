@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class NotNullOrEmptyTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_VariableWithValue()
+    public void NotThrow_When_non_empty_string()
     {
         // Arrange
         var value = "non-empty";
@@ -19,20 +19,7 @@ public class NotNullOrEmptyTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_NotThrows_When_PropertyWithValue()
-    {
-        // Arrange
-        var sample = new { Value = "non-empty" };
-
-        // Act
-        Guard.Argument(sample.Value).NotNullOrEmpty();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_VariableNull()
+    public void Throw_ArgumentException_When_value_is_null()
     {
         // Arrange
         string? value = null;
@@ -46,25 +33,11 @@ public class NotNullOrEmptyTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value cannot be null or empty string. (Parameter 'value')", ex.Message);
     }
-
+    
     [Fact]
-    public void ShouldThrows_ArgumentException_When_PropertyNull()
+    public void Throw_ArgumentException_When_value_is_empty_string()
     {
-        var sample = new { Value = (string?)null };
-
-        void Act()
-        {
-            Guard.Argument(sample.Value).NotNullOrEmpty();
-        }
-
-        // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be null or empty string. (Parameter 'sample.Value')", ex.Message);
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_VariableEmpty()
-    {
+        // Arrange
         string value = string.Empty;
 
         void Act()
@@ -78,17 +51,49 @@ public class NotNullOrEmptyTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_PropertyEmpty()
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
     {
-        var sample = new { Value = string.Empty };
+        // Arrange
+        string value = string.Empty;
+        var customMessage = "Custom message.";
 
         void Act()
         {
-            Guard.Argument(sample.Value).NotNullOrEmpty();
+            value = Guard.Argument(value).NotNullOrEmpty(customMessage);
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be null or empty string. (Parameter 'sample.Value')", ex.Message);
+        Assert.Equal($"{customMessage} (Parameter 'value')", ex.Message);
+    }
+
+    [Fact]
+    public void Throw_CustomException_When_Throws_was_used()
+    {
+        // Arrange
+        string value = string.Empty;
+        var customMessage = "Custom message.";
+
+        void Act()
+        {
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
+            value = Guard.Argument(value).Throws<CustomException>().NotNullOrEmpty(customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<CustomException>(Act);
+        Assert.Equal(customMessage, ex.Message);
+        Assert.Equal(nameof(value), ex.ParamName);
+    }
+
+    class CustomException : Exception
+    {
+        public string ParamName { get; }
+
+        public CustomException(string paramName, string? message)
+            : base(message)
+        {
+            ParamName = paramName;
+        }
     }
 }

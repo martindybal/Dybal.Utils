@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards;
 public class CountTests : UnitTestsBase
 {
     [Fact]
-    public void ShouldReturn_2_When_Contains2Elements()
+    public void Return_2_When_contains_2_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2);
@@ -16,7 +16,7 @@ public class CountTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldReturn_3_When_Contains3Elements()
+    public void Return_3_When_contains_3_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3);
@@ -26,7 +26,7 @@ public class CountTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldReturn_4_When_Contains4Elements()
+    public void Return_4_When_contains_4_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3, 4);
@@ -36,7 +36,7 @@ public class CountTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldReturn_5_When_Contains5Elements()
+    public void Return_5_When_contains_5_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3, 4, 5);
@@ -46,7 +46,7 @@ public class CountTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldReturn_6_When_Contains6Elements()
+    public void Return_6_When_contains_6_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6);
@@ -56,7 +56,7 @@ public class CountTests : UnitTestsBase
     }
     
     [Fact]
-    public void ShouldReturn_7_When_Contains7Elements()
+    public void Return_7_When_contains_7_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7);
@@ -66,7 +66,7 @@ public class CountTests : UnitTestsBase
     }
     
     [Fact]
-    public void ShouldReturn_8_When_Contains8Elements()
+    public void Return_8_When_contains_8_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8);
@@ -76,7 +76,7 @@ public class CountTests : UnitTestsBase
     }
     
     [Fact]
-    public void ShouldReturn_9_When_Contains9Elements()
+    public void Return_9_When_contains_9_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9);
@@ -86,7 +86,7 @@ public class CountTests : UnitTestsBase
     }
     
     [Fact]
-    public void ShouldReturn_10_When_Contains10Elements()
+    public void Return_10_When_contains_10_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -96,7 +96,7 @@ public class CountTests : UnitTestsBase
     }
     
     [Fact]
-    public void ShouldReturn_11_When_Contains11Elements()
+    public void Return_11_When_contains_11_elements()
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);

@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class NotNullOrWhiteSpaceTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_VariableWithValue()
+    public void NotThrow_When_non_empty_string()
     {
         // Arrange
         var value = "non-empty";
@@ -17,22 +17,9 @@ public class NotNullOrWhiteSpaceTests : UnitTestsBase
         // Assert
         // doesn't throw any exception
     }
-
+    
     [Fact]
-    public void Should_NotThrows_When_PropertyWithValue()
-    {
-        // Arrange
-        var sample = new { Value = (string?)"non-empty" };
-
-        // Act
-        Guard.Argument(sample.Value).NotNullOrWhiteSpace();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_VariableNull()
+    public void Throw_ArgumentException_When_value_is_null()
     {
         // Arrange
         string? value = null;
@@ -46,12 +33,28 @@ public class NotNullOrWhiteSpaceTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value cannot be null or white space string. (Parameter 'value')", ex.Message);
     }
+    
+    [Fact]
+    public void Throw_ArgumentException_When_value_is_empty_string()
+    {
+        // Arrange
+        string value = string.Empty;
+
+        void Act()
+        {
+            Guard.Argument(value).NotNullOrWhiteSpace();
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal("Value cannot be null or white space string. (Parameter 'value')", ex.Message);
+    }
 
     [Theory]
     [InlineData(" ")]
     [InlineData("\t")]
     [InlineData("\n")]
-    public void ShouldThrows_ArgumentException_When_VariableWhitespace(string value)
+    public void Throw_ArgumentException_When_value_is_white_space(string value)
     {
         void Act()
         {
@@ -63,39 +66,50 @@ public class NotNullOrWhiteSpaceTests : UnitTestsBase
         Assert.Equal("Value cannot be null or white space string. (Parameter 'value')", ex.Message);
     }
 
-
     [Fact]
-    public void ShouldThrows_ArgumentException_When_PropertyNull()
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
     {
         // Arrange
-        var sample = new { Value = (string?)null };
+        string value = string.Empty;
+        var customMessage = "Custom message.";
 
         void Act()
         {
-            Guard.Argument(sample.Value).NotNullOrWhiteSpace();
+            value = Guard.Argument(value).NotNullOrEmpty(customMessage);
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be null or white space string. (Parameter 'sample.Value')", ex.Message);
+        Assert.Equal($"{customMessage} (Parameter 'value')", ex.Message);
     }
 
-    [Theory]
-    [InlineData(" ")]
-    [InlineData("\t")]
-    [InlineData("\n")]
-    public void ShouldThrows_ArgumentException_When_PropertyWhitespace(string value)
+    [Fact]
+    public void Throw_CustomException_When_Throws_was_used()
     {
         // Arrange
-        var sample = new { Value = value };
+        string value = string.Empty;
+        var customMessage = "Custom message.";
 
         void Act()
         {
-            Guard.Argument(sample.Value).NotNullOrWhiteSpace();
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
+            value = Guard.Argument(value).Throws<CustomException>().NotNullOrEmpty(customMessage);
         }
 
         // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be null or white space string. (Parameter 'sample.Value')", ex.Message);
+        var ex = Assert.Throws<CustomException>(Act);
+        Assert.Equal(customMessage, ex.Message);
+        Assert.Equal(nameof(value), ex.ParamName);
+    }
+
+    class CustomException : Exception
+    {
+        public string ParamName { get; }
+
+        public CustomException(string paramName, string? message)
+            : base(message)
+        {
+            ParamName = paramName;
+        }
     }
 }

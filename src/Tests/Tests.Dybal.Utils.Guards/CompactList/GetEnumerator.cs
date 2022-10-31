@@ -7,7 +7,7 @@ namespace Tests.Dybal.Utils.Guards;
 public class GetEnumerator : UnitTestsBase
 {
     [Fact]
-    public void Generic_ShouldReturn_SequenceWithAllElements()
+    public void Return_sequence_with_all_elements_generic()
     {
         var expectedSequence = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
         var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
@@ -24,7 +24,7 @@ public class GetEnumerator : UnitTestsBase
     }
 
     [Fact]
-    public void NonGeneric_ShouldReturn_SequenceWithAllElements()
+    public void Return_sequence_with_all_elements_non_generic()
     {
         var expectedSequence = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
         IEnumerable compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);

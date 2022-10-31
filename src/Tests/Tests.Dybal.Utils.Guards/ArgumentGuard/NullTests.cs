@@ -6,49 +6,36 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class NullTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_VariableNull()
+    public void NotThrow_When_null()
     {
         // Arrange
-        object? value = null;
+        string? value = null;
 
         // Act
-        Guard.Argument(value).Null();
+        string? actualValue = Guard.Argument(value).Null();
 
         // Assert
-        // doesn't throw any exception
+        Assert.Equal(value, actualValue);
     }
 
     [Fact]
-    public void Should_NotThrows_When_NullableStructVariableNull()
+    public void NotThrow_When_nullable_nullable_struct_is_null()
     {
         // Arrange
         int? value = null;
 
         // Act
-        Guard.Argument(value).Null();
+        int? actualValue = Guard.Argument(value).Null();
 
         // Assert
-        // doesn't throw any exception
+        Assert.Equal(value, actualValue);
     }
-
+    
     [Fact]
-    public void Should_NotThrows_When_PropertyNull()
+    public void Throw_ArgumentException_When_has_value()
     {
         // Arrange
-        var sample = new { Value = (object?)null };
-
-        // Act
-        Guard.Argument(sample.Value).Null();
-
-        // Assert
-        // doesn't throw any exception
-    }
-
-    [Fact]
-    public void ShouldThrows_ArgumentException_When_VariableWithValue()
-    {
-        // Arrange
-        object? value = "value";
+        string? value = "value";
 
         void Act()
         {
@@ -61,7 +48,7 @@ public class NullTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_NullableStructVariableWithValue()
+    public void Throw_ArgumentException_When_nullable_struct_has_value()
     {
         // Arrange
         int? value = 0;
@@ -77,18 +64,65 @@ public class NullTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_PropertyWithValue()
+    public void Throw_ArgumentException_When_struct_default_value()
     {
         // Arrange
-        var sample = new { Value = (object?)"value" };
+        int value = 0;
 
         void Act()
         {
-            Guard.Argument(sample.Value).Null();
+            Guard.Argument(value).Null();
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value must be null. (Parameter 'sample.Value')", ex.Message);
+        Assert.Equal("Value must be null. (Parameter 'value')", ex.Message);
+    }
+
+    [Fact]
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
+    {
+        // Arrange
+        string? value = "value";
+        var customMessage = "Custom message.";
+
+        void Act()
+        {
+            Guard.Argument(value).Null(customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal($"{customMessage} (Parameter 'value')", ex.Message);
+    }
+
+    [Fact]
+    public void Throw_CustomException_When_Throws_was_used()
+    {
+        // Arrange
+        string? value = "value";
+        var customMessage = "Custom message.";
+
+        void Act()
+        {
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
+            Guard.Argument(value).Throws<CustomException>().Null(customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<CustomException>(Act);
+        Assert.Equal(customMessage, ex.Message);
+        Assert.Equal(nameof(value), ex.ParamName);
+    }
+    
+    class CustomException : Exception
+    {
+        public string ParamName { get; }
+
+        public CustomException(string paramName, string? message)
+            : base(message)
+        {
+            ParamName = paramName;
+        }
     }
 }
