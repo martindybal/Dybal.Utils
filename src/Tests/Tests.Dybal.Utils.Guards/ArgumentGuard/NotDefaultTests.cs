@@ -6,33 +6,33 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class NotDefaultTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_VariableWithValue()
+    public void NotThrows_When_not_empty_guid()
     {
         // Arrange
-        var expectedValue = Guid.NewGuid();
+        var value = Guid.NewGuid();
 
         // Act
-        Guid actualValue = Guard.Argument(expectedValue).NotDefault();
-
-        // Assert
-        Assert.Equal(expectedValue, actualValue);
-    }
-    
-    [Fact]
-    public void Should_NotThrows_When_PropertyWithValue()
-    {
-        // Arrange
-        var sample = new { Value = Guid.NewGuid() };
-
-        // Act
-        Guard.Argument(sample.Value).NotDefault();
+        Guard.Argument(value).NotDefault();
 
         // Assert
         // doesn't throw any exception
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_GuidVariableHasDefaultValue()
+    public void NotThrows_When_not_default_int()
+    {
+        // Arrange
+        var value = 1;
+
+        // Act
+        Guard.Argument(value).NotDefault();
+
+        // Assert
+        // doesn't throw any exception
+    }
+
+    [Fact]
+    public void Throw_ArgumentException_When_empty_guid()
     {
         // Arrange
         var value = Guid.Empty;
@@ -46,9 +46,9 @@ public class NotDefaultTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("Value cannot be an empty GUID. (Parameter 'value')", ex.Message);
     }
-    
+
     [Fact]
-    public void ShouldThrows_ArgumentException_When_VariableHasDefaultValue()
+    public void Throw_ArgumentException_When_default_int()
     {
         // Arrange
         var value = 0;
@@ -64,34 +64,48 @@ public class NotDefaultTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_GuidPropertyHasDefaultValue()
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
     {
         // Arrange
-        var sample = new { Value = Guid.Empty };
+        var value = 0;
+        var customMessage = "Custom message.";
 
         void Act()
         {
-            Guard.Argument(sample.Value).NotDefault();
+            Guard.Argument(value).NotDefault(customMessage);
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be an empty GUID. (Parameter 'sample.Value')", ex.Message);
+        Assert.Equal($"{customMessage} (Parameter 'value')", ex.Message);
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_PropertyHasDefaultValue()
+    public void Throw_CustomException_When_Throws_was_used()
     {
         // Arrange
-        var sample = new { Value = 0 };
+        var value = 0;
 
         void Act()
         {
-            Guard.Argument(sample.Value).NotDefault();
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
+            Guard.Argument(value).Throws<CustomException>().NotDefault();
         }
 
         // Assert
-        var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Value cannot be the default value. (Parameter 'sample.Value')", ex.Message);
+        var customException = Assert.Throws<CustomException>(Act);
+        Assert.Equal(nameof(value), customException.ParamName);
+        Assert.Equal("Value cannot be the default value.", customException.Message);
+    }
+
+    class CustomException : Exception
+    {
+        public string ParamName { get; }
+
+        public CustomException(string paramName, string? message)
+            : base(message)
+        {
+            ParamName = paramName;
+        }
     }
 }

@@ -4,4 +4,8 @@
 		<ProjectReference Include="..\..\Utils\Dybal.Utils.Guards.ObjectExtensions\Dybal.Utils.Guards.ObjectExtensions.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+	</ItemGroup>
+
 </Project>

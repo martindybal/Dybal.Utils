@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class AllTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_AllItemsMatchPredicate()
+    public void NotThrow_When_all_items_match_predicate()
     {
         // Arrange
         var source = new[] { "  ", " " };
@@ -19,7 +19,7 @@ public class AllTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_NotThrows_When_CollectionEmpty()
+    public void NotThrow_When_collection_is_empty()
     {
         // Arrange
         var source = Array.Empty<string>();
@@ -32,7 +32,7 @@ public class AllTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_CollectionNotContainPredicate()
+    public void Throw_ArgumentException_When_none_item_match_predicate()
     {
         // Arrange
         var source = new[] { "a", "b" };
@@ -45,5 +45,67 @@ public class AllTests : UnitTestsBase
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal("All items of collection must match predicate. (Parameter 'source')", ex.Message);
+    }
+
+    [Fact]
+    public void Throw_ArgumentException_When_one_item_does_not_match_predicate()
+    {
+        // Arrange
+        var source = new[] { "a", " " };
+
+        void Act()
+        {
+            Guard.Argument(source).All(string.IsNullOrWhiteSpace);
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal("All items of collection must match predicate. (Parameter 'source')", ex.Message);
+    }
+
+    [Fact]
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
+    {
+        // Arrange
+        var source = new[] { "a", " " };
+        var customMessage = "Custom message.";
+
+        void Act()
+        {
+            Guard.Argument(source).All(string.IsNullOrWhiteSpace, customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal($"{customMessage} (Parameter 'source')", ex.Message);
+    }
+
+    [Fact]
+    public void Throw_CustomException_When_Throws_was_used()
+    {
+        // Arrange
+        var source = new[] { "a", " " };
+
+        void Act()
+        {
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
+            Guard.Argument(source).Throws<CustomException>().All(string.IsNullOrWhiteSpace);
+        }
+
+        // Assert
+        var customException = Assert.Throws<CustomException>(Act);
+        Assert.Equal(nameof(source), customException.ParamName);
+        Assert.Equal("All items of collection must match predicate.", customException.Message);
+    }
+
+    class CustomException : Exception
+    {
+        public string ParamName { get; }
+
+        public CustomException(string paramName, string? message)
+            : base(message)
+        {
+            ParamName = paramName;
+        }
     }
 }

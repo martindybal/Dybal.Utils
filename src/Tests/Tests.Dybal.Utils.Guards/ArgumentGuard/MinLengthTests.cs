@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class MinLengthTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_ValueHasMoreCharacters()
+    public void NotThrow_When_value_has_more_characters()
     {
         // Arrange
         string value = "abc";
@@ -19,7 +19,7 @@ public class MinLengthTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_NotThrows_When_ValueHasMinimumCharacters()
+    public void NotThrow_When_value_has_minimum_characters()
     {
         // Arrange
         string value = "abc";
@@ -32,7 +32,7 @@ public class MinLengthTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_ValueHasFewerCharacters()
+    public void Throw_ArgumentException_When_value_has_fewer_characters()
     {
         // Arrange
         string value = "ab";
@@ -50,7 +50,7 @@ public class MinLengthTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueHasFewerCharactersAndCustomMessageWasUsed()
+    public void Throw_ArgumentException_When_value_has_more_characters()
     {
         // Arrange
         string value = "ab";
@@ -69,7 +69,7 @@ public class MinLengthTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueHasFewerCharactersAndCustomExceptionAndMessageWasUsed()
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
     {
         // Arrange
         string value = "ab";

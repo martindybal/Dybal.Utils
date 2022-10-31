@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class MaxLengthTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_ValueHasFewerCharacters()
+    public void NotThrow_When_value_has_fewer_characters()
     {
         // Arrange
         string value = "ab";
@@ -19,7 +19,7 @@ public class MaxLengthTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_NotThrows_When_ValueHasMaximumCharacters()
+    public void NotThrow_When_value_has_maximum_characters()
     {
         // Arrange
         string value = "abc";
@@ -32,7 +32,7 @@ public class MaxLengthTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_ValueHasMoreCharacters()
+    public void Throw_ArgumentException_When_value_has_more_characters()
     {
         // Arrange
         string value = "abcD";
@@ -50,7 +50,7 @@ public class MaxLengthTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueHasMoreCharactersAndCustomMessageWasUsed()
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
     {
         // Arrange
         string value = "abcD";
@@ -69,7 +69,7 @@ public class MaxLengthTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueHasMoreCharactersAndCustomExceptionAndMessageWasUsed()
+    public void Throw_CustomException_When_Throws_was_used()
     {
         // Arrange
         string value = "abcD";

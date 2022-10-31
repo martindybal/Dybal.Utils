@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class EmptyTests : UnitTestsBase
 {
     [Fact]
-    public void Should_NotThrows_When_CollectionIsEmpty()
+    public void NotThrow_When_collection_is_empty()
     {
         // Arrange
         var value = Array.Empty<string>();
@@ -19,7 +19,7 @@ public class EmptyTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_NotThrows_When_CollectionIsEmpty_Typed()
+    public void NotThrow_When_collection_is_empty_typed()
     {
         // Arrange
         var value = Array.Empty<string>();
@@ -32,79 +32,74 @@ public class EmptyTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_CollectionIsNotEmpty()
+    public void Throw_ArgumentException_When_collection_is_not_empty()
     {
         // Arrange
-        var value = new[] { "" };
+        var source = new[] { "" };
 
         // Act
 
         void Act()
         {
-            Guard.Argument(value).Empty();
+            Guard.Argument(source).Empty();
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection has to be empty. (Parameter 'value')", ex.Message);
+        Assert.Equal("Collection has to be empty. (Parameter 'source')", ex.Message);
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_CollectionContainsNull()
+    public void Throw_ArgumentException_When_collection_contain_null()
     {
         // Arrange
-        var value = new string?[] { null };
+        var source = new string?[] { null };
 
         // Act
 
         void Act()
         {
-            Guard.Argument(value).Empty();
+            Guard.Argument(source).Empty();
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection has to be empty. (Parameter 'value')", ex.Message);
+        Assert.Equal("Collection has to be empty. (Parameter 'source')", ex.Message);
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_WithCustomMessage_When_ValueHasFewerCharactersAndCustomMessageWasUsed()
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
     {
         // Arrange
-        var value = new[] { "" };
+        var source = new[] { "" };
         var customMessage = "Custom message.";
 
-        // Act
-
         void Act()
         {
-            Guard.Argument(value).Empty(customMessage);
+            Guard.Argument(source).Empty(customMessage);
         }
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal($"{customMessage} (Parameter 'value')", ex.Message);
+        Assert.Equal($"{customMessage} (Parameter 'source')", ex.Message);
     }
 
     [Fact]
-    public void ShouldThrows_CustomException_WithCustomMessage_When_ValueHasFewerCharactersAndCustomExceptionAndMessageWasUsed()
+    public void Throw_CustomException_When_Throws_was_used()
     {
         // Arrange
-        var value = new[] { "" };
-        var customMessage = "Custom message.";
-
-        // Act
+        var source = new[] { "" };
 
         void Act()
         {
             ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
-            Guard.Argument(value).Throws<CustomException>().Empty(customMessage);
+            Guard.Argument(source).Throws<CustomException>().Empty();
         }
 
         // Assert
-        var ex = Assert.Throws<CustomException>(Act);
-        Assert.Equal(customMessage, ex.Message);
-        Assert.Equal(nameof(value), ex.ParamName);
+        var customException = Assert.Throws<CustomException>(Act);
+        Assert.Equal(nameof(source), customException.ParamName);
+        Assert.Equal("Collection has to be empty.", customException.Message);
     }
 
     class CustomException : Exception

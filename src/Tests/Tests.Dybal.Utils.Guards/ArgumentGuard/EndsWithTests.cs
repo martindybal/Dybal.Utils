@@ -9,20 +9,20 @@ public class EndsWithTests : UnitTestsBase
     [InlineData("abc")]
     [InlineData("defabc")]
     [InlineData(" abc")]
-    public void Should_NotThrows_When_CollectionContainValue(string expectedValue)
+    public void NotThrow_When_value_ends_with_abc(string value)
     {
         // Act
-        var actualValue = Guard.Argument(expectedValue).EndsWith("abc");
+        var actualValue = Guard.Argument(value).EndsWith("abc");
 
         // Assert
-        Assert.Equal(expectedValue, actualValue);
+        Assert.Equal(value, actualValue);
     }
 
     [Theory]
     [InlineData("abc")]
     [InlineData("Abc")]
     [InlineData("ABC")]
-    public void Should_NotThrows_When_CollectionContainValueIgnoreCase(string expectedValue)
+    public void NotThrow_When_value_ends_with_abc_with_ignore_case(string expectedValue)
     {
         // Act
         var actualValue = Guard.Argument(expectedValue).EndsWith("abc", StringComparison.CurrentCultureIgnoreCase);
@@ -32,7 +32,7 @@ public class EndsWithTests : UnitTestsBase
     }
 
     [Fact]
-    public void ShouldThrows_ArgumentException_When_CollectionEmpty()
+    public void Throw_ArgumentException_When_empty_string()
     {
         // Arrange
         var value = string.Empty;
@@ -53,7 +53,9 @@ public class EndsWithTests : UnitTestsBase
     [InlineData("abc_")]
     [InlineData(" abc xyz")]
     [InlineData("xyz")]
-    public void ShouldThrows_ArgumentException_When_CollectionNotContainValue(string value)
+    [InlineData("Abc")]
+    [InlineData("ABC")]
+    public void Throw_ArgumentException_When_value_does_not_ends_with_abc(string value)
     {
         // Arrange
         void Act()
@@ -64,5 +66,51 @@ public class EndsWithTests : UnitTestsBase
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
         Assert.Equal($"\"{value}\" has to ends with \"abc\". (Parameter 'value')", ex.Message);
+    }
+
+    [Fact]
+    public void Throw_ArgumentException_with_custom_message_When_was_used()
+    {
+        // Arrange
+        var value = "value";
+        var customMessage = "Custom message.";
+
+        void Act()
+        {
+            Guard.Argument(value).EndsWith("abc", customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentException>(Act);
+        Assert.Equal($"{customMessage} (Parameter 'value')", ex.Message);
+    }
+
+    [Fact]
+    public void Throw_CustomException_When_Throws_was_used()
+    {
+        // Arrange
+        var value = "value";
+
+        void Act()
+        {
+            ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
+            Guard.Argument(value).Throws<CustomException>().EndsWith("abc");
+        }
+
+        // Assert
+        var customException = Assert.Throws<CustomException>(Act);
+        Assert.Equal(nameof(value), customException.ParamName);
+        Assert.Equal($"\"{value}\" has to ends with \"abc\".", customException.Message);
+    }
+
+    class CustomException : Exception
+    {
+        public string ParamName { get; }
+
+        public CustomException(string paramName, string? message)
+            : base(message)
+        {
+            ParamName = paramName;
+        }
     }
 }

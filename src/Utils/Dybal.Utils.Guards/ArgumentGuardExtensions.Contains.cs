@@ -10,7 +10,12 @@ public static partial class ArgumentGuardExtensions
         return guard.Any<TEnumerable, TArgument>(item => Equals(item, value), message);
     }
 
-    public static ArgumentGuard<string> Contains(this ArgumentGuard<string> guard, string value, StringComparison comparisonType = StringComparison.CurrentCulture, string? message = null)
+    public static ArgumentGuard<string> Contains(this ArgumentGuard<string> guard, string value, string? message = null)
+    {
+        return Contains(guard, value, StringComparison.CurrentCulture, message);
+    }
+
+    public static ArgumentGuard<string> Contains(this ArgumentGuard<string> guard, string value, StringComparison comparisonType, string? message = null)
     {
         if (!guard.Argument.Value.Contains(value, comparisonType))
         {

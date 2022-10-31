@@ -18,7 +18,7 @@ public class IndexerTests : UnitTestsBase
     [InlineData(9)]
     [InlineData(10)]
     [InlineData(11)]
-    public void ShouldReturn_ItemOnIndex_WhenIndexInRange(int index)
+    public void Return_item_on_index_When_index_in_range(int index)
     {
         // Arrange
         var compactList = new CompactList<int>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
@@ -35,7 +35,7 @@ public class IndexerTests : UnitTestsBase
     [InlineData(3)]
     [InlineData(5)]
     [InlineData(10)]
-    public void ShouldThrow_ItemOnIndex_WhenIndexOutOfRange(int indexOutOfRange)
+    public void Throw_ArgumentOutOfRangeException_When_index_out_of_range(int indexOutOfRange)
     {
         // Arrange
         var compactList = new CompactList<int>(1, 1, 1);

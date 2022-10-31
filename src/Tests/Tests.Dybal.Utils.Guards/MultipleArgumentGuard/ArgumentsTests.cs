@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.MultipleArgumentGuard;
 public class ArgumentsTests : UnitTestsBase
 {
     [Fact]
-    public void Should_ReturnActiveGuardWithCorrectArguments2()
+    public void Return_MultipleArgumentGuard_with_correct_argument_2()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
@@ -21,7 +21,7 @@ public class ArgumentsTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_ReturnActiveGuardWithCorrectArguments3()
+    public void Return_MultipleArgumentGuard_with_correct_argument_3()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
@@ -38,7 +38,7 @@ public class ArgumentsTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_ReturnGuardWithCorrectArguments4()
+    public void Return_MultipleArgumentGuard_with_correct_argument_4()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
@@ -57,7 +57,7 @@ public class ArgumentsTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_ReturnGuardWithCorrectArguments5()
+    public void Return_MultipleArgumentGuard_with_correct_argument_5()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
@@ -78,7 +78,7 @@ public class ArgumentsTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_ReturnGuardWithCorrectArguments6()
+    public void Return_MultipleArgumentGuard_with_correct_argument_6()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
@@ -101,7 +101,7 @@ public class ArgumentsTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_ReturnGuardWithCorrectArguments7()
+    public void Return_MultipleArgumentGuard_with_correct_argument_7()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
@@ -126,7 +126,7 @@ public class ArgumentsTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_ReturnGuardWithCorrectArguments8()
+    public void Return_MultipleArgumentGuard_with_correct_argument_8()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
@@ -153,7 +153,7 @@ public class ArgumentsTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_ReturnGuardWithCorrectArguments9()
+    public void Return_MultipleArgumentGuard_with_correct_argument_9()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
@@ -182,7 +182,7 @@ public class ArgumentsTests : UnitTestsBase
     }
 
     [Fact]
-    public void Should_ReturnGuardWithCorrectArguments10()
+    public void Return_MultipleArgumentGuard_with_correct_argument_10()
     {
         // Arrange
         DateTime? value1 = new DateTime(2009, 09, 01);
