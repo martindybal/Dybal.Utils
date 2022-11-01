@@ -229,7 +229,7 @@ public class ArgumentsTests : UnitTestsBase
 
         // Assert
         var exceptionNotRegisteredException = Assert.Throws<ExceptionNotRegisteredException>(Act);
-        Assert.Equal("Exception System.NotSupportedException was not registered. Use ThrowHelper.Register(NotSupportedExceptionFactory).", exceptionNotRegisteredException.Message);
+        Assert.Equal("Exception System.NotSupportedException was not registered. Use ThrowHelper.TryRegister(NotSupportedExceptionFactory).", exceptionNotRegisteredException.Message);
     }
 #endif
 
@@ -249,7 +249,7 @@ public class ArgumentsTests : UnitTestsBase
 
         // Assert
         var exceptionNotRegisteredException = Assert.Throws<ExceptionNotRegisteredException>(Act);
-        Assert.Equal("Exception System.NotSupportedException was not registered. Use ThrowHelper.Register(NotSupportedExceptionFactory).", exceptionNotRegisteredException.Message);
+        Assert.Equal("Exception System.NotSupportedException was not registered. Use ThrowHelper.TryRegister(NotSupportedExceptionFactory).", exceptionNotRegisteredException.Message);
     }
 
     class CustomException : Exception
