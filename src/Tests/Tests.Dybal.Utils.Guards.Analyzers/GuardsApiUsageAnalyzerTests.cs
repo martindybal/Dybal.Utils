@@ -3,15 +3,15 @@ using Microsoft.CodeAnalysis.Testing;
 using Tests.Dybal.Utils.Guards.Analyzers.Utilities;
 using Xunit;
 
-namespace Tests.Dybal.Utils.Guards.Analyzers
+namespace Tests.Dybal.Utils.Guards.Analyzers;
+
+public class GuardsApiUsageAnalyzerTests
 {
-    public class GuardsApiUsageAnalyzerTests
+    [Fact]
+    public async Task NoWarning_When_ArgumentGuard_EqualTo_Invocation()
     {
-        [Fact]
-        public async Task NoWarning_When_ArgumentGuard_EqualTo_Invocation()
-        {
-            // Prepare
-            var source = @"
+        // Prepare
+        var source = @"
 using Dybal.Utils.Guards;
 
 class Program
@@ -23,15 +23,15 @@ class Program
     }
 }";
 
-            // Assert
-            await VerifyUtils.Test(source);
-        }
+        // Assert
+        await VerifyUtils.Test(source);
+    }
 
-        [Fact]
-        public async Task Warning_When_ArgumentGuard_Equals_Invocation()
-        {
-            // Prepare
-            var source = @"
+    [Fact]
+    public async Task Warning_When_ArgumentGuard_Equals_Invocation()
+    {
+        // Prepare
+        var source = @"
 using Dybal.Utils.Guards;
 
 class Program
@@ -43,9 +43,8 @@ class Program
     }
 }";
 
-            // Assert
-            var expectedDiagnostic = new DiagnosticResult(GuardEqualsUsageAnalyzer.UseEqualInsteadOfEqualsRule).WithLocation(0);
-            await VerifyUtils.Test(source, expectedDiagnostic);
-        }
+        // Assert
+        var expectedDiagnostic = new DiagnosticResult(GuardEqualsUsageAnalyzer.UseEqualInsteadOfEqualsRule).WithLocation(0);
+        await VerifyUtils.Test(source, expectedDiagnostic);
     }
 }
