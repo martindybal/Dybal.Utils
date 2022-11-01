@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '6.0.x'
-          source-url: https://nuget.pkg.github.com/martin.dybal/index.json
+          source-url: https://nuget.pkg.github.com/martindybal/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: dotnet build src/Utils/Dybal.Utils.Guards/Dybal.Utils.Guards.csproj --configuration Release
