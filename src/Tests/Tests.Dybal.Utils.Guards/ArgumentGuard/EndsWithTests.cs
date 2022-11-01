@@ -44,7 +44,7 @@ public class EndsWithTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal($"\"\" has to ends with \"abc\". (Parameter 'value')", ex.Message);
+        Assert.Equal($"\"\" has to end with \"abc\". (Parameter 'value')", ex.Message);
     }
 
     [Theory]
@@ -55,7 +55,7 @@ public class EndsWithTests : UnitTestsBase
     [InlineData("xyz")]
     [InlineData("Abc")]
     [InlineData("ABC")]
-    public void Throw_ArgumentException_When_value_does_not_ends_with_abc(string value)
+    public void Throw_ArgumentException_When_value_does_not_end_with_abc(string value)
     {
         // Arrange
         void Act()
@@ -65,7 +65,7 @@ public class EndsWithTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal($"\"{value}\" has to ends with \"abc\". (Parameter 'value')", ex.Message);
+        Assert.Equal($"\"{value}\" has to end with \"abc\". (Parameter 'value')", ex.Message);
     }
 
     [Fact]
@@ -100,7 +100,7 @@ public class EndsWithTests : UnitTestsBase
         // Assert
         var customException = Assert.Throws<CustomException>(Act);
         Assert.Equal(nameof(value), customException.ParamName);
-        Assert.Equal($"\"{value}\" has to ends with \"abc\".", customException.Message);
+        Assert.Equal($"\"{value}\" has to end with \"abc\".", customException.Message);
     }
 
     class CustomException : Exception

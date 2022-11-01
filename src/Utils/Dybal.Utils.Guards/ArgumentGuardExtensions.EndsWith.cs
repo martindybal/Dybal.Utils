@@ -11,7 +11,7 @@ public static partial class ArgumentGuardExtensions
     {
         if (!guard.Argument.Value.EndsWith(value, comparisonType))
         {
-            message ??= $"\"{guard.Argument.Value}\" has to ends with \"{value}\".";
+            message ??= $"\"{guard.Argument.Value}\" has to end with \"{value}\".";
             ThrowHelper.Throw<ArgumentException>(guard, message);
         }
 
