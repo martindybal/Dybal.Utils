@@ -1,0 +1,25 @@
+name: Upload Dybal.Utils.Guards to nuget
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+          source-url: https://nuget.pkg.github.com/martin.dybal/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - run: dotnet build src/Utils/Dybal.Utils.Guards/Dybal.Utils.Guards.csproj --configuration Release
+      - name: Create the package
+        run: dotnet pack src/Utils/Dybal.Utils.Guards/Dybal.Utils.Guards.csproj --configuration Release
+      - name: Publish the package to nuget
+        run: dotnet nuget push src/Utils/Dybal.Utils.Guards/bin/Release/*.nupkg
