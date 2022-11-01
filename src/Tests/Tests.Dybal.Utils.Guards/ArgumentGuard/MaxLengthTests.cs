@@ -46,7 +46,7 @@ public class MaxLengthTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("The length of 'value' must be 3 characters or fewer. Parameter 4 has characters. (Parameter 'value')", ex.Message);
+        Assert.Equal("The length of 'value' must be 3 characters or fewer. Parameter has 4 characters. (Parameter 'value')", ex.Message);
     }
 
     [Fact]
