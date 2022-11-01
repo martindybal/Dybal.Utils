@@ -28,7 +28,7 @@ Foo(Guid id, string bar)
 }
 ```
 
-### Less boilerplate more clarity
+### Less boilerplate and more clarity to your code
 ```C#
 Foo(Guid id, string bar)
 {
