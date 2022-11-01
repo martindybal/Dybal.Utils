@@ -28,16 +28,21 @@ Foo(Guid id, string bar)
 }
 ```
 
+### Less boilerplate more clarity
 ```C#
-Foo(Guid? id, string bar)
+Foo(Guid id, string bar)
 {
     Id = Guard.Argument(id).NotDefault();
     Bar = Guard.Argument(bar).NotNullOrWhiteSpace().MinLength(5).MaxLength(20);
 }
 ```
 
-If you like shortcodes, you can also use `using static Dybal.Utils.Guards.GuardProvider;`
+If you like shortcodes, you can also use this.
 ```C#
+using static Dybal.Utils.Guards.GuardProvider;
+
+...
+
 Foo(Guid? id, string bar)
 {
     Id = Guard(id).NotDefault();
