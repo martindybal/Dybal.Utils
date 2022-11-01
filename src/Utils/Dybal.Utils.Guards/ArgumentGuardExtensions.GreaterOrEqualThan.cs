@@ -4,7 +4,7 @@ namespace Dybal.Utils.Guards;
 
 public static partial class ArgumentGuardExtensions
 {
-    public static ArgumentGuard<TArgument> GreaterOrEqualThan<TArgument>(this ArgumentGuard<TArgument> guard, TArgument value, string? message = null, [CallerArgumentExpression("value")] string valueName = "")
+    public static ArgumentGuard<TArgument> GreaterThanOrEqualTo<TArgument>(this ArgumentGuard<TArgument> guard, TArgument value, string? message = null, [CallerArgumentExpression("value")] string valueName = "")
         where TArgument : IComparable<TArgument>
     {
         if (guard.Argument.Value.CompareTo(value) < 0)
