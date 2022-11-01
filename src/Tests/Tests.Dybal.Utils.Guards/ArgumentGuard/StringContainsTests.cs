@@ -10,7 +10,7 @@ public class StringContainsTests : UnitTestsBase
     [InlineData("abc ")]
     [InlineData(" abc")]
     [InlineData(" abc ")]
-    public void NotThrow_When_value_contain_abc(string expectedValue)
+    public void NotThrow_When_value_contains_abc(string expectedValue)
     {
         // Act
         var actualValue = Guard.Argument(expectedValue).Contains("abc");
@@ -23,7 +23,7 @@ public class StringContainsTests : UnitTestsBase
     [InlineData("abc")]
     [InlineData("Abc")]
     [InlineData("ABC")]
-    public void NotThrow_When_value_contain_with_abc_ignore_case(string expectedValue)
+    public void NotThrow_When_value_contains_with_abc_ignore_case(string expectedValue)
     {
         // Act
         var actualValue = Guard.Argument(expectedValue).Contains("abc", StringComparison.CurrentCultureIgnoreCase);
