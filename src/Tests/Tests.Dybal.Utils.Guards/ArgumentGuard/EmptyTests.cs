@@ -50,7 +50,7 @@ public class EmptyTests : UnitTestsBase
     }
 
     [Fact]
-    public void Throw_ArgumentException_When_collection_contain_null()
+    public void Throw_ArgumentException_When_collection_contains_null()
     {
         // Arrange
         var source = new string?[] { null };
