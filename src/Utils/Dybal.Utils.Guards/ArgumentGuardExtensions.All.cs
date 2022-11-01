@@ -14,7 +14,7 @@ public static partial class ArgumentGuardExtensions
         var source = guard.Argument.Value;
         if (!source.All(filter))
         {   
-            message ??= "All items of collection must match predicate.";
+            message ??= "All items must match the predicate.";
             ThrowHelper.Throw<ArgumentException>(guard, message);
         }
 
