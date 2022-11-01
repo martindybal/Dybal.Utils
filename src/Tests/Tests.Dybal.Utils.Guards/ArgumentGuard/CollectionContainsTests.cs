@@ -12,7 +12,8 @@ public class CollectionContainsTests : UnitTestsBase
         var source = new[] { 1, 2, 3, 4, 5 };
 
         // Act
-        var sourceWithFive = Guard.Argument(source).Contains(5);
+        
+        int[] sourceWithFive = Guard.Argument(source).Contains(5);
 
         // Assert
         Assert.Equal(source, sourceWithFive);
