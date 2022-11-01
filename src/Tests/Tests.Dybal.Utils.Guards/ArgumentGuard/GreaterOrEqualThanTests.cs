@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
-public class GreaterOrEqualThanTests : UnitTestsBase
+public class GreaterThanOrEqualToTests : UnitTestsBase
 {
     [Fact]
     public void NotThrow_When_value_is_greater()
@@ -12,7 +12,7 @@ public class GreaterOrEqualThanTests : UnitTestsBase
         int value = 2;
 
         // Act
-        int guardValue = Guard.Argument(value).GreaterOrEqualThan(1);
+        int guardValue = Guard.Argument(value).GreaterThanOrEqualTo(1);
 
         // Assert
         Assert.Equal(value, guardValue);
@@ -25,7 +25,7 @@ public class GreaterOrEqualThanTests : UnitTestsBase
         int value = 1;
 
         // Act
-        int guardValue = Guard.Argument(value).GreaterOrEqualThan(1);
+        int guardValue = Guard.Argument(value).GreaterThanOrEqualTo(1);
 
         // Assert
         Assert.Equal(value, guardValue);
@@ -40,7 +40,7 @@ public class GreaterOrEqualThanTests : UnitTestsBase
         void Act()
         {
             var greaterValue = 2;
-            value = Guard.Argument(value).GreaterOrEqualThan(greaterValue);
+            value = Guard.Argument(value).GreaterThanOrEqualTo(greaterValue);
         }
 
         // Assert
@@ -57,7 +57,7 @@ public class GreaterOrEqualThanTests : UnitTestsBase
         
         void Act()
         {
-            value = Guard.Argument(value).GreaterOrEqualThan(2, customMessage);
+            value = Guard.Argument(value).GreaterThanOrEqualTo(2, customMessage);
         }
 
         // Assert
@@ -75,7 +75,7 @@ public class GreaterOrEqualThanTests : UnitTestsBase
         void Act()
         {
             ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
-            value = Guard.Argument(value).Throws<CustomException>().GreaterOrEqualThan(2, customMessage);
+            value = Guard.Argument(value).Throws<CustomException>().GreaterThanOrEqualTo(2, customMessage);
         }
 
         // Assert

@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
-public class LessOrEqualThanTests : UnitTestsBase
+public class LessThanOrEqualToTests : UnitTestsBase
 {
     [Fact]
     public void NotThrow_When_value_is_less()
@@ -12,7 +12,7 @@ public class LessOrEqualThanTests : UnitTestsBase
         int value = 1;
 
         // Act
-        int guardValue = Guard.Argument(value).LessOrEqualThan(2);
+        int guardValue = Guard.Argument(value).LessThanOrEqualTo(2);
 
         // Assert
         Assert.Equal(value, guardValue);
@@ -25,7 +25,7 @@ public class LessOrEqualThanTests : UnitTestsBase
         int value = 1;
 
         // Act
-        int guardValue = Guard.Argument(value).LessOrEqualThan(1);
+        int guardValue = Guard.Argument(value).LessThanOrEqualTo(1);
 
         // Assert
         Assert.Equal(value, guardValue);
@@ -40,7 +40,7 @@ public class LessOrEqualThanTests : UnitTestsBase
         void Act()
         {
             var lessValue = 1;
-            value = Guard.Argument(value).LessOrEqualThan(lessValue);
+            value = Guard.Argument(value).LessThanOrEqualTo(lessValue);
         }
 
         // Assert
@@ -57,7 +57,7 @@ public class LessOrEqualThanTests : UnitTestsBase
         
         void Act()
         {
-            value = Guard.Argument(value).LessOrEqualThan(1, customMessage);
+            value = Guard.Argument(value).LessThanOrEqualTo(1, customMessage);
         }
 
         // Assert
@@ -75,7 +75,7 @@ public class LessOrEqualThanTests : UnitTestsBase
         void Act()
         {
             ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
-            value = Guard.Argument(value).Throws<CustomException>().LessOrEqualThan(1, customMessage);
+            value = Guard.Argument(value).Throws<CustomException>().LessThanOrEqualTo(1, customMessage);
         }
 
         // Assert
