@@ -1,6 +1,4 @@
 ﻿#nullable disable
-using Dybal.Utils.Guards;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
