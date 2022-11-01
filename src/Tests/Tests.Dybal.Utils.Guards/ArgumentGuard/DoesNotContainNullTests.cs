@@ -32,7 +32,7 @@ public class DoesNotContainNullTests : UnitTestsBase
     }
     
     [Fact]
-    public void Throw_ArgumentException_When_collection_contain_null()
+    public void Throw_ArgumentException_When_collection_contains_null()
     {
         // Arrange
         var source = new int?[] { 1, null };
@@ -44,7 +44,7 @@ public class DoesNotContainNullTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collections must not contain null. (Parameter 'source')", ex.Message);
+        Assert.Equal("Collection must not contain null. (Parameter 'source')", ex.Message);
     }
 
     [Fact]
@@ -79,7 +79,7 @@ public class DoesNotContainNullTests : UnitTestsBase
         // Assert
         var customException = Assert.Throws<CustomException>(Act);
         Assert.Equal(nameof(source), customException.ParamName);
-        Assert.Equal("Collections must not contain null.", customException.Message);
+        Assert.Equal("Collection must not contain null.", customException.Message);
     }
 
     class CustomException : Exception

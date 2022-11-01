@@ -44,7 +44,7 @@ public class StartsWithTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal($"\"\" has to starts with \"abc\". (Parameter 'value')", ex.Message);
+        Assert.Equal($"\"\" has to start with \"abc\". (Parameter 'value')", ex.Message);
     }
 
     [Theory]
@@ -55,7 +55,7 @@ public class StartsWithTests : UnitTestsBase
     [InlineData("xyz")]
     [InlineData("Abc")]
     [InlineData("ABC")]
-    public void Throw_ArgumentException_When_value_starts_not_ends_with_abc(string value)
+    public void Throw_ArgumentException_When_value_not_starts_with_abc(string value)
     {
         // Arrange
         void Act()
@@ -65,7 +65,7 @@ public class StartsWithTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal($"\"{value}\" has to starts with \"abc\". (Parameter 'value')", ex.Message);
+        Assert.Equal($"\"{value}\" has to start with \"abc\". (Parameter 'value')", ex.Message);
     }
     
     [Fact]
@@ -100,7 +100,7 @@ public class StartsWithTests : UnitTestsBase
         // Assert
         var customException = Assert.Throws<CustomException>(Act);
         Assert.Equal(nameof(value), customException.ParamName);
-        Assert.Equal($"\"{value}\" has to starts with \"abc\".", customException.Message);
+        Assert.Equal($"\"{value}\" has to start with \"abc\".", customException.Message);
     }
 
     class CustomException : Exception

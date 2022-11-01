@@ -13,7 +13,7 @@ public static partial class ArgumentGuardExtensions
     {
         if (!guard.Argument.Value.Any(filter))
         {
-            message ??= "Collection does not contain required item.";
+            message ??= "No item matches the predicate.";
             ThrowHelper.Throw<ArgumentException>(guard, message);
         }
 

@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class CollectionContainsTests : UnitTestsBase
 {
     [Fact]
-    public void NotThrow_When_contain_value()
+    public void NotThrow_When_contains_value()
     {
         // Arrange
         var source = new[] { 1, 2, 3, 4, 5 };

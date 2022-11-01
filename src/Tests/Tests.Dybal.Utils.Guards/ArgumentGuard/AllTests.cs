@@ -32,7 +32,7 @@ public class AllTests : UnitTestsBase
     }
 
     [Fact]
-    public void Throw_ArgumentException_When_none_item_match_predicate()
+    public void Throw_ArgumentException_When_no_item_matches_predicate()
     {
         // Arrange
         var source = new[] { "a", "b" };
@@ -44,7 +44,7 @@ public class AllTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("All items of collection must match predicate. (Parameter 'source')", ex.Message);
+        Assert.Equal("All items must match the predicate. (Parameter 'source')", ex.Message);
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public class AllTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("All items of collection must match predicate. (Parameter 'source')", ex.Message);
+        Assert.Equal("All items must match the predicate. (Parameter 'source')", ex.Message);
     }
 
     [Fact]
@@ -95,7 +95,7 @@ public class AllTests : UnitTestsBase
         // Assert
         var customException = Assert.Throws<CustomException>(Act);
         Assert.Equal(nameof(source), customException.ParamName);
-        Assert.Equal("All items of collection must match predicate.", customException.Message);
+        Assert.Equal("All items must match the predicate.", customException.Message);
     }
 
     class CustomException : Exception

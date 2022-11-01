@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class AnyTests : UnitTestsBase
 {
     [Fact]
-    public void NotThrow_When_one_item_match_predicate()
+    public void NotThrow_When_one_item_matches_predicate()
     {
         // Arrange
         var source = new[] { "a", "b", " " };
@@ -31,11 +31,11 @@ public class AnyTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection does not contain required item. (Parameter 'source')", ex.Message);
+        Assert.Equal("No item matches the predicate. (Parameter 'source')", ex.Message);
     }
 
     [Fact]
-    public void Throw_ArgumentException_When_none_item_match_predicate()
+    public void Throw_ArgumentException_When_no_item_matches_predicate()
     {
         // Arrange
         var source = new[] { "a", "b" };
@@ -47,7 +47,7 @@ public class AnyTests : UnitTestsBase
 
         // Assert
         var ex = Assert.Throws<ArgumentException>(Act);
-        Assert.Equal("Collection does not contain required item. (Parameter 'source')", ex.Message);
+        Assert.Equal("No item matches the predicate. (Parameter 'source')", ex.Message);
     }
 
     [Fact]
@@ -82,7 +82,7 @@ public class AnyTests : UnitTestsBase
         // Assert
         var customException = Assert.Throws<CustomException>(Act);
         Assert.Equal(nameof(source), customException.ParamName);
-        Assert.Equal("Collection does not contain required item.", customException.Message);
+        Assert.Equal("No item matches the predicate.", customException.Message);
     }
 
     class CustomException : Exception

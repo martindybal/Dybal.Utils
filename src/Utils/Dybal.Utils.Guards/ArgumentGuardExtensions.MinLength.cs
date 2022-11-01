@@ -6,7 +6,7 @@ public static partial class ArgumentGuardExtensions
     {
         if (guard.Argument.Value.Length < minLength)
         {
-            ThrowHelper.Throw<ArgumentException>(guard, message ?? $"The length of '{guard.Argument.Name}' must be {minLength} characters or more. Parameter {guard.Argument.Value.Length} has characters.");
+            ThrowHelper.Throw<ArgumentException>(guard, message ?? $"The length of '{guard.Argument.Name}' must be {minLength} characters or more. Parameter has {guard.Argument.Value.Length} characters.");
         }
 
         return guard;

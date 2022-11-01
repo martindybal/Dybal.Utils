@@ -11,7 +11,7 @@ public static partial class ArgumentGuardExtensions
     {
         if (!guard.Argument.Value.StartsWith(value, comparisonType))
         {
-            message ??= $"\"{guard.Argument.Value}\" has to starts with \"{value}\".";
+            message ??= $"\"{guard.Argument.Value}\" has to start with \"{value}\".";
             ThrowHelper.Throw<ArgumentException>(guard, message);
         }
 
