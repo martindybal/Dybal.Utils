@@ -6,7 +6,7 @@ namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 public class StringGuardCombinationTests : UnitTestsBase
 {
     [Fact]
-    public void NotThrow_When_all_guard_are_ok()
+    public void NotThrow_When_all_guards_are_ok()
     {
         // Arrange
         string value = "abc";
