@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-	<ProjectReference Include="..\..\Utils\Dybal.Utils.Guards\Dybal.Utils.Guards.csproj" />
-	<ProjectReference Include="..\..\Analyzers\Dybal.Utils.Guards.Analyzers\Dybal.Utils.Guards.Analyzers.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utils\Dybal.Utils.Guards\Dybal.Utils.Guards.csproj" />
+		<ProjectReference Include="..\..\Analyzers\Dybal.Utils.Guards.Analyzers\Dybal.Utils.Guards.Analyzers.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
