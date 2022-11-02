@@ -2,6 +2,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Utils\Dybal.Utils.Guards\Dybal.Utils.Guards.csproj" />
+		<ProjectReference Include="..\..\Analyzers\Dybal.Utils.Guards.Analyzers\Dybal.Utils.Guards.Analyzers.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
 	</ItemGroup>
 
 	<ItemGroup>
