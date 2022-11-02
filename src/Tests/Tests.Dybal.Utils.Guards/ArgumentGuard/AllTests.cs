@@ -25,7 +25,7 @@ public class AllTests : UnitTestsBase
         var source = Array.Empty<string>();
 
         // Act
-        Guard.Argument(source).All(static _ => false);
+        Guard.Argument(source).All(static _ => true);
         
         // Assert
         // doesn't throw any exception
