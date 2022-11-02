@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
+using Tests.Dybal.Utils.Guards.Analyzers.Verifiers;
 
 namespace Tests.Dybal.Utils.Guards.Analyzers.Utilities;
 

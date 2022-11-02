@@ -1,8 +1,8 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Collections.Immutable;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using System.Collections.Immutable;
 
-namespace Tests.Dybal.Utils.Guards.Analyzers;
+namespace Tests.Dybal.Utils.Guards.Analyzers.Verifiers;
 
 internal static class CSharpVerifierHelper
 {
