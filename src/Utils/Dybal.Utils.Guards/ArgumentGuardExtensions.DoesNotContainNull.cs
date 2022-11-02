@@ -11,6 +11,6 @@ public static partial class ArgumentGuardExtensions
         where TEnumerable : IEnumerable<TArgument>
     {
         var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.Argument);
-        return guard.All<TEnumerable, TArgument>(static item => item is not null, message ?? "Collection must not contain null.");
+        return guard.None<TEnumerable, TArgument>(static item => item is null, message ?? "Collection must not contain null.");
     }
 }
