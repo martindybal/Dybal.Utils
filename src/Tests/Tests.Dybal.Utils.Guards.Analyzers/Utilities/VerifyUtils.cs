@@ -21,7 +21,9 @@ public static class VerifyUtils<TAnalyzer>
         };
 
         foreach (var diagnostic in diagnostics)
+        {
             test.ExpectedDiagnostics.Add(diagnostic);
+        }
 
 
         return test.RunAsync();
