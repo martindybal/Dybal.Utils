@@ -1,15 +1,16 @@
 ﻿using Dybal.Utils.Guards;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
-using VerifyCS = Tests.Dybal.Utils.Guards.Analyzers.CSharpAnalyzerVerifier<Dybal.Utils.Guards.Analyzers.GuardEqualsUsageAnalyzer>;
 
 namespace Tests.Dybal.Utils.Guards.Analyzers.Utilities;
 
-public static class VerifyUtils
+public static class VerifyUtils<TAnalyzer>
+    where TAnalyzer : DiagnosticAnalyzer, new()
 {
     public static Task Test(string source, params DiagnosticResult[] diagnostics)
     {
-        var test = new VerifyCS.Test()
+        var test = new CSharpAnalyzerVerifier<TAnalyzer>.Test()
         {
             TestCode = source,
             TestState =
