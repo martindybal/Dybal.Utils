@@ -1,4 +1,4 @@
-﻿namespace Dybal.Utils.Guards.Analyzers;
+﻿namespace Dybal.Utils.Guards.Analyzers.Utilities;
 
 public static class DiagnosticIds
 {

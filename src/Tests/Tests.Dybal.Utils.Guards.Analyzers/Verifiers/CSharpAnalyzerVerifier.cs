@@ -1,11 +1,9 @@
 ﻿#nullable disable
-using Dybal.Utils.Guards;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 
-namespace Tests.Dybal.Utils.Guards.Analyzers;
+namespace Tests.Dybal.Utils.Guards.Analyzers.Verifiers;
 
 public static partial class CSharpAnalyzerVerifier<TAnalyzer>
     where TAnalyzer : DiagnosticAnalyzer, new()

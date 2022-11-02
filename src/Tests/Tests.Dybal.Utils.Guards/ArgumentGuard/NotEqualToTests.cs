@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
 
-public class NotNotEqualToTests : UnitTestsBase
+public class NotEqualToTests : UnitTestsBase
 {
     [Fact]
     public void NotThrow_When_value_is_less()
