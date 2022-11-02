@@ -28,7 +28,7 @@ public class MultipleArgumentGuardEqualsUsageAnalyzer : ApiUsageAnalyzerBase
 
     protected override void AnalyzeInvocation(OperationAnalysisContext context, IInvocationOperation invocation, IMethodSymbol method)
     {
-        // Whenever someone invokes .Equals on ArgumentGuard, issue a warning
+        // Whenever someone invokes .Equals on MultipleArgumentGuard, issue a warning
         var diagnostics = Diagnostic.Create(DoNotUseEqualsRule, invocation.Syntax.GetLocation());
         context.ReportDiagnostic(diagnostics);
     }
