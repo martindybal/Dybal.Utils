@@ -5,11 +5,11 @@ using Microsoft.CodeAnalysis.Operations;
 namespace Dybal.Utils.Guards.Analyzers;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public sealed class GuardEqualsUsageAnalyzer : ApiUsageAnalyzerBase
+public sealed class ArgumentGuardEqualsUsageAnalyzer : ApiUsageAnalyzerBase
 {
     public static DiagnosticDescriptor UseEqualInsteadOfEqualsRule = new DiagnosticDescriptor(
 #pragma warning disable RS2008 // Enable analyzer release tracking
-        id: DiagnosticIds.UseEqualToInsteadOfEquals,
+        id: DiagnosticIds.ArgumentGuard_UseEqualToInsteadOfEquals,
 #pragma warning restore RS2008 // Enable analyzer release tracking
         title: "Do not use invalid equality check",
         messageFormat: @"When checking for equality, do not use ""Equals"" - use ""EqualTo"" instead",
@@ -17,7 +17,7 @@ public sealed class GuardEqualsUsageAnalyzer : ApiUsageAnalyzerBase
         DiagnosticSeverity.Warning,
         isEnabledByDefault: true);
 
-    public GuardEqualsUsageAnalyzer()
+    public ArgumentGuardEqualsUsageAnalyzer()
         : base(
             descriptor: UseEqualInsteadOfEqualsRule,
             typeFullName: "Dybal.Utils.Guards.ArgumentGuard`1",
