@@ -1,4 +1,4 @@
-name: Upload Dybal.Utils.Guards to nuget
+name: Upload packages to nuget
 
 on:
   release:
@@ -7,6 +7,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    matrix:
+        project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions"]
     permissions:
       packages: write
       contents: read
@@ -18,8 +20,8 @@ jobs:
           source-url: https://nuget.pkg.github.com/martindybal/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: dotnet build src/Utils/Dybal.Utils.Guards/Dybal.Utils.Guards.csproj --configuration Release
+      - run: dotnet build ${{ matrix.project }} --configuration Release
       - name: Create the package
-        run: dotnet pack src/Utils/Dybal.Utils.Guards/Dybal.Utils.Guards.csproj --configuration Release
+        run: dotnet pack ${{ matrix.project }} --configuration Release
       - name: Push Package to NuGet.org
-        run: dotnet nuget push src/Utils/Dybal.Utils.Guards/bin/Release/*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ${{ matrix.project }}/bin/Release/*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json

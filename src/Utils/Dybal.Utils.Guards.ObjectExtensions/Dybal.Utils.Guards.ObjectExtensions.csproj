@@ -1,5 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <ProjectReference Include="..\Dybal.Utils.Guards\Dybal.Utils.Guards.csproj" />
-  </ItemGroup>
+
+	<PropertyGroup>
+		<Version>1.0.0-pre-03</Version>
+		<Authors>Martin Dybal</Authors>
+		<PackageProjectUrl>https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.Guards.ObjectExtensions</PackageProjectUrl>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<Description>Extension method to facilitate the creation of a Guard from a variable.</Description>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/martindybal/Dybal.Utils.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Dybal.Utils.Guards\Dybal.Utils.Guards.csproj" />
+	</ItemGroup>
+
 </Project>
