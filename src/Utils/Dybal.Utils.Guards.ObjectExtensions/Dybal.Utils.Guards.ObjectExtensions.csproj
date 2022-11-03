@@ -19,4 +19,11 @@
 		<ProjectReference Include="..\Dybal.Utils.Guards\Dybal.Utils.Guards.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<None Include="readme.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
 </Project>
