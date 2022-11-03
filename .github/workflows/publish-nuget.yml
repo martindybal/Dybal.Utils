@@ -7,8 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    matrix:
-        project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions"]
+    strategy:
+        matrix:
+            project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions"]
     permissions:
       packages: write
       contents: read
