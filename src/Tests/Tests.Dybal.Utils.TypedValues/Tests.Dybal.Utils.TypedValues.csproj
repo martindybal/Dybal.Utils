@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<EnablePreviewFeatures>True</EnablePreviewFeatures>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utils\Dybal.Utils.TypedValues\Dybal.Utils.TypedValues.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="TypedId\" />
+	</ItemGroup>
+
+</Project>
