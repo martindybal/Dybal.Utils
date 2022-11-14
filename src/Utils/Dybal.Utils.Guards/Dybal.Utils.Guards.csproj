@@ -28,5 +28,9 @@
 			Include="../../Analyzers/Dybal.Utils.Guards.Analyzers/bin/$(Configuration)/netstandard2.0/Dybal.Utils.Guards.Analyzers.dll" 
 			PackagePath="analyzers/dotnet/cs" Pack="true" Visible="false" />
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="4.4.0-4.final" />
+	</ItemGroup>
 
 </Project>
