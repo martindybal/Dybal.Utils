@@ -26,4 +26,8 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.CodeAnalysis.CSharp" Version="4.4.0-4.final" />
+	</ItemGroup>
+
 </Project>
