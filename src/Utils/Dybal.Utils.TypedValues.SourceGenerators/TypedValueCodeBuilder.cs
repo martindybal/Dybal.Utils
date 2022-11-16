@@ -21,7 +21,7 @@ public static class TypedValueCodeBuilder
             get => this.{valueParameterName};
             {typedValuePropertySetter}
             {{
-                ValidateValue(value);
+                Validate{metadata.ValueName}(value);
                 this.{valueParameterName} = value;
             }}
         }}
@@ -40,7 +40,7 @@ public static class TypedValueCodeBuilder
         [System.Obsolete(""Use parametric a constructor instead"", true)]
         public {metadata.Name}()
         {{
-            this.{valueParameterName} = null!;
+            this.{valueParameterName} = default({metadata.ValueType.FullName})!;
         }}
 
         public {metadata.Name}({metadata.ValueType.FullName} {valueParameterName})
@@ -58,17 +58,28 @@ public static class TypedValueCodeBuilder
 
         public int CompareTo({metadata.Name} other)
         {{
-            return ({metadata.ValueName}, other.{metadata.ValueName}) switch
-            {{
-                (null, null) => 0,
-                (null, _) => -1,
-                (_, null) => 1,
-                (_, _) => {metadata.ValueName}.CompareTo(other.{metadata.ValueName}),
-            }};
+            {(metadata.ValueType.IsClass ? ReferenceTypeCompareTo(metadata.ValueName) : ValueTypeCompareTo(metadata.ValueName))}
         }}
     }}
 }}";
         return source;
+    }
+
+    private static string ValueTypeCompareTo(string valueName)
+    {
+        return $"return {valueName}.CompareTo(other.{valueName});";
+    }
+
+    private static string ReferenceTypeCompareTo(string valueName)
+    {
+        return 
+            @$"return ({valueName}, other.{valueName}) switch
+            {{
+                (null, null) => 0,
+                (null, _) => -1,
+                (_, null) => 1,
+                (_, _) => {valueName}.CompareTo(other.{valueName}),
+            }};";
     }
 
     private static string ToParameterName(string name)
