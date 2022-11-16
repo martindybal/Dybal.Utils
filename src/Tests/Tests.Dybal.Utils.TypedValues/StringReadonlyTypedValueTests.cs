@@ -1,5 +1,4 @@
-﻿using Dybal.Utils.TypedValues;
-using Xunit;
+﻿using Xunit;
 
 namespace Tests.Dybal.Utils.TypedValues;
 
