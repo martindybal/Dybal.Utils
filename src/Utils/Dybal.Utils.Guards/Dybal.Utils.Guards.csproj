@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.0.0-pre-03</Version>
+		<Version>1.0.0-pre-04</Version>
 		<Authors>Martin Dybal</Authors>
 		<PackageProjectUrl>https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.Guards</PackageProjectUrl>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
