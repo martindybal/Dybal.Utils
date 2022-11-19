@@ -1,4 +1,5 @@
 ﻿using Dybal.Utils.Guards;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Tests.Dybal.Utils.Guards.ArgumentGuard;
@@ -12,7 +13,7 @@ public class NotDefaultIfHasValueTests : UnitTestsBase
         Guid? value = null;
 
         // Act
-        Guard.Argument(value).NotDefaultIfHasValue();
+        value = Guard.Argument(value).NotDefaultIfHasValue();
 
         // Assert
         // doesn't throw any exception
@@ -25,7 +26,7 @@ public class NotDefaultIfHasValueTests : UnitTestsBase
         Guid? value = Guid.NewGuid();
 
         // Act
-        Guard.Argument(value).NotDefaultIfHasValue();
+        value = Guard.Argument(value).NotDefaultIfHasValue();
 
         // Assert
         // doesn't throw any exception
@@ -38,7 +39,7 @@ public class NotDefaultIfHasValueTests : UnitTestsBase
         int? value = 1;
 
         // Act
-        Guard.Argument(value).NotDefaultIfHasValue();
+        value = Guard.Argument(value).NotDefaultIfHasValue();
 
         // Assert
         // doesn't throw any exception
@@ -52,7 +53,7 @@ public class NotDefaultIfHasValueTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(defaultValue).NotDefaultIfHasValue();
+            defaultValue = Guard.Argument(defaultValue).NotDefaultIfHasValue();
         }
 
         // Assert
@@ -68,7 +69,7 @@ public class NotDefaultIfHasValueTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(defaultValue).NotDefaultIfHasValue();
+            defaultValue = Guard.Argument(defaultValue).NotDefaultIfHasValue();
         }
 
         // Assert
@@ -85,7 +86,7 @@ public class NotDefaultIfHasValueTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(defaultValue).NotDefaultIfHasValue(customMessage);
+            defaultValue = Guard.Argument(defaultValue).NotDefaultIfHasValue(customMessage);
         }
 
         // Assert
@@ -102,7 +103,7 @@ public class NotDefaultIfHasValueTests : UnitTestsBase
         void Act()
         {
             ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
-            Guard.Argument(defaultValue).Throws<CustomException>().NotDefaultIfHasValue();
+            defaultValue = Guard.Argument(defaultValue).Throws<CustomException>().NotDefaultIfHasValue();
         }
 
         // Assert
