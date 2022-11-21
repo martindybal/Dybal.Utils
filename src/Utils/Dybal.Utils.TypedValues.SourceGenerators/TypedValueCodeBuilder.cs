@@ -10,13 +10,13 @@ public static class TypedValueCodeBuilder
 
         var source = $@"namespace {metadata.Namespace}
 {{
-    public partial record struct {metadata.Name}: global::Dybal.Utils.TypedValues.{typedValueInterfaceName}<{metadata.Name}, {metadata.ValueType.FullName}>
+    public partial record struct {metadata.Name}: global::Dybal.Utils.TypedValues.{typedValueInterfaceName}<{metadata.Name}, {metadata.ValueType}>
     {{
-        private {(metadata.Readonly ? "readonly " : string.Empty)}{metadata.ValueType.FullName} {valueParameterName};
+        private {(metadata.Readonly ? "readonly " : string.Empty)}{metadata.ValueType} {valueParameterName};
 
-        public static implicit operator {metadata.ValueType.FullName}({metadata.Name} typed) => typed.{metadata.ValueName};
+        public static implicit operator {metadata.ValueType}({metadata.Name} typed) => typed.{metadata.ValueName};
 
-        public {metadata.ValueType.FullName} {metadata.ValueName}
+        public {metadata.ValueType} {metadata.ValueName}
         {{
             get => this.{valueParameterName};
             {typedValuePropertySetter}
@@ -26,7 +26,7 @@ public static class TypedValueCodeBuilder
             }}
         }}
         
-        {metadata.ValueType.FullName} global::Dybal.Utils.TypedValues.{typedValueInterfaceName}<{metadata.ValueType.FullName}>.Value
+        {metadata.ValueType} global::Dybal.Utils.TypedValues.{typedValueInterfaceName}<{metadata.ValueType}>.Value
         {{
             get => {metadata.ValueName};
             {typedValuePropertySetter} => {metadata.ValueName} = value;
@@ -40,25 +40,25 @@ public static class TypedValueCodeBuilder
         [System.Obsolete(""Use parametric a constructor instead"", true)]
         public {metadata.Name}()
         {{
-            this.{valueParameterName} = default({metadata.ValueType.FullName})!;
+            this.{valueParameterName} = default({metadata.ValueType})!;
         }}
 
-        public {metadata.Name}({metadata.ValueType.FullName} {valueParameterName})
+        public {metadata.Name}({metadata.ValueType} {valueParameterName})
         {{
             Validate{metadata.ValueName}({valueParameterName});
             this.{valueParameterName} = {valueParameterName};
         }}
 
-        static partial void Validate{metadata.ValueName}({metadata.ValueType.FullName} {valueParameterName});
+        static partial void Validate{metadata.ValueName}({metadata.ValueType} {valueParameterName});
 
-        public void Deconstruct(out {metadata.ValueType.FullName} {valueParameterName})
+        public void Deconstruct(out {metadata.ValueType} {valueParameterName})
         {{
             {valueParameterName} = {metadata.ValueName};
         }}
 
         public int CompareTo({metadata.Name} other)
         {{
-            {(metadata.ValueType.IsClass ? ReferenceTypeCompareTo(metadata.ValueName) : ValueTypeCompareTo(metadata.ValueName))}
+            {(metadata.ReferenceType ? ReferenceTypeCompareTo(metadata.ValueName) : ValueTypeCompareTo(metadata.ValueName))}
         }}
     }}
 }}";
