@@ -58,7 +58,7 @@ public static class TypedValueCodeBuilder
 
         public int CompareTo({metadata.Name} other)
         {{
-            {(metadata.ReferenceType ? ReferenceTypeCompareTo(metadata.ValueName) : ValueTypeCompareTo(metadata.ValueName))}
+            {(metadata.IsValueReferenceType ? ReferenceTypeCompareTo(metadata.ValueName) : ValueTypeCompareTo(metadata.ValueName))}
         }}
     }}
 }}";
