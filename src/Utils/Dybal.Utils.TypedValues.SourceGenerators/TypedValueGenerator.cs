@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+﻿using System.Diagnostics;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -9,80 +9,116 @@ namespace Dybal.Utils.TypedValues.SourceGenerators;
 [Generator]
 public class TypedValueGenerator : IIncrementalGenerator
 {
-    private const string TypedValueAttributeFullName = "Dybal.Utils.TypedValues.TypedValueAttribute`1";
+    private const string TypedValueAttributeFullName = "Dybal.Utils.TypedValues.TypedValueAttribute";
+    private const string TypedValueAttributeFullName1 = "Dybal.Utils.TypedValues.TypedValueAttribute<TValue>";
+
+    private static readonly SymbolDisplayFormat TypedValueFormat = new(SymbolDisplayGlobalNamespaceStyle.Omitted, SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces, SymbolDisplayGenericsOptions.IncludeTypeParameters);
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        // Do a simple filter for records
-        IncrementalValuesProvider<RecordDeclarationSyntax> recordDeclarations = context.SyntaxProvider
-            .ForAttributeWithMetadataName(
-                TypedValueAttributeFullName,
+        // Do a simple filter for target records
+        IncrementalValuesProvider<(INamedTypeSymbol, AttributeData)> targetRecords = context.SyntaxProvider
+            .CreateSyntaxProvider(
                 predicate: IsRecordWithAttribute,
                 transform: GetSemanticTargetForGeneration)
-            .Where(static declarationSyntax => declarationSyntax is not null)!;
+            .Where(static targetRecord => targetRecord != default);
 
-        IncrementalValueProvider<(Compilation, ImmutableArray<RecordDeclarationSyntax>)> compilationAndRecords
-            = context.CompilationProvider.Combine(recordDeclarations.Collect());
+        // Transform target records
+        IncrementalValuesProvider<TypedValueMetadata> transformedRecords = targetRecords
+            .Select(static (record, ct) => GetTypedValueMetadata(record.Item1, record.Item2, ct));
 
-        // Generate the source using the compilation and records
-        context.RegisterSourceOutput(compilationAndRecords, static (spc, source) => GenerateTypedValue(source.Item1, source.Item2, spc));
+        // Deduplicate transform target records
+        IncrementalValuesProvider<TypedValueMetadata> dedupedRecords = transformedRecords
+            .Collect()
+            .SelectMany(static (records, ct) => records.GroupBy(static record => record))
+            .Select(static (records, ct) => records.Key);
+
+        // Generate the source using the deduplicated target records
+        context.RegisterSourceOutput(dedupedRecords, static (spc, source) => GenerateTypedValue(source, spc));
     }
 
     static bool IsRecordWithAttribute(SyntaxNode node, CancellationToken ct)
         => node is RecordDeclarationSyntax { AttributeLists.Count: > 0 };
 
-    static RecordDeclarationSyntax? GetSemanticTargetForGeneration(GeneratorAttributeSyntaxContext context, CancellationToken ct)
+    static (INamedTypeSymbol, AttributeData) GetSemanticTargetForGeneration(GeneratorSyntaxContext context, CancellationToken ct)
     {
-        var recordDeclarationSyntax = (RecordDeclarationSyntax)context.TargetNode;
-        return recordDeclarationSyntax;
-    }
-
-    static void GenerateTypedValue(Compilation compilation, IEnumerable<RecordDeclarationSyntax>? records, SourceProductionContext context)
-    {
-        records = records?.Distinct().ToArray();
-
-        if (records == null || !records.Any())
+        ISymbol? symbol = context.SemanticModel.GetDeclaredSymbol(context.Node);
+        if (symbol is not INamedTypeSymbol recordSymbol)
         {
-            return;
+            return default;
         }
 
-        var recordsToGenerate = GetTypedValuesMetadata(compilation, records, context.CancellationToken);
-
-        foreach (var typedValueMetadata in recordsToGenerate)
+        if (!TryGetAttributeData(recordSymbol, context.SemanticModel, out AttributeData attributeData))
         {
-            // generate the source code and add it to the output
-            var typedValueSourceCode = TypedValueCodeBuilder.GetTypedValueGeneratedCode(typedValueMetadata);
-            context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}.g.cs", SourceText.From(typedValueSourceCode, Encoding.UTF8));
+            return default;
         }
+
+        return (recordSymbol, attributeData);
     }
 
-    static IEnumerable<TypedValueMetadata> GetTypedValuesMetadata(Compilation compilation, IEnumerable<RecordDeclarationSyntax> records, CancellationToken ct)
+    static bool TryGetAttributeData(INamedTypeSymbol recordSymbol, SemanticModel semanticModel, out AttributeData attributeData)
     {
-        foreach (var recordDeclarationSyntax in records)
+        foreach (AttributeData attribute in recordSymbol.GetAttributes())
         {
-            ct.ThrowIfCancellationRequested();
-
-            var semanticModel = compilation.GetSemanticModel(recordDeclarationSyntax.SyntaxTree);
-            if (ModelExtensions.GetDeclaredSymbol(semanticModel, recordDeclarationSyntax) is INamedTypeSymbol recordSymbol)
+            if (attribute.AttributeClass is not null)
             {
-                var recordName = recordSymbol.Name;
-                var recordNamespace = recordSymbol.ContainingNamespace.ToString();
-
-                var typedValueAttribute = recordSymbol.GetAttributes().Single(attribute => attribute.AttributeClass!.Name != TypedValueAttributeFullName);
-                var valueName = GetAttributePropertyValue<string>(typedValueAttribute, "ValueName");
-                var valueType = GetAttributePropertyValue<Type>(typedValueAttribute, "TValueType");
-                
-                //TODO
-                valueName ??= "Value";
-                valueType ??= typeof(string);
-
-                yield return new TypedValueMetadata(recordName, recordNamespace, valueType, valueName, recordSymbol.IsReadOnly);
+                string metadataName = attribute.AttributeClass.ConstructedFrom.ToDisplayString();
+                if (metadataName is TypedValueAttributeFullName or TypedValueAttributeFullName1)
+                {
+                    attributeData = attribute;
+                    return true;
+                }
             }
         }
+
+        attributeData = null!;
+        return false;
     }
 
-    private static TProperty GetAttributePropertyValue<TProperty>(AttributeData attribute, string propertyName)
+    static TypedValueMetadata GetTypedValueMetadata(INamedTypeSymbol recordSymbol, AttributeData attributeData, CancellationToken ct)
     {
-        return (TProperty)attribute.NamedArguments.SingleOrDefault(argument => argument.Key == propertyName).Value.Value!;
+        var recordName = recordSymbol.Name;
+        var recordNamespace = recordSymbol.ContainingNamespace.ToString();
+
+        string valueType;
+        bool isReferenceType;
+        if (attributeData.ConstructorArguments.Length == 1
+            && attributeData.ConstructorArguments[0].Value is INamedTypeSymbol type)
+        {
+            valueType = type.ToDisplayString(TypedValueFormat);
+            isReferenceType = type.IsReferenceType;
+        }
+        else
+        {
+            Debug.Assert(attributeData.AttributeClass is not null);
+            Debug.Assert(attributeData.AttributeClass!.TypeArguments.Length == 1);
+
+            ITypeSymbol typeArgument = attributeData.AttributeClass.TypeArguments[0];
+            valueType = typeArgument.ToDisplayString(TypedValueFormat);
+            isReferenceType = typeArgument.IsReferenceType;
+        }
+
+        string valueName;
+        if (attributeData.NamedArguments.Length == 1
+            && attributeData.NamedArguments[0].Value.Value is string value)
+        {
+            Debug.Assert(attributeData.NamedArguments[0].Key == "ValueName");
+            Debug.Assert(attributeData.NamedArguments[0].Value.Type!.SpecialType == SpecialType.System_String);
+
+            valueName = value;
+        }
+        else
+        {
+            valueName = "Value";
+        }
+
+        return new TypedValueMetadata(recordName, recordNamespace, valueType, valueName, isReferenceType, recordSymbol.IsReadOnly);
+    }
+
+    static void GenerateTypedValue(TypedValueMetadata typedValueMetadata, SourceProductionContext context)
+    {
+        // generate the source code and add it to the output
+        var typedValueSourceCode = TypedValueCodeBuilder.GetTypedValueGeneratedCode(typedValueMetadata);
+        context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}.g.cs", SourceText.From(typedValueSourceCode, Encoding.UTF8));
     }
 }
