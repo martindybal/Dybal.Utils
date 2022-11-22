@@ -1,5 +1,7 @@
 name: dotnet build and tests
-on: [push]
+
+on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,7 +11,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Release, Debug]
-        dotnet-version: [ '6.0.x' ]
+        dotnet-version: [ '7.0.x' ]
 
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
+        run: dotnet build --configuration ${{ matrix.configuration }} --no-restore  
       - name: Test
         run: dotnet test --no-restore --verbosity normal --logger trx --results-directory "TestResults/${{ matrix.dotnet-version }}/${{ matrix.configuration }}"
       - name: Upload dotnet test results
