@@ -33,6 +33,7 @@ jobs:
 
       - name: Test Reporter
         uses: dorny/test-reporter@v1.6.0
+        continue-on-error: true
         if: ${{ always() }}
         with:
           name: tests ${{ matrix.dotnet-version }} ${{ matrix.configuration }}
