@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
         matrix:
-            project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions", "src/Analyzers/Dybal.Utils.Guards.Analyzers"]
+            project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions"]
     permissions:
       packages: write
       contents: read
@@ -21,7 +21,7 @@ jobs:
           source-url: https://nuget.pkg.github.com/martindybal/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: dotnet build ${{ matrix.project }} --configuration Release
+      - run: dotnet build src/Dybal.Utils.sln --configuration Release
       - name: Create the package
         run: dotnet pack ${{ matrix.project }} --configuration Release
       - name: Push Package to NuGet.org
