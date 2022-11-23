@@ -19,10 +19,6 @@
 		<ProjectReference Include="..\Dybal.Utils.Guards\Dybal.Utils.Guards.csproj" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<None Include="readme.md">
 			<Pack>True</Pack>
