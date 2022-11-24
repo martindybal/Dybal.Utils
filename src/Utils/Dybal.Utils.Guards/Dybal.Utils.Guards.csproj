@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>1.0.0-pre-04</Version>
+		<Version>1.0.0-pre-05</Version>
 		<Authors>Martin Dybal</Authors>
 		<PackageProjectUrl>https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.Guards</PackageProjectUrl>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -24,7 +24,9 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="../../Analyzers/Dybal.Utils.Guards.Analyzers/bin/$(Configuration)/netstandard2.0/*.dll" PackagePath="analyzers/dotnet/cs" Pack="true" Visible="false" />
+		<None 
+			Include="../../Analyzers/Dybal.Utils.Guards.Analyzers/bin/$(Configuration)/netstandard2.0/Dybal.Utils.Guards.Analyzers.dll" 
+			PackagePath="analyzers/dotnet/cs" Pack="true" Visible="false" />
 	</ItemGroup>
 
 </Project>
