@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<Version>1.0.0-pre-01</Version>
@@ -25,7 +25,7 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
-		<None Include="../Dybal.Utils.TypedValues.SourceGenerators/bin/$(Configuration)/netstandard2.0/*.dll" PackagePath="analyzers/dotnet/cs" Pack="true" Visible="false" />
+		<None Include="../Dybal.Utils.TypedValues.SourceGenerators/bin/$(Configuration)/netstandard2.0/Dybal.Utils.TypedValues.SourceGenerators.dll" PackagePath="analyzers/dotnet/cs" Pack="true" Visible="false" />
 	</ItemGroup>
 	
 </Project>
