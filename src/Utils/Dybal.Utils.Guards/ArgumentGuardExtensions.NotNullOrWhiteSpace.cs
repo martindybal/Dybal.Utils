@@ -9,6 +9,6 @@ public static partial class ArgumentGuardExtensions
             ThrowHelper.Throw<ArgumentException>(covariantGuard, message ?? "Value cannot be null or white space string.");
         }
 
-        return ArgumentGuard<string>.From(covariantGuard, covariantGuard.ArgumentValue, covariantGuard.ArgumentName);
+        return ArgumentGuard<string>.From(covariantGuard.ArgumentValue, covariantGuard.ArgumentName, covariantGuard.ExceptionOverrideType);
     }
 }

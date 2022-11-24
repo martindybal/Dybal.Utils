@@ -7,7 +7,7 @@ public static partial class ArgumentGuardExtensions
     {
         if (guard.ArgumentValue.HasValue)
         {
-             var valueGuard = ArgumentGuard<TArgument>.From(guard, guard.ArgumentValue.Value, guard.ArgumentName);
+             var valueGuard = ArgumentGuard<TArgument>.From(guard.ArgumentValue.Value, guard.ArgumentName, ((IExceptionOverride)guard).ExceptionOverrideType);
              valueGuard.NotDefault(message);
         }
 

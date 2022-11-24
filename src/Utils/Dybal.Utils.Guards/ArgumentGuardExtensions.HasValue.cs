@@ -10,6 +10,6 @@ public static partial class ArgumentGuardExtensions
             ThrowHelper.Throw<ArgumentException>(guard, message ?? "Nullable object must have a value.");
         }
         
-        return ArgumentGuard<TArgument>.From(guard, guard.ArgumentValue.Value, guard.ArgumentName);
+        return ArgumentGuard<TArgument>.From(guard.ArgumentValue.Value, guard.ArgumentName, ((IExceptionOverride)guard).ExceptionOverrideType);
     }
 }

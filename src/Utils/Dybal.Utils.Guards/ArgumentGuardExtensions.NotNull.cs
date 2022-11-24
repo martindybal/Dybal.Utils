@@ -9,7 +9,7 @@ public static partial class ArgumentGuardExtensions
             ThrowHelper.Throw<ArgumentNullException>(covariantGuard, message);
         }
         
-        var guard = ArgumentGuard<TArgument>.From(covariantGuard, covariantGuard.ArgumentValue, covariantGuard.ArgumentName);
+        var guard = ArgumentGuard<TArgument>.From(covariantGuard.ArgumentValue, covariantGuard.ArgumentName, covariantGuard.ExceptionOverrideType);
         return guard;
     }
 }

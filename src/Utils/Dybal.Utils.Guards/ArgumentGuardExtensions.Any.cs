@@ -4,7 +4,7 @@ public static partial class ArgumentGuardExtensions
 {
     public static ArgumentGuard<IEnumerable<TArgument>> Any<TArgument>(this ICovariantArgumentGuard<IEnumerable<TArgument>> covariantGuard, Func<TArgument, bool> filter, string? message = null)
     {
-        var guard = ArgumentGuard<IEnumerable<TArgument>>.From(covariantGuard, covariantGuard.ArgumentValue, covariantGuard.ArgumentName);
+        var guard = ArgumentGuard<IEnumerable<TArgument>>.From(covariantGuard.ArgumentValue, covariantGuard.ArgumentName, covariantGuard.ExceptionOverrideType);
         return guard.Any(filter, message);
     }
 

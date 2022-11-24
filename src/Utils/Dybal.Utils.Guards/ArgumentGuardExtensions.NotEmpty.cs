@@ -16,7 +16,7 @@ public static partial class ArgumentGuardExtensions
             ThrowHelper.Throw<ArgumentException>(covariantGuard, message);
         }
 
-        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.ArgumentValue, covariantGuard.ArgumentName);
+        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard.ArgumentValue, covariantGuard.ArgumentName, covariantGuard.ExceptionOverrideType);
         return guard;
     }
 }

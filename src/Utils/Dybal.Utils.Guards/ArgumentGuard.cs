@@ -33,7 +33,11 @@ public readonly record struct ArgumentGuard<TArgument> : ICovariantArgumentGuard
     
     public static ArgumentGuard<TArgument> From(IExceptionOverride exceptionOverride, TArgument argumentValue, string argumentName)
     {
-        //TODO use just ExceptionOverrideType
-        return new ArgumentGuard<TArgument>(argumentValue, argumentName, exceptionOverride.ExceptionOverrideType);
+        return From(argumentValue, argumentName, exceptionOverride.ExceptionOverrideType);
+    }
+    
+    public static ArgumentGuard<TArgument> From(TArgument argumentValue, string argumentName, Type? exceptionOverrideType)
+    {
+        return new ArgumentGuard<TArgument>(argumentValue, argumentName, exceptionOverrideType);
     }
 }

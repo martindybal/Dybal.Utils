@@ -10,7 +10,7 @@ public static partial class ArgumentGuardExtensions
     public static ArgumentGuard<TEnumerable> ContainsNull<TEnumerable, TArgument>(this ICovariantArgumentGuard<TEnumerable> covariantGuard, string? message = null)
         where TEnumerable : IEnumerable<TArgument>
     {
-        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.ArgumentValue, covariantGuard.ArgumentName);
+        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard.ArgumentValue, covariantGuard.ArgumentName, covariantGuard.ExceptionOverrideType);
         return guard.Any<TEnumerable, TArgument>(static item => item is null, message ?? "Collection has to contain null.");
     }
 }
