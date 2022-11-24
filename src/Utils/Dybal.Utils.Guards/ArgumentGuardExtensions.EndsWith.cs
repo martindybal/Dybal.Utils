@@ -9,9 +9,9 @@ public static partial class ArgumentGuardExtensions
 
     public static ArgumentGuard<string> EndsWith(this ArgumentGuard<string> guard, string value, StringComparison comparisonType, string? message = null)
     {
-        if (!guard.Argument.Value.EndsWith(value, comparisonType))
+        if (!guard.ArgumentValue.EndsWith(value, comparisonType))
         {
-            message ??= $"\"{guard.Argument.Value}\" has to end with \"{value}\".";
+            message ??= $"\"{guard.ArgumentValue}\" has to end with \"{value}\".";
             ThrowHelper.Throw<ArgumentException>(guard, message);
         }
 

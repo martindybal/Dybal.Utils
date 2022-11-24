@@ -16,7 +16,7 @@ public class GuardProviderTests : UnitTestsBase
         var guard = Guard(value);
 
         // Assert
-        AssertGuard.AssertArgument(value, guard.Argument);
+        AssertGuard.AssertArgument(value, guard.ArgumentValue, guard.ArgumentName);
     }
 
     [Fact]

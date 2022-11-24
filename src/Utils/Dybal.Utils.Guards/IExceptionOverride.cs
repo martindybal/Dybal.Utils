@@ -2,6 +2,6 @@
 
 public interface IExceptionOverride
 {
-    internal string ArgumentName { get; }
+    string ArgumentName { get; }
     internal Type? ExceptionOverrideType { get; }
 }

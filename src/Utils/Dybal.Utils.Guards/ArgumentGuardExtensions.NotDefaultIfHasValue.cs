@@ -5,9 +5,9 @@ public static partial class ArgumentGuardExtensions
     public static ArgumentGuard<TArgument?> NotDefaultIfHasValue<TArgument>(this ArgumentGuard<TArgument?> guard, string? message = null)
         where TArgument : struct
     {
-        if (guard.Argument.Value.HasValue)
+        if (guard.ArgumentValue.HasValue)
         {
-             var valueGuard = ArgumentGuard<TArgument>.From(guard, new Argument<TArgument>(guard.Argument.Value.Value, guard.Argument.Name));
+             var valueGuard = ArgumentGuard<TArgument>.From(guard, guard.ArgumentValue.Value, guard.ArgumentName);
              valueGuard.NotDefault(message);
         }
 

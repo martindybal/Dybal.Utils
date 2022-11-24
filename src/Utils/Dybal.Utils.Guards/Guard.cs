@@ -13,7 +13,7 @@ public static class Guard
     /// <returns>Instance of ArgumentGuard&lt;TArgument&gt;</returns>
     public static ArgumentGuard<TArgument> Argument<TArgument>(TArgument argumentValue, [CallerArgumentExpression("argumentValue")] string argumentName = "")
     {
-        return new ArgumentGuard<TArgument>(new Argument<TArgument>(argumentValue, argumentName));
+        return new ArgumentGuard<TArgument>(argumentValue, argumentName);
     }
     
     public static MultipleArgumentGuard Arguments<TArgument1, TArgument2>(

@@ -5,7 +5,7 @@ public static partial class ArgumentGuardExtensions
     public static ArgumentGuard<TEnumerable> DoesNotContain<TEnumerable, TArgument>(this ICovariantArgumentGuard<TEnumerable> covariantGuard, TArgument? value, string? message = null)
         where TEnumerable : IEnumerable<TArgument>
     {
-        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.Argument);
+        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.ArgumentValue, covariantGuard.ArgumentName);
         message ??= $"Collection must not contain '{value}'.";
         return guard.None<TEnumerable, TArgument>(item => Equals(item, value), message);
     }

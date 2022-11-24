@@ -15,8 +15,8 @@ public class ArgumentTests : UnitTestsBase
         var guard = Guard.Argument(value);
 
         // Assert
-        Assert.Equal(nameof(value), guard.Argument.Name);
-        Assert.Equal(value, guard.Argument.Value);
-        AssertGuard.AssertArgument(value, guard.Argument);
+        Assert.Equal(nameof(value), guard.ArgumentName);
+        Assert.Equal(value, guard.ArgumentValue);
+        AssertGuard.AssertArgument(value, guard.ArgumentValue, guard.ArgumentName);
     }
 }

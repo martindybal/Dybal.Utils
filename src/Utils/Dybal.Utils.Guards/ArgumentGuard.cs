@@ -2,24 +2,27 @@
 
 public readonly record struct ArgumentGuard<TArgument> : ICovariantArgumentGuard<TArgument>, IExceptionOverride
 {
-    public IArgument<TArgument> Argument { get; }
+    public TArgument ArgumentValue { get; }
+    public string ArgumentName { get; }
+    
     internal Type? ExceptionOverrideType { get; private init; }
 
-    string IExceptionOverride.ArgumentName => Argument.Name;
+    string IExceptionOverride.ArgumentName => ArgumentName;
     Type? IExceptionOverride.ExceptionOverrideType => ExceptionOverrideType;
 
-    internal ArgumentGuard(IArgument<TArgument> argument)
-        : this(argument, null)
+    internal ArgumentGuard(TArgument argumentValue, string argumentName)
+        : this(argumentValue, argumentName, null)
     {
     }
 
-    private ArgumentGuard(IArgument<TArgument> argument, Type? exceptionOverrideType)
+    private ArgumentGuard(TArgument argumentValue, string argumentName, Type? exceptionOverrideType)
     {
-        Argument = argument;
+        ArgumentValue = argumentValue;
+        ArgumentName = argumentName;
         ExceptionOverrideType = exceptionOverrideType;
     }
-
-    public static implicit operator TArgument(ArgumentGuard<TArgument> guard) => guard.Argument.Value;
+    
+    public static implicit operator TArgument(ArgumentGuard<TArgument> guard) => guard.ArgumentValue;
 
     public ArgumentGuard<TArgument> Throws<TException>()
         where TException : Exception
@@ -28,8 +31,9 @@ public readonly record struct ArgumentGuard<TArgument> : ICovariantArgumentGuard
         return this with { ExceptionOverrideType = typeof(TException) };
     }
     
-    public static ArgumentGuard<TArgument> From(IExceptionOverride exceptionOverride, IArgument<TArgument> argument)
+    public static ArgumentGuard<TArgument> From(IExceptionOverride exceptionOverride, TArgument argumentValue, string argumentName)
     {
-        return new ArgumentGuard<TArgument>(argument, exceptionOverride.ExceptionOverrideType);
+        //TODO use just ExceptionOverrideType
+        return new ArgumentGuard<TArgument>(argumentValue, argumentName, exceptionOverride.ExceptionOverrideType);
     }
 }

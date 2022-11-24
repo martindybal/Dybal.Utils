@@ -5,7 +5,7 @@ public static partial class ArgumentGuardExtensions
     public static ArgumentGuard<TEnumerable> Contains<TEnumerable, TArgument>(this ICovariantArgumentGuard<TEnumerable> covariantGuard, TArgument? value, string? message = null)
         where TEnumerable : IEnumerable<TArgument>
     {
-        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.Argument);
+        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.ArgumentValue, covariantGuard.ArgumentName);
         message ??= $"Collection has to contain '{value}'.";
         return guard.Any<TEnumerable, TArgument>(item => Equals(item, value), message);
     }
@@ -17,9 +17,9 @@ public static partial class ArgumentGuardExtensions
 
     public static ArgumentGuard<string> Contains(this ArgumentGuard<string> guard, string value, StringComparison comparisonType, string? message = null)
     {
-        if (!guard.Argument.Value.Contains(value, comparisonType))
+        if (!guard.ArgumentValue.Contains(value, comparisonType))
         {
-            message ??= $"\"{guard.Argument.Value}\" has to contain \"{value}\".";
+            message ??= $"\"{guard.ArgumentValue}\" has to contain \"{value}\".";
             ThrowHelper.Throw<ArgumentException>(guard, message);
         }
 

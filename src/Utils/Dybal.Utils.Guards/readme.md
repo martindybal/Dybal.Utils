@@ -74,7 +74,7 @@ public static class CustomGuardExtensions
 {
     public static ArgumentGuard<int> IsNotFive(this ArgumentGuard<int> guard)
     {
-        if (guard.Argument.Value == 5)
+        if (guard.ArgumentValue == 5)
         {
             ThrowHelper.Throw<ArgumentException>(guard, "Value cannot be five.");
         }

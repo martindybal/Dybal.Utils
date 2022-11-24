@@ -4,14 +4,14 @@ public static partial class ArgumentGuardExtensions
 {
     public static ArgumentGuard<IEnumerable<TArgument>> All<TArgument>(this ICovariantArgumentGuard<IEnumerable<TArgument>> covariantGuard, Func<TArgument, bool> filter, string? message = null)
     {
-        var guard = ArgumentGuard<IEnumerable<TArgument>>.From(covariantGuard, covariantGuard.Argument);
+        var guard = ArgumentGuard<IEnumerable<TArgument>>.From(covariantGuard, covariantGuard.ArgumentValue, covariantGuard.ArgumentName);
         return guard.All(filter, message);
     }
 
     public static ArgumentGuard<TEnumerable> All<TEnumerable, TArgument>(this ArgumentGuard<TEnumerable> guard, Func<TArgument, bool> filter, string? message = null)
         where TEnumerable : IEnumerable<TArgument>
     {
-        var source = guard.Argument.Value;
+        var source = guard.ArgumentValue;
         if (!source.All(filter))
         {   
             message ??= "All items must match the predicate.";

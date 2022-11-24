@@ -10,13 +10,13 @@ public static partial class ArgumentGuardExtensions
     public static ArgumentGuard<TEnumerable> NotEmpty<TEnumerable, TArgument>(this ICovariantArgumentGuard<TEnumerable> covariantGuard, string? message = null)
         where TEnumerable : IEnumerable<TArgument>
     {
-        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.Argument);
-        if (!guard.Argument.Value.Any())
+        if (!covariantGuard.ArgumentValue.Any())
         {
             message ??= "Collection cannot be empty.";
-            ThrowHelper.Throw<ArgumentException>(guard, message);
+            ThrowHelper.Throw<ArgumentException>(covariantGuard, message);
         }
 
+        var guard = ArgumentGuard<TEnumerable>.From(covariantGuard, covariantGuard.ArgumentValue, covariantGuard.ArgumentName);
         return guard;
     }
 }

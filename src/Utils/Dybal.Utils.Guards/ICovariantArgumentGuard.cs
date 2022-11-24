@@ -2,5 +2,5 @@
 
 public interface ICovariantArgumentGuard<out TArgument>: IExceptionOverride
 {
-    IArgument<TArgument> Argument { get; }
+    TArgument ArgumentValue { get; }
 }

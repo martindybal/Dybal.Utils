@@ -5,11 +5,11 @@ public static partial class ArgumentGuardExtensions
     public static ArgumentGuard<TArgument> HasValue<TArgument>(this ArgumentGuard<TArgument?> guard, string? message = null)
         where TArgument : struct
     {
-        if (guard.Argument.Value.HasValue == false)
+        if (guard.ArgumentValue.HasValue == false)
         {
             ThrowHelper.Throw<ArgumentException>(guard, message ?? "Nullable object must have a value.");
         }
         
-        return ArgumentGuard<TArgument>.From(guard, new Argument<TArgument>(guard.Argument.Value.Value, guard.Argument.Name));
+        return ArgumentGuard<TArgument>.From(guard, guard.ArgumentValue.Value, guard.ArgumentName);
     }
 }
