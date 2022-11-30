@@ -14,8 +14,6 @@ public static class TypedValueCodeBuilder
     {{
         private {(metadata.Readonly ? "readonly " : string.Empty)}{metadata.ValueType} {valueParameterName};
 
-        public static implicit operator {metadata.ValueType}({metadata.Name} typed) => typed.{metadata.ValueName};
-
         public {metadata.ValueType} {metadata.ValueName}
         {{
             get => this.{valueParameterName};

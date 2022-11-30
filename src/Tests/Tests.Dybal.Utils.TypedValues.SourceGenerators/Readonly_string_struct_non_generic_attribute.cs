@@ -20,8 +20,6 @@ namespace My.TypedValue.Tests
     {
         private readonly System.String value;
 
-        public static implicit operator System.String(TestTypedReadonlyString typed) => typed.Value;
-
         public System.String Value
         {
             get => this.value;

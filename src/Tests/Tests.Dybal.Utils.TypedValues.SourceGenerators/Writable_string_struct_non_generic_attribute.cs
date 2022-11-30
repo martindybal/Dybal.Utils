@@ -20,8 +20,6 @@ namespace My.TypedValue.Tests
     {
         private System.String value;
 
-        public static implicit operator System.String(TestTypedString typed) => typed.Value;
-
         public System.String Value
         {
             get => this.value;

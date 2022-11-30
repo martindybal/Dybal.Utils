@@ -23,8 +23,6 @@ namespace My.TypedValue.Tests
     {
         private System.Int32 percentage;
 
-        public static implicit operator System.Int32(TestTypedInt typed) => typed.Percentage;
-
         public System.Int32 Percentage
         {
             get => this.percentage;
