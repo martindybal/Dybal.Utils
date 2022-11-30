@@ -2,6 +2,35 @@
 
 public static class TypedValueCodeBuilder
 {
+    public static string GetSystemTextJsonSerializationGeneratedCode(TypedValueMetadata metadata)
+    {
+        var source = $@"namespace {metadata.Namespace}
+{{
+    [global::System.Text.Json.Serialization.JsonConverter(typeof({metadata.Name}SystemTextJsonConverter))]
+    public partial record struct {metadata.Name}
+    {{
+
+    }}
+
+    class {metadata.Name}SystemTextJsonConverter : global::System.Text.Json.Serialization.JsonConverter<{metadata.Name}>
+    {{
+        public override {metadata.Name} Read(ref global::System.Text.Json.Utf8JsonReader reader, global::System.Type typeToConvert, global::System.Text.Json.JsonSerializerOptions options)
+        {{
+            var value = global::System.Text.Json.JsonSerializer.Deserialize<{metadata.ValueType}>(ref reader, options);
+            return new {metadata.Name}(value);
+        }}
+        
+        public override void Write(global::System.Text.Json.Utf8JsonWriter writer, {metadata.Name} value, global::System.Text.Json.JsonSerializerOptions options)
+        {{
+            var jsonValue = global::System.Text.Json.JsonSerializer.Serialize(value.Value, options);
+            writer.WriteRawValue(jsonValue);
+        }}
+    }}
+}}";
+        return source;
+    }
+
+
     public static string GetTypedValueGeneratedCode(TypedValueMetadata metadata)
     {
         var typedValueInterfaceName = metadata.Readonly ? "IReadonlyTypedValue" : "ITypedValue";

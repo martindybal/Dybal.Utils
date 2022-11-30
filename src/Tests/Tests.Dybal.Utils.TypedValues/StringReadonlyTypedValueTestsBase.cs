@@ -78,6 +78,36 @@ public abstract class StringReadonlyTypedValueTestsBase<TTypedValue>
         var expectedResult = value1.CompareTo(value2);
         Assert.Equal(expectedResult, compareResult);
     }
+    
+    [Fact]
+    public void System_Text_Json_Serialize_Should_be_equal_value_Serialize()
+    {
+        // Arrange
+        var value = "typed value";
+        var expectedJson = System.Text.Json.JsonSerializer.Serialize(value);
+
+        // Act
+        var typedValue = CreateTypedValue(value);
+        var typedValueJson = System.Text.Json.JsonSerializer.Serialize(typedValue);
+        
+        // Assert
+        Assert.Equal(expectedJson, typedValueJson);
+    }
+    
+    [Fact]
+    public void System_Text_Json_Deserialize_typed_value_from_value_json()
+    {
+        // Arrange
+        var value = "typed value";
+        var expectedJson = System.Text.Json.JsonSerializer.Serialize(value);
+
+        // Act
+        var typedValue = System.Text.Json.JsonSerializer.Deserialize<TTypedValue>(expectedJson);
+        
+        // Assert
+        Assert.NotNull(typedValue);
+        Assert.Equal(value, typedValue.Value);
+    }
 
     protected abstract TTypedValue CreateTypedValue(string value);
 }
