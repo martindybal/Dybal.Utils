@@ -12,6 +12,10 @@
 	<ItemGroup>
 		<Content Include="..\xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
+	
+	<ItemGroup>
+		<AdditionalFiles Include="..\Dybal.Utils.TypedValues.json" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />

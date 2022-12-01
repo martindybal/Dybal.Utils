@@ -3,10 +3,10 @@
 [Flags]
 public enum Converters
 {
-    None = 1 << 0,
+    None = 0,
     
     /// <summary>
     /// Creates a System.Text.Json.Serialization.JsonConverter for serializing the value object as its primitive value
     /// </summary>
-    SystemTextJson = 1 << 1
+    SystemTextJson = 1 << 0
 }

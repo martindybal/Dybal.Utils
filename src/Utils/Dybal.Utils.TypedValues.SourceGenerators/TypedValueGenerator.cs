@@ -1,6 +1,8 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -8,34 +10,87 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Dybal.Utils.TypedValues.SourceGenerators;
 
+public class TypedValueGeneratorOptions
+{
+    public Converters Converters { get; }
+
+    public TypedValueGeneratorOptions(Converters converters)
+    {
+        Converters = converters;
+    }
+}
+
 [Generator]
 public class TypedValueGenerator : IIncrementalGenerator
 {
     private const string TypedValueAttributeFullName = "Dybal.Utils.TypedValues.TypedValueAttribute";
-    private const string TypedValueAttributeFullName1 = "Dybal.Utils.TypedValues.TypedValueAttribute<TValue>";
+    private const string GenericTypedValueAttributeFullName = "Dybal.Utils.TypedValues.TypedValueAttribute<TValue>";
 
     private static readonly SymbolDisplayFormat TypedValueFormat = new(SymbolDisplayGlobalNamespaceStyle.Omitted, SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces, SymbolDisplayGenericsOptions.IncludeTypeParameters);
-    private static Converters? defaultConvertors = null;
+    
+    private static TypedValueGeneratorOptions? config = null;
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+
+        var files = context.AdditionalTextsProvider
+            .Where(file => file.Path.EndsWith("Dybal.Utils.TypedValues.json"))
+            .Select((file, ct) => new { file.Path, Content = file.GetText(ct)!.ToString() })
+            .Select((file, ct) => file.Path);
+
         // Do a simple filter for target records
-        var syntaxProvider = context.SyntaxProvider
+        var targetRecords = context.SyntaxProvider
             .CreateSyntaxProvider(
                 predicate: IsRecordWithAttribute,
                 transform: GetSemanticTargetForGeneration)
-            .Where(static targetRecord => targetRecord != default)
-            .Select(static (record, ct) => GetTypedValueMetadata(record.Item1, record.Item2))
+            .Where(static targetRecord => targetRecord != default);
+
+        // Transform target records
+        var transformedRecords = targetRecords
+            .Select(static (record, ct) => GetTypedValueMetadata(record.Item1, record.Item2));
+
+        // Deduplicate transform target records
+        var dedupedRecords = transformedRecords
             .Collect()
             .SelectMany(static (records, ct) => records.GroupBy(static record => record))
             .Select(static (records, ct) => records.Key)
-            .Collect()
-            .Combine(context.CompilationProvider)
-            .Combine(context.ParseOptionsProvider)
-            .Combine(context.AnalyzerConfigOptionsProvider);
+            .Combine(files.Collect());
 
         // Generate the source using the deduplicated target records
-        context.RegisterSourceOutput(syntaxProvider, (spc, arg) => GenerateTypedValues(spc, arg.Left.Left.Left, arg.Right));
+        context.RegisterSourceOutput(dedupedRecords, static (spc, source) => Execute(source.Left, source.Right.FirstOrDefault(), spc));
+    }
+
+    private static void Execute(TypedValueMetadata typedValueMetadata, string? configFilePath, SourceProductionContext context)
+    {
+        config ??= ReadConfigFromJson(configFilePath) ?? DefaultConfig();
+        GenerateTypedValue(typedValueMetadata, context);
+    }
+    
+    private static TypedValueGeneratorOptions? ReadConfigFromJson(string? configFilePath)
+    {
+        try
+        {
+            if (configFilePath is not null)
+            {
+                var options = new JsonSerializerOptions
+                {
+                    Converters =
+                    {
+                        new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+                    }
+                };
+
+                var configJson = File.ReadAllText(configFilePath);
+                return JsonSerializer.Deserialize<TypedValueGeneratorOptions>(configJson, options);
+            }
+        }
+        catch { }
+        return null;
+    }
+
+    private static TypedValueGeneratorOptions DefaultConfig()
+    {
+        return new TypedValueGeneratorOptions(Converters.None);
     }
     
     static bool IsRecordWithAttribute(SyntaxNode node, CancellationToken ct)
@@ -43,13 +98,13 @@ public class TypedValueGenerator : IIncrementalGenerator
 
     static (INamedTypeSymbol, AttributeData) GetSemanticTargetForGeneration(GeneratorSyntaxContext context, CancellationToken ct)
     {
-        ISymbol? symbol = context.SemanticModel.GetDeclaredSymbol(context.Node);
+        var symbol = context.SemanticModel.GetDeclaredSymbol(context.Node);
         if (symbol is not INamedTypeSymbol recordSymbol)
         {
             return default;
         }
 
-        if (!TryGetAttributeData(recordSymbol, context.SemanticModel, out AttributeData attributeData))
+        if (!TryGetAttributeData(recordSymbol, context.SemanticModel, out var attributeData))
         {
             return default;
         }
@@ -59,12 +114,12 @@ public class TypedValueGenerator : IIncrementalGenerator
 
     static bool TryGetAttributeData(INamedTypeSymbol recordSymbol, SemanticModel semanticModel, out AttributeData attributeData)
     {
-        foreach (AttributeData attribute in recordSymbol.GetAttributes())
+        foreach (var attribute in recordSymbol.GetAttributes())
         {
             if (attribute.AttributeClass is not null)
             {
-                string metadataName = attribute.AttributeClass.ConstructedFrom.ToDisplayString();
-                if (metadataName is TypedValueAttributeFullName or TypedValueAttributeFullName1)
+                var metadataName = attribute.AttributeClass.ConstructedFrom.ToDisplayString();
+                if (metadataName is TypedValueAttributeFullName or GenericTypedValueAttributeFullName)
                 {
                     attributeData = attribute;
                     return true;
@@ -113,7 +168,7 @@ public class TypedValueGenerator : IIncrementalGenerator
         {
             return (Converters)argumentValue;
         }
-        
+
         return null;
     }
 
@@ -140,7 +195,7 @@ public class TypedValueGenerator : IIncrementalGenerator
 
     static void GenerateTypedValue(SourceProductionContext context, TypedValueMetadata typedValueMetadata, AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider)
     {
-       var converters = typedValueMetadata.Converters ?? (defaultConvertors ??= GetAnalyzerConfigConvertors(analyzerConfigOptionsProvider));
+        var converters = typedValueMetadata.Converters ?? config!.Converters;
 
         // generate the source code and add it to the output
         var typedValueSourceCode = TypedValueCodeBuilder.GetTypedValueGeneratedCode(typedValueMetadata);

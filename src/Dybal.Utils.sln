@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}"
 	ProjectSection(SolutionItems) = preProject
 		Tests\Directory.Build.props = Tests\Directory.Build.props
+		Tests\Dybal.Utils.TypedValues.json = Tests\Dybal.Utils.TypedValues.json
 		Tests\xunit.runner.json = Tests\xunit.runner.json
 	EndProjectSection
 EndProject
@@ -54,7 +55,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Dybal.Utils.TypedValu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Dybal.Utils.TypedValues.SourceGenerators", "Tests\Tests.Dybal.Utils.TypedValues.SourceGenerators\Tests.Dybal.Utils.TypedValues.SourceGenerators.csproj", "{4CAE6F67-B0FF-447E-B6A4-E72211B5634B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dybal.Utils.TypedValues.Abstractions", "Utils\Dybal.Utils.TypedValues.Abstractions\Dybal.Utils.TypedValues.Abstractions.csproj", "{43B68D10-9729-4314-A30B-829159B999AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dybal.Utils.TypedValues.Abstractions", "Utils\Dybal.Utils.TypedValues.Abstractions\Dybal.Utils.TypedValues.Abstractions.csproj", "{43B68D10-9729-4314-A30B-829159B999AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
