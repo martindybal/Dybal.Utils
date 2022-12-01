@@ -23,64 +23,24 @@ public class TypedValueGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
 
-        var files = context.AdditionalTextsProvider
+        var configFiles = context.AdditionalTextsProvider
             .Where(file => file.Path.EndsWith("Dybal.Utils.TypedValues.json"))
             .Select((file, ct) => new { file.Path, Content = file.GetText(ct)!.ToString() })
             .Select((file, ct) => file.Path);
-
-        // Do a simple filter for target records
+        
         var targetRecords = context.SyntaxProvider
             .CreateSyntaxProvider(
                 predicate: IsRecordWithAttribute,
                 transform: GetSemanticTargetForGeneration)
-            .Where(static targetRecord => targetRecord != default);
-
-        // Transform target records
-        var transformedRecords = targetRecords
-            .Select(static (record, ct) => GetTypedValueMetadata(record.Item1, record.Item2));
-
-        // Deduplicate transform target records
-        var dedupedRecords = transformedRecords
+            .Where(static targetRecord => targetRecord != default)
+            .Select(static (record, ct) => GetTypedValueMetadata(record.Item1, record.Item2))
             .Collect()
             .SelectMany(static (records, ct) => records.GroupBy(static record => record))
-            .Select(static (records, ct) => records.Key)
-            .Combine(files.Collect());
+            .Select(static (records, ct) => records.Key);
 
-        // Generate the source using the deduplicated target records
-        context.RegisterSourceOutput(dedupedRecords, static (spc, source) => Execute(source.Left, source.Right.FirstOrDefault(), spc));
-    }
-
-    private static void Execute(TypedValueMetadata typedValueMetadata, string? configFilePath, SourceProductionContext context)
-    {
-        config ??= ReadConfigFromJson(configFilePath) ?? DefaultConfig();
-        GenerateTypedValue(context, typedValueMetadata);
-    }
-    
-    private static TypedValueGeneratorOptions? ReadConfigFromJson(string? configFilePath)
-    {
-        try
-        {
-            if (configFilePath is not null)
-            {
-                var options = new JsonSerializerOptions
-                {
-                    Converters =
-                    {
-                        new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-                    }
-                };
-
-                var configJson = File.ReadAllText(configFilePath);
-                return JsonSerializer.Deserialize<TypedValueGeneratorOptions>(configJson, options);
-            }
-        }
-        catch { }
-        return null;
-    }
-
-    private static TypedValueGeneratorOptions DefaultConfig()
-    {
-        return new TypedValueGeneratorOptions(Converters.None);
+        var source = targetRecords.Combine(configFiles.Collect());
+        
+        context.RegisterSourceOutput(source, static (spc, source) => Execute(spc, source.Left, source.Right.FirstOrDefault()));
     }
     
     static bool IsRecordWithAttribute(SyntaxNode node, CancellationToken ct)
@@ -172,6 +132,29 @@ public class TypedValueGenerator : IIncrementalGenerator
         }
 
         return default;
+    }
+
+
+    private static void Execute(SourceProductionContext context, TypedValueMetadata typedValueMetadata, string? configFilePath)
+    {
+        config ??= TryReadConfigFromJson(configFilePath) ?? TypedValueGeneratorOptions.Default;
+        GenerateTypedValue(context, typedValueMetadata);
+    }
+
+    private static TypedValueGeneratorOptions? TryReadConfigFromJson(string? configFilePath)
+    {
+        try
+        {
+            if (configFilePath is not null)
+            {
+                var options = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) } };
+
+                var configJson = File.ReadAllText(configFilePath);
+                return JsonSerializer.Deserialize<TypedValueGeneratorOptions>(configJson, options);
+            }
+        }
+        catch { }
+        return null;
     }
     
     static void GenerateTypedValue(SourceProductionContext context, TypedValueMetadata typedValueMetadata)
