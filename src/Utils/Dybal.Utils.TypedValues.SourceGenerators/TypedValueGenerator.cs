@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
 namespace Dybal.Utils.TypedValues.SourceGenerators;
@@ -13,30 +15,29 @@ public class TypedValueGenerator : IIncrementalGenerator
     private const string TypedValueAttributeFullName1 = "Dybal.Utils.TypedValues.TypedValueAttribute<TValue>";
 
     private static readonly SymbolDisplayFormat TypedValueFormat = new(SymbolDisplayGlobalNamespaceStyle.Omitted, SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces, SymbolDisplayGenericsOptions.IncludeTypeParameters);
+    private static Converters? defaultConvertors = null;
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         // Do a simple filter for target records
-        IncrementalValuesProvider<(INamedTypeSymbol, AttributeData)> targetRecords = context.SyntaxProvider
+        var syntaxProvider = context.SyntaxProvider
             .CreateSyntaxProvider(
                 predicate: IsRecordWithAttribute,
                 transform: GetSemanticTargetForGeneration)
-            .Where(static targetRecord => targetRecord != default);
-
-        // Transform target records
-        IncrementalValuesProvider<TypedValueMetadata> transformedRecords = targetRecords
-            .Select(static (record, ct) => GetTypedValueMetadata(record.Item1, record.Item2, ct));
-
-        // Deduplicate transform target records
-        IncrementalValuesProvider<TypedValueMetadata> dedupedRecords = transformedRecords
+            .Where(static targetRecord => targetRecord != default)
+            .Select(static (record, ct) => GetTypedValueMetadata(record.Item1, record.Item2))
             .Collect()
             .SelectMany(static (records, ct) => records.GroupBy(static record => record))
-            .Select(static (records, ct) => records.Key);
+            .Select(static (records, ct) => records.Key)
+            .Collect()
+            .Combine(context.CompilationProvider)
+            .Combine(context.ParseOptionsProvider)
+            .Combine(context.AnalyzerConfigOptionsProvider);
 
         // Generate the source using the deduplicated target records
-        context.RegisterSourceOutput(dedupedRecords, static (spc, source) => GenerateTypedValue(source, spc));
+        context.RegisterSourceOutput(syntaxProvider, (spc, arg) => GenerateTypedValues(spc, arg.Left.Left.Left, arg.Right));
     }
-
+    
     static bool IsRecordWithAttribute(SyntaxNode node, CancellationToken ct)
         => node is RecordDeclarationSyntax { AttributeLists.Count: > 0 };
 
@@ -75,7 +76,7 @@ public class TypedValueGenerator : IIncrementalGenerator
         return false;
     }
 
-    static TypedValueMetadata GetTypedValueMetadata(INamedTypeSymbol recordSymbol, AttributeData attributeData, CancellationToken ct)
+    static TypedValueMetadata GetTypedValueMetadata(INamedTypeSymbol recordSymbol, AttributeData attributeData)
     {
         var recordName = recordSymbol.Name;
         var recordNamespace = recordSymbol.ContainingNamespace.ToString();
@@ -104,7 +105,7 @@ public class TypedValueGenerator : IIncrementalGenerator
         return attributeData.AttributeClass.TypeArguments[0];
     }
 
-    private static Converters GetConverters(AttributeData attributeData)
+    private static Converters? GetConverters(AttributeData attributeData)
     {
         var argumentValue = GetAttributeNamedArgumentValue<int?>(attributeData, "Converters");
 
@@ -112,9 +113,8 @@ public class TypedValueGenerator : IIncrementalGenerator
         {
             return (Converters)argumentValue;
         }
-
-        //TODO Read from analyzer options
-        return Converters.None;
+        
+        return null;
     }
 
     private static TValue? GetAttributeNamedArgumentValue<TValue>(AttributeData attributeData, string argumentName)
@@ -129,16 +129,50 @@ public class TypedValueGenerator : IIncrementalGenerator
         return default;
     }
 
-    static void GenerateTypedValue(TypedValueMetadata typedValueMetadata, SourceProductionContext context)
+    
+   private void GenerateTypedValues(SourceProductionContext context, ImmutableArray<TypedValueMetadata> typedValuesMetadata, AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider)
     {
+        foreach (var typedValueMetadata in typedValuesMetadata)
+        {
+            GenerateTypedValue(context, typedValueMetadata, analyzerConfigOptionsProvider);
+        }
+    }
+
+    static void GenerateTypedValue(SourceProductionContext context, TypedValueMetadata typedValueMetadata, AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider)
+    {
+       var converters = typedValueMetadata.Converters ?? (defaultConvertors ??= GetAnalyzerConfigConvertors(analyzerConfigOptionsProvider));
+
         // generate the source code and add it to the output
         var typedValueSourceCode = TypedValueCodeBuilder.GetTypedValueGeneratedCode(typedValueMetadata);
         context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}.g.cs", SourceText.From(typedValueSourceCode, Encoding.UTF8));
-        
-        if (typedValueMetadata.Converters.HasFlag(Converters.SystemTextJson))
+
+        if (converters.HasFlag(Converters.SystemTextJson))
         {
             var systemTextJsonSerializationSourceCode = TypedValueCodeBuilder.GetSystemTextJsonSerializationGeneratedCode(typedValueMetadata);
             context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}SystemTextJson.g.cs", SourceText.From(systemTextJsonSerializationSourceCode, Encoding.UTF8));
         }
+    }
+
+    private static Converters GetAnalyzerConfigConvertors(AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider)
+    {
+        var convertors = Converters.None;
+        if (GetAnalyzerConfigGetSwitch(analyzerConfigOptionsProvider, "TypedValues_Converters_SystemTextJson"))
+        {
+            convertors |= Converters.SystemTextJson;
+        }
+
+        return convertors;
+    }
+
+    private static bool GetAnalyzerConfigGetSwitch(AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider, string name)
+    {
+        if (analyzerConfigOptionsProvider.GlobalOptions.TryGetValue(name, out var switchValueText))
+        {
+            if (bool.TryParse(switchValueText, out var switchValue))
+            {
+                return switchValue;
+            }
+        }
+        return false;
     }
 }

@@ -12,7 +12,7 @@ using Dybal.Utils.TypedValues;
 
 namespace My.TypedValue.Tests
 {
-    [TypedValue<int>(ValueName = ""Percentage"", Converters = Converters.None)]
+    [TypedValue<int>(ValueName = ""Percentage"")]
     public readonly partial record struct TypedValueTest;
 }";
 

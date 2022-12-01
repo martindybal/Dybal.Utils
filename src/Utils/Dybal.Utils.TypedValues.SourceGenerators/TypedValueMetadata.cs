@@ -3,7 +3,7 @@
     public readonly record struct TypedValueMetadata
     {
         public TypedValueMetadata(string name, string @namespace, string valueType, string valueName,
-            Converters converters, bool isValueReferenceType, bool @readonly)
+            Converters? converters, bool isValueReferenceType, bool @readonly)
         {
             this.Name = name;
             this.Namespace = @namespace;
@@ -18,7 +18,7 @@
         public string Namespace { get; }
         public string ValueType { get; }
         public string ValueName { get; }
-        public Converters Converters { get; }
+        public Converters? Converters { get; }
         public bool IsValueReferenceType { get; }
         public bool Readonly { get; }
     }
