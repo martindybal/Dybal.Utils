@@ -3,13 +3,15 @@
 [AttributeUsage(AttributeTargets.Struct)]
 public class TypedValueAttribute : Attribute
 {
-    public string ValueName { get; set; } = "Value";
+    public string ValueName { get; init; } = "Value";
 
-    public Type TValueType { get; }
+    public Type ValueType { get; }
+
+    public Converters Converters { get; init; }
 
     public TypedValueAttribute(Type valueType)
     {
-        TValueType = valueType;
+        ValueType = valueType;
     }
 }
 

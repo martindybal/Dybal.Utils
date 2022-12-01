@@ -27,5 +27,9 @@
 		</None>
 		<None Include="../Dybal.Utils.TypedValues.SourceGenerators/bin/$(Configuration)/netstandard2.0/Dybal.Utils.TypedValues.SourceGenerators.dll" PackagePath="analyzers/dotnet/cs" Pack="true" Visible="false" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Dybal.Utils.TypedValues.Abstractions\Dybal.Utils.TypedValues.Abstractions.csproj" />
+	</ItemGroup>
 	
 </Project>

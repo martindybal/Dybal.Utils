@@ -86,7 +86,9 @@ public class TypedValueGenerator : IIncrementalGenerator
 
         var valueName = GetAttributeNamedArgumentValue<string>(attributeData, "ValueName") ?? "Value";
 
-        return new TypedValueMetadata(recordName, recordNamespace, valueType, valueName, isReferenceType, recordSymbol.IsReadOnly);
+        var converters = GetConverters(attributeData);
+
+        return new TypedValueMetadata(recordName, recordNamespace, valueType, valueName, converters, isReferenceType, recordSymbol.IsReadOnly);
     }
 
     private static ITypeSymbol GetValueType(AttributeData attributeData)
@@ -100,6 +102,19 @@ public class TypedValueGenerator : IIncrementalGenerator
         Debug.Assert(attributeData.AttributeClass!.TypeArguments.Length == 1);
 
         return attributeData.AttributeClass.TypeArguments[0];
+    }
+
+    private static Converters GetConverters(AttributeData attributeData)
+    {
+        var argumentValue = GetAttributeNamedArgumentValue<int?>(attributeData, "Converters");
+
+        if (argumentValue.HasValue)
+        {
+            return (Converters)argumentValue;
+        }
+
+        //TODO Read from analyzer options
+        return Converters.None;
     }
 
     private static TValue? GetAttributeNamedArgumentValue<TValue>(AttributeData attributeData, string argumentName)
@@ -119,8 +134,11 @@ public class TypedValueGenerator : IIncrementalGenerator
         // generate the source code and add it to the output
         var typedValueSourceCode = TypedValueCodeBuilder.GetTypedValueGeneratedCode(typedValueMetadata);
         context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}.g.cs", SourceText.From(typedValueSourceCode, Encoding.UTF8));
-
-        var systemTextJsonSerializationSourceCode = TypedValueCodeBuilder.GetSystemTextJsonSerializationGeneratedCode(typedValueMetadata);
-        context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}SystemTextJson.g.cs", SourceText.From(systemTextJsonSerializationSourceCode, Encoding.UTF8));
+        
+        if (typedValueMetadata.Converters.HasFlag(Converters.SystemTextJson))
+        {
+            var systemTextJsonSerializationSourceCode = TypedValueCodeBuilder.GetSystemTextJsonSerializationGeneratedCode(typedValueMetadata);
+            context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}SystemTextJson.g.cs", SourceText.From(systemTextJsonSerializationSourceCode, Encoding.UTF8));
+        }
     }
 }

@@ -54,6 +54,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Dybal.Utils.TypedValu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Dybal.Utils.TypedValues.SourceGenerators", "Tests\Tests.Dybal.Utils.TypedValues.SourceGenerators\Tests.Dybal.Utils.TypedValues.SourceGenerators.csproj", "{4CAE6F67-B0FF-447E-B6A4-E72211B5634B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dybal.Utils.TypedValues.Abstractions", "Utils\Dybal.Utils.TypedValues.Abstractions\Dybal.Utils.TypedValues.Abstractions.csproj", "{43B68D10-9729-4314-A30B-829159B999AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{4CAE6F67-B0FF-447E-B6A4-E72211B5634B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CAE6F67-B0FF-447E-B6A4-E72211B5634B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CAE6F67-B0FF-447E-B6A4-E72211B5634B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43B68D10-9729-4314-A30B-829159B999AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43B68D10-9729-4314-A30B-829159B999AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43B68D10-9729-4314-A30B-829159B999AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43B68D10-9729-4314-A30B-829159B999AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{E919C1BF-AFDE-4501-A124-CCACC8241204} = {6CF0900F-6B75-419D-9EE1-F1E502170755}
 		{124E9EA4-2A3F-44A5-88FA-7FAB5E5FF747} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}
 		{4CAE6F67-B0FF-447E-B6A4-E72211B5634B} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}
+		{43B68D10-9729-4314-A30B-829159B999AA} = {6CF0900F-6B75-419D-9EE1-F1E502170755}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {863B3DB7-8473-4AE9-9757-BF2FD7100893}

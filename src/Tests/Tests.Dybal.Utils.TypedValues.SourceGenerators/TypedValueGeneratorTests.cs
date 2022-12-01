@@ -8,9 +8,11 @@ public class TypedValueGeneratorTests
     protected string typedValueFilename => "My.TypedValue.Tests.TypedValueTest.g.cs";
 
     protected string typedValueCode => @"using System;
+using Dybal.Utils.TypedValues;
+
 namespace My.TypedValue.Tests
 {
-    [global::Dybal.Utils.TypedValues.TypedValue<int>(ValueName = ""Percentage"", Converters = global::Dybal.Utils.TypedValues.Converters.None)]
+    [TypedValue<int>(ValueName = ""Percentage"", Converters = Converters.None)]
     public readonly partial record struct TypedValueTest;
 }";
 
