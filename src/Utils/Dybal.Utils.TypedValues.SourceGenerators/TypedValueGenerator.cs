@@ -63,7 +63,7 @@ public class TypedValueGenerator : IIncrementalGenerator
     private static void Execute(TypedValueMetadata typedValueMetadata, string? configFilePath, SourceProductionContext context)
     {
         config ??= ReadConfigFromJson(configFilePath) ?? DefaultConfig();
-        GenerateTypedValue(typedValueMetadata, context);
+        GenerateTypedValue(context, typedValueMetadata);
     }
     
     private static TypedValueGeneratorOptions? ReadConfigFromJson(string? configFilePath)
@@ -183,17 +183,8 @@ public class TypedValueGenerator : IIncrementalGenerator
 
         return default;
     }
-
     
-   private void GenerateTypedValues(SourceProductionContext context, ImmutableArray<TypedValueMetadata> typedValuesMetadata, AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider)
-    {
-        foreach (var typedValueMetadata in typedValuesMetadata)
-        {
-            GenerateTypedValue(context, typedValueMetadata, analyzerConfigOptionsProvider);
-        }
-    }
-
-    static void GenerateTypedValue(SourceProductionContext context, TypedValueMetadata typedValueMetadata, AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider)
+    static void GenerateTypedValue(SourceProductionContext context, TypedValueMetadata typedValueMetadata)
     {
         var converters = typedValueMetadata.Converters ?? config!.Converters;
 
