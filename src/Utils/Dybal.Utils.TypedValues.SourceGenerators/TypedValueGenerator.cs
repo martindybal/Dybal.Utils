@@ -94,7 +94,7 @@ public class TypedValueGenerator : IIncrementalGenerator
             return default;
         }
 
-        if (!TryGetAttributeData(recordSymbol, context.SemanticModel, out var attributeData))
+        if (!TryGetAttributeData(recordSymbol, out var attributeData))
         {
             return default;
         }
@@ -102,7 +102,7 @@ public class TypedValueGenerator : IIncrementalGenerator
         return (recordSymbol, attributeData);
     }
 
-    static bool TryGetAttributeData(INamedTypeSymbol recordSymbol, SemanticModel semanticModel, out AttributeData attributeData)
+    static bool TryGetAttributeData(INamedTypeSymbol recordSymbol, out AttributeData attributeData)
     {
         foreach (var attribute in recordSymbol.GetAttributes())
         {
@@ -187,28 +187,5 @@ public class TypedValueGenerator : IIncrementalGenerator
             var systemTextJsonSerializationSourceCode = TypedValueCodeBuilder.GetSystemTextJsonSerializationGeneratedCode(typedValueMetadata);
             context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}SystemTextJson.g.cs", SourceText.From(systemTextJsonSerializationSourceCode, Encoding.UTF8));
         }
-    }
-
-    private static Converters GetAnalyzerConfigConvertors(AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider)
-    {
-        var convertors = Converters.None;
-        if (GetAnalyzerConfigGetSwitch(analyzerConfigOptionsProvider, "TypedValues_Converters_SystemTextJson"))
-        {
-            convertors |= Converters.SystemTextJson;
-        }
-
-        return convertors;
-    }
-
-    private static bool GetAnalyzerConfigGetSwitch(AnalyzerConfigOptionsProvider analyzerConfigOptionsProvider, string name)
-    {
-        if (analyzerConfigOptionsProvider.GlobalOptions.TryGetValue(name, out var switchValueText))
-        {
-            if (bool.TryParse(switchValueText, out var switchValue))
-            {
-                return switchValue;
-            }
-        }
-        return false;
     }
 }
