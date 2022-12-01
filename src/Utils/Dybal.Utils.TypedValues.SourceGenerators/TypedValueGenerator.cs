@@ -80,39 +80,38 @@ public class TypedValueGenerator : IIncrementalGenerator
         var recordName = recordSymbol.Name;
         var recordNamespace = recordSymbol.ContainingNamespace.ToString();
 
-        string valueType;
-        bool isReferenceType;
-        if (attributeData.ConstructorArguments.Length == 1
-            && attributeData.ConstructorArguments[0].Value is INamedTypeSymbol type)
-        {
-            valueType = type.ToDisplayString(TypedValueFormat);
-            isReferenceType = type.IsReferenceType;
-        }
-        else
-        {
-            Debug.Assert(attributeData.AttributeClass is not null);
-            Debug.Assert(attributeData.AttributeClass!.TypeArguments.Length == 1);
+        var type = GetValueType(attributeData);
+        var valueType = type.ToDisplayString(TypedValueFormat);
+        var isReferenceType = type.IsReferenceType;
 
-            ITypeSymbol typeArgument = attributeData.AttributeClass.TypeArguments[0];
-            valueType = typeArgument.ToDisplayString(TypedValueFormat);
-            isReferenceType = typeArgument.IsReferenceType;
-        }
-
-        string valueName;
-        if (attributeData.NamedArguments.Length == 1
-            && attributeData.NamedArguments[0].Value.Value is string value)
-        {
-            Debug.Assert(attributeData.NamedArguments[0].Key == "ValueName");
-            Debug.Assert(attributeData.NamedArguments[0].Value.Type!.SpecialType == SpecialType.System_String);
-
-            valueName = value;
-        }
-        else
-        {
-            valueName = "Value";
-        }
+        var valueName = GetAttributeNamedArgumentValue<string>(attributeData, "ValueName") ?? "Value";
 
         return new TypedValueMetadata(recordName, recordNamespace, valueType, valueName, isReferenceType, recordSymbol.IsReadOnly);
+    }
+
+    private static ITypeSymbol GetValueType(AttributeData attributeData)
+    {
+        if (attributeData.ConstructorArguments.Length == 1 && attributeData.ConstructorArguments[0].Value is ITypeSymbol type)
+        {
+            return type;
+        }
+
+        Debug.Assert(attributeData.AttributeClass is not null);
+        Debug.Assert(attributeData.AttributeClass!.TypeArguments.Length == 1);
+
+        return attributeData.AttributeClass.TypeArguments[0];
+    }
+
+    private static TValue? GetAttributeNamedArgumentValue<TValue>(AttributeData attributeData, string argumentName)
+    {
+        var argument = attributeData.NamedArguments.SingleOrDefault(argument => argument.Key == argumentName);
+
+        if (argument.Value.Value is TValue value)
+        {
+            return value;
+        }
+
+        return default;
     }
 
     static void GenerateTypedValue(TypedValueMetadata typedValueMetadata, SourceProductionContext context)
@@ -120,7 +119,7 @@ public class TypedValueGenerator : IIncrementalGenerator
         // generate the source code and add it to the output
         var typedValueSourceCode = TypedValueCodeBuilder.GetTypedValueGeneratedCode(typedValueMetadata);
         context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}.g.cs", SourceText.From(typedValueSourceCode, Encoding.UTF8));
-        
+
         var systemTextJsonSerializationSourceCode = TypedValueCodeBuilder.GetSystemTextJsonSerializationGeneratedCode(typedValueMetadata);
         context.AddSource($"{typedValueMetadata.Namespace}.{typedValueMetadata.Name}SystemTextJson.g.cs", SourceText.From(systemTextJsonSerializationSourceCode, Encoding.UTF8));
     }
