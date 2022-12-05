@@ -48,7 +48,7 @@ public static class TypedValueCodeBuilder
             get => this.{valueParameterName};
             {typedValuePropertySetter}
             {{
-                Validate{metadata.ValueName}(value);
+                {RenderValidation(metadata)}
                 this.{valueParameterName} = value;
             }}
         }}
@@ -72,11 +72,9 @@ public static class TypedValueCodeBuilder
 
         public {metadata.Name}({metadata.ValueType} {valueParameterName})
         {{
-            Validate{metadata.ValueName}({valueParameterName});
+            {RenderValidation(metadata)}
             this.{valueParameterName} = {valueParameterName};
         }}
-
-        static partial void Validate{metadata.ValueName}({metadata.ValueType} {valueParameterName});
 
         public void Deconstruct(out {metadata.ValueType} {valueParameterName})
         {{
@@ -90,6 +88,11 @@ public static class TypedValueCodeBuilder
     }}
 }}";
         return source;
+    }
+
+    private static string RenderValidation(TypedValueMetadata metadata)
+    {
+        return metadata.ValidationMethodName is not null ? $"{metadata.ValidationMethodName}(value);" : string.Empty;
     }
 
     private static string ValueTypeCompareTo(string valueName)

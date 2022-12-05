@@ -85,16 +85,40 @@ public class TypedValueGenerator : IIncrementalGenerator
     {
         var recordName = recordSymbol.Name;
         var recordNamespace = recordSymbol.ContainingNamespace.ToString();
-
+        
         var type = GetValueType(attributeData);
         var valueType = type.ToDisplayString(TypedValueFormat);
         var isReferenceType = type.IsReferenceType;
 
         var valueName = GetAttributeNamedArgumentValue<string>(attributeData, "ValueName") ?? "Value";
 
+        var validationMethodName = GetValidationMethodName(recordSymbol, valueName);
+
         var converters = GetConverters(attributeData);
 
-        return new TypedValueMetadata(recordName, recordNamespace, valueType, valueName, converters, isReferenceType, recordSymbol.IsReadOnly);
+        return new TypedValueMetadata(recordName, recordNamespace, valueType, valueName, converters, isReferenceType, recordSymbol.IsReadOnly, validationMethodName);
+    }
+
+    private static string? GetValidationMethodName(INamedTypeSymbol recordSymbol, string valueName)
+    {
+        bool ContainsValidationMethod(string validationMethodName)
+        {
+            return recordSymbol.MemberNames.Contains(validationMethodName);
+        }
+
+        var validationMethodName = $"Validate{valueName}";
+        if (ContainsValidationMethod(validationMethodName))
+        {
+            return validationMethodName;
+        }
+
+        validationMethodName = "ValidateValue";
+        if (ContainsValidationMethod(validationMethodName))
+        {
+            return validationMethodName;
+        }
+
+        return null;
     }
 
     private static ITypeSymbol GetValueType(AttributeData attributeData)
