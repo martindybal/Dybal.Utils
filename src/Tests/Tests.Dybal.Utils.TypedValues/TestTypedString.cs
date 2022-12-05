@@ -5,7 +5,7 @@ namespace Tests.Dybal.Utils.TypedValues;
 [TypedValue<string>]
 public partial record struct TestTypedString
 {
-    static partial void ValidateValue(string value)
+    static void ValidateValue(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
