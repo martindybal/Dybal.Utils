@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utils\Dybal.Utils.TypedValues.SourceGenerators\Dybal.Utils.TypedValues.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\..\Utils\Dybal.Utils.TypedValues\Dybal.Utils.TypedValues.csproj" ReferenceOutputAssembly="true" />
+		<ProjectReference Include="..\..\Utils\Dybal.Utils.TypedValues.Abstractions\Dybal.Utils.TypedValues.Abstractions.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+	</ItemGroup>
+
+</Project>

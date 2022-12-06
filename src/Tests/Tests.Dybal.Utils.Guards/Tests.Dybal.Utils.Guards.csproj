@@ -5,8 +5,5 @@
 		<ProjectReference Include="..\..\Analyzers\Dybal.Utils.Guards.Analyzers\Dybal.Utils.Guards.Analyzers.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
-	</ItemGroup>
 
 </Project>

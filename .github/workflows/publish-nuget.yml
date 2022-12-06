@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
         matrix:
-            project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions"]
+            project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions", "src/Utils/Dybal.Utils.TypedValues"]
     permissions:
       packages: write
       contents: read
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '7.0.x'
           source-url: https://nuget.pkg.github.com/martindybal/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -25,4 +25,5 @@ jobs:
       - name: Create the package
         run: dotnet pack ${{ matrix.project }} --configuration Release
       - name: Push Package to NuGet.org
+        continue-on-error: true
         run: dotnet nuget push ${{ matrix.project }}/bin/Release/*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
