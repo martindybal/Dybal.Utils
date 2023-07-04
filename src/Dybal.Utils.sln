@@ -34,7 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Analyzers", "Analyzers", "{
 		Analyzers\Directory.Build.props = Analyzers\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Dybal.Utils.Guards.Analyzers", "Tests\Tests.Dybal.Utils.Guards.Analyzers\Tests.Dybal.Utils.Guards.Analyzers.csproj", "{98733F01-5C91-4232-A062-B256A77F6BAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Dybal.Utils.Guards.Analyzers", "Tests\Tests.Dybal.Utils.Guards.Analyzers\Tests.Dybal.Utils.Guards.Analyzers.csproj", "{98733F01-5C91-4232-A062-B256A77F6BAB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dybal.Utils.Guards.Analyzers", "Analyzers\Dybal.Utils.Guards.Analyzers\Dybal.Utils.Guards.Analyzers.csproj", "{C44A6016-D1E4-4D3A-9246-92F5C9B1A7D6}"
 EndProject
@@ -43,6 +43,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 		..\readme.md = ..\readme.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dybal.Utils.Extensions.DependencyInjection", "Utils\Dybal.Utils.Extensions.DependencyInjection\Dybal.Utils.Extensions.DependencyInjection.csproj", "{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Dybal.Utils.Extensions.DependencyInjection", "Tests\Tests.Dybal.Utils.Extensions.DependencyInjection\Tests.Dybal.Utils.Extensions.DependencyInjection.csproj", "{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Dybal.Utils", "Tests\Tests.Dybal.Utils\Tests.Dybal.Utils.csproj", "{17E39751-B65F-429E-A833-2980DDE7F517}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +80,18 @@ Global
 		{C44A6016-D1E4-4D3A-9246-92F5C9B1A7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C44A6016-D1E4-4D3A-9246-92F5C9B1A7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C44A6016-D1E4-4D3A-9246-92F5C9B1A7D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17E39751-B65F-429E-A833-2980DDE7F517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17E39751-B65F-429E-A833-2980DDE7F517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17E39751-B65F-429E-A833-2980DDE7F517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17E39751-B65F-429E-A833-2980DDE7F517}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +104,9 @@ Global
 		{B950007F-874D-4ABC-9486-365964A8758C} = {BCE3C699-8EBF-412B-968C-8452F19CD545}
 		{98733F01-5C91-4232-A062-B256A77F6BAB} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}
 		{C44A6016-D1E4-4D3A-9246-92F5C9B1A7D6} = {64FF88BF-7201-43D4-9442-F81E0CB57C76}
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9} = {6CF0900F-6B75-419D-9EE1-F1E502170755}
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}
+		{17E39751-B65F-429E-A833-2980DDE7F517} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {863B3DB7-8473-4AE9-9757-BF2FD7100893}
