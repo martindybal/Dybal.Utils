@@ -1,6 +1,6 @@
 ﻿namespace Dybal.Utils.Guards;
 
-public record struct MultipleArgumentGuard : IExceptionOverride
+public readonly record struct MultipleArgumentGuard : IExceptionOverride
 {
     public IReadOnlyList<IArgument<object?>> Arguments { get; }
 
