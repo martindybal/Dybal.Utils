@@ -1,8 +1,7 @@
 <Project>
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
-		<OutputItemType>Analyzer</OutputItemType>
-		<LangVersion>11.0</LangVersion>
+		<LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>

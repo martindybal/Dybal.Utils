@@ -6,7 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}"
 	ProjectSection(SolutionItems) = preProject
 		Tests\Directory.Build.props = Tests\Directory.Build.props
-		Tests\Dybal.Utils.TypedValues.json = Tests\Dybal.Utils.TypedValues.json
 		Tests\xunit.runner.json = Tests\xunit.runner.json
 	EndProjectSection
 EndProject
@@ -46,6 +45,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 		..\readme.md = ..\readme.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dybal.Utils.Extensions.DependencyInjection", "Utils\Dybal.Utils.Extensions.DependencyInjection\Dybal.Utils.Extensions.DependencyInjection.csproj", "{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Dybal.Utils.Extensions.DependencyInjection", "Tests\Tests.Dybal.Utils.Extensions.DependencyInjection\Tests.Dybal.Utils.Extensions.DependencyInjection.csproj", "{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests.Dybal.Utils", "Tests\Tests.Dybal.Utils\Tests.Dybal.Utils.csproj", "{17E39751-B65F-429E-A833-2980DDE7F517}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dybal.Utils.TypedValues", "Utils\Dybal.Utils.TypedValues\Dybal.Utils.TypedValues.csproj", "{9CEC81BF-7D61-44C6-A0E1-0A730D545329}"
 EndProject
@@ -87,6 +92,18 @@ Global
 		{C44A6016-D1E4-4D3A-9246-92F5C9B1A7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C44A6016-D1E4-4D3A-9246-92F5C9B1A7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C44A6016-D1E4-4D3A-9246-92F5C9B1A7D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17E39751-B65F-429E-A833-2980DDE7F517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17E39751-B65F-429E-A833-2980DDE7F517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17E39751-B65F-429E-A833-2980DDE7F517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17E39751-B65F-429E-A833-2980DDE7F517}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9CEC81BF-7D61-44C6-A0E1-0A730D545329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9CEC81BF-7D61-44C6-A0E1-0A730D545329}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CEC81BF-7D61-44C6-A0E1-0A730D545329}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -119,6 +136,9 @@ Global
 		{B950007F-874D-4ABC-9486-365964A8758C} = {BCE3C699-8EBF-412B-968C-8452F19CD545}
 		{98733F01-5C91-4232-A062-B256A77F6BAB} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}
 		{C44A6016-D1E4-4D3A-9246-92F5C9B1A7D6} = {64FF88BF-7201-43D4-9442-F81E0CB57C76}
+		{966C3EA6-7B42-4F2B-9F4B-84C33E0ADBD9} = {6CF0900F-6B75-419D-9EE1-F1E502170755}
+		{37C89CFC-4386-4CF0-97C9-8DE24FF1D1EB} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}
+		{17E39751-B65F-429E-A833-2980DDE7F517} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}
 		{9CEC81BF-7D61-44C6-A0E1-0A730D545329} = {6CF0900F-6B75-419D-9EE1-F1E502170755}
 		{E919C1BF-AFDE-4501-A124-CCACC8241204} = {6CF0900F-6B75-419D-9EE1-F1E502170755}
 		{124E9EA4-2A3F-44A5-88FA-7FAB5E5FF747} = {2B1A6D1D-EB89-4DF2-B29D-C0A821E34247}

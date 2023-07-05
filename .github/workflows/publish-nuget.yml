@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
         matrix:
-            project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions", "src/Utils/Dybal.Utils.TypedValues"]
+            project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions", "src/Utils/Dybal.Utils.Extensions.DependencyInjection", "src/Utils/Dybal.Utils.TypedValues"]
     permissions:
       packages: write
       contents: read

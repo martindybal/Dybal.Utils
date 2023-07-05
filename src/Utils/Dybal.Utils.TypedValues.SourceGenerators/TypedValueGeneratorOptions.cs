@@ -9,5 +9,5 @@ public class TypedValueGeneratorOptions
         Converters = converters;
     }
 
-    public static TypedValueGeneratorOptions Default { get; } = new(Converters.None);
+    public static TypedValueGeneratorOptions Default { get; } = new(Converters.SystemTextJson);
 }

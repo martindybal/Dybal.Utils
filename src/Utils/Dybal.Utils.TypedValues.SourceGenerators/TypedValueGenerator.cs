@@ -22,12 +22,6 @@ public class TypedValueGenerator : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-
-        var configFiles = context.AdditionalTextsProvider
-            .Where(file => file.Path.EndsWith("Dybal.Utils.TypedValues.json"))
-            .Select((file, ct) => new { file.Path, Content = file.GetText(ct)!.ToString() })
-            .Select((file, ct) => file.Path);
-        
         var targetRecords = context.SyntaxProvider
             .CreateSyntaxProvider(
                 predicate: IsRecordWithAttribute,
@@ -37,10 +31,8 @@ public class TypedValueGenerator : IIncrementalGenerator
             .Collect()
             .SelectMany(static (records, ct) => records.GroupBy(static record => record))
             .Select(static (records, ct) => records.Key);
-
-        var source = targetRecords.Combine(configFiles.Collect());
         
-        context.RegisterSourceOutput(source, static (spc, source) => Execute(spc, source.Left, source.Right.FirstOrDefault()));
+        context.RegisterSourceOutput(targetRecords, static (spc, source) => Execute(spc, source));
     }
     
     static bool IsRecordWithAttribute(SyntaxNode node, CancellationToken ct)
@@ -159,26 +151,10 @@ public class TypedValueGenerator : IIncrementalGenerator
     }
 
 
-    private static void Execute(SourceProductionContext context, TypedValueMetadata typedValueMetadata, string? configFilePath)
+    private static void Execute(SourceProductionContext context, TypedValueMetadata typedValueMetadata)
     {
-        config ??= TryReadConfigFromJson(configFilePath) ?? TypedValueGeneratorOptions.Default;
+        config ??= TypedValueGeneratorOptions.Default;
         GenerateTypedValue(context, typedValueMetadata);
-    }
-
-    private static TypedValueGeneratorOptions? TryReadConfigFromJson(string? configFilePath)
-    {
-        try
-        {
-            if (configFilePath is not null)
-            {
-                var options = new JsonSerializerOptions { Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) } };
-
-                var configJson = File.ReadAllText(configFilePath);
-                return JsonSerializer.Deserialize<TypedValueGeneratorOptions>(configJson, options);
-            }
-        }
-        catch { }
-        return null;
     }
     
     static void GenerateTypedValue(SourceProductionContext context, TypedValueMetadata typedValueMetadata)

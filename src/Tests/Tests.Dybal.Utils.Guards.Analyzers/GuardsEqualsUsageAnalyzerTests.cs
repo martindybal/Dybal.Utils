@@ -1,5 +1,6 @@
 using Dybal.Utils.Guards.Analyzers;
 using Microsoft.CodeAnalysis.Testing;
+using Newtonsoft.Json.Linq;
 using Tests.Dybal.Utils.Guards.Analyzers.Utilities;
 using Xunit;
 
@@ -7,7 +8,10 @@ namespace Tests.Dybal.Utils.Guards.Analyzers;
 
 public class GuardsEqualsUsageAnalyzerTests
 {
-    [Fact]
+
+    private const string dotnetUpdateSkipMessage = "You need to use ReferenceAssemblies.Net.Net70 in VerifyUtils which are not yet available";
+
+    [Fact(Skip = dotnetUpdateSkipMessage)]
     public async Task NoWarning_When_ArgumentGuard_EqualTo_Invocation()
     {
         // Prepare
@@ -26,8 +30,8 @@ class Program
         // Assert
         await VerifyUtils<ArgumentGuardEqualsUsageAnalyzer>.Test(source);
     }
-
-    [Fact]
+    
+    [Fact(Skip = dotnetUpdateSkipMessage)]
     public async Task Warning_When_ArgumentGuard_Equals_Invocation()
     {
         // Prepare
@@ -48,7 +52,7 @@ class Program
         await VerifyUtils<ArgumentGuardEqualsUsageAnalyzer>.Test(source, expectedDiagnostic);
     }
 
-    [Fact]
+    [Fact(Skip = dotnetUpdateSkipMessage)]
     public async Task NoWarning_When_MultipleArgumentGuard_AtLeastOneIsNotNull_Invocation()
     {
         // Prepare
@@ -69,7 +73,7 @@ class Program
         await VerifyUtils<MultipleArgumentGuardEqualsUsageAnalyzer>.Test(source);
     }
 
-    [Fact]
+    [Fact(Skip = dotnetUpdateSkipMessage)]
     public async Task Warning_When_MultipleArgumentGuard_Equals_Invocation()
     {
         // Prepare
