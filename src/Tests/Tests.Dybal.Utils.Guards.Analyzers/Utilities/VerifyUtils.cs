@@ -25,8 +25,7 @@ public static class VerifyUtils<TAnalyzer>
         {
             test.ExpectedDiagnostics.Add(diagnostic);
         }
-
-
+        
         return test.RunAsync();
     }
 }
