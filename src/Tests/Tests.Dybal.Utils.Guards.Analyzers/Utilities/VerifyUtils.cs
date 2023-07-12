@@ -16,7 +16,7 @@ public static class VerifyUtils<TAnalyzer>
             TestCode = source,
             TestState =
             {
-                ReferenceAssemblies = ReferenceAssemblies.Net.Net60,
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net70,
                 AdditionalReferences = { MetadataReference.CreateFromFile(typeof(Guard).Assembly.Location) }
             }
         };

@@ -17,9 +17,9 @@ namespace Tests.Dybal.Utils.TypedValues.SourceGenerators.Verifiers
 
 			public LanguageVersion LanguageVersion { get; set; } = LanguageVersion.Default;
 
-			protected override IEnumerable<ISourceGenerator> GetSourceGenerators()
+			protected override IEnumerable<Type> GetSourceGenerators()
 			{
-				return new[] { new TSourceGenerator().AsSourceGenerator() };
+				return new[] { typeof(TSourceGenerator) };
 			}
 
 			protected override CompilationOptions CreateCompilationOptions()
