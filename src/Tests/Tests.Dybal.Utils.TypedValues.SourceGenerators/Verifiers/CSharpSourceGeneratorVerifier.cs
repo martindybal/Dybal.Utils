@@ -48,7 +48,7 @@ namespace Tests.Dybal.Utils.TypedValues.SourceGenerators.Verifiers
                     Sources = { source },
                     AdditionalReferences = { typeof(TypedValueAttribute).Assembly, typeof(Converters).Assembly },
                 },
-                ReferenceAssemblies = ReferenceAssemblies.Net.Net60,
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net70,
                 LanguageVersion = LanguageVersion.CSharp11,
 
             };
