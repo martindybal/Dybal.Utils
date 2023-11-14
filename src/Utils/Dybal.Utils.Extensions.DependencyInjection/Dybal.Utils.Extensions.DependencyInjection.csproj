@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<PackageProjectUrl>https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.Extensions.DependencyInjection</PackageProjectUrl>
 		<Description>The primary purpose of Dybal.Utils.Extensions.DependencyInjection is to simplify the registration of services into IServiceCollection.</Description>
+		<Version>1.0.0-pre-08</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

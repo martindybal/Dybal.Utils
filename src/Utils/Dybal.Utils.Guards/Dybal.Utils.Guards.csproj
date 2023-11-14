@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<PackageProjectUrl>https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.Guards</PackageProjectUrl>
 		<Description>The primary purpose of Dybal.Utils.Guards is to simplify writing input data checks to the object.</Description>
+		<Version>1.0.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
