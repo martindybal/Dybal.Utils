@@ -3,6 +3,7 @@
 	<PropertyGroup>
 		<PackageProjectUrl>https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.TypedValues</PackageProjectUrl>
 		<Description>The primary purpose of Dybal.Utils.TypedValues is to avoid mismatch simple values. Such as int, guid, string. And easy to create types with validations.</Description>
+		<Version>1.0.0-pre08</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
