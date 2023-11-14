@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<PackageProjectUrl>https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.Guards.ObjectExtensions</PackageProjectUrl>
 		<Description>Extension method to facilitate the creation of a Guard from a variable.</Description>
-		<Version>1.0.0-pre08</Version>
+		<Version>1.0.0-pre-08</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
