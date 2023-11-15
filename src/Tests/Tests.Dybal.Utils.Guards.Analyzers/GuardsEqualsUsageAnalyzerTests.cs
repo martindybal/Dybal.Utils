@@ -1,6 +1,5 @@
 using Dybal.Utils.Guards.Analyzers;
 using Microsoft.CodeAnalysis.Testing;
-using Newtonsoft.Json.Linq;
 using Tests.Dybal.Utils.Guards.Analyzers.Utilities;
 using Xunit;
 
