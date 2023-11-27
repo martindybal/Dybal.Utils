@@ -26,7 +26,7 @@ public class NotNullOrEmptyTests : UnitTestsBase
 
         void Act()
         {
-            Guard.Argument(value).NotNullOrEmpty(value);
+            Guard.Argument(value).NotNullOrEmpty();
         }
 
         // Assert
