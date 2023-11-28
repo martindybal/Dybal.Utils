@@ -13,7 +13,7 @@ public class AtLeastOneIsNotNullTests : UnitTestsBase
     [InlineData("A", null, null)]
     [InlineData(null, "A", null)]
     [InlineData(null, null, "A")]
-    public void NotThrow_When_at_least_one_value_is_not_null(object value1, object value2, object value3)
+    public void NotThrow_When_at_least_one_value_is_not_null(object? value1, object? value2, object? value3)
     {
         // Arrange
         var sample = new
