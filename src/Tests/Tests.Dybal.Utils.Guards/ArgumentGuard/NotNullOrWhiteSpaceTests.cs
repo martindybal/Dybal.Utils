@@ -75,7 +75,7 @@ public class NotNullOrWhiteSpaceTests : UnitTestsBase
 
         void Act()
         {
-            value = Guard.Argument(value).NotNullOrEmpty(customMessage);
+            value = Guard.Argument(value).NotNullOrWhiteSpace(customMessage);
         }
 
         // Assert
@@ -93,7 +93,7 @@ public class NotNullOrWhiteSpaceTests : UnitTestsBase
         void Act()
         {
             ThrowHelper.TryRegister((paramName, message) => new CustomException(paramName, message));
-            value = Guard.Argument(value).Throws<CustomException>().NotNullOrEmpty(customMessage);
+            value = Guard.Argument(value).Throws<CustomException>().NotNullOrWhiteSpace(customMessage);
         }
 
         // Assert
