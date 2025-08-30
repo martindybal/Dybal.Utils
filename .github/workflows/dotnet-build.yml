@@ -22,8 +22,6 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build Utils/Dybal.Utils.TypedValues.SourceGenerators/Dybal.Utils.TypedValues.SourceGenerators.csproj --configuration ${{ matrix.configuration }} --no-restore
-      - name: Build
         run: dotnet build Analyzers/Dybal.Utils.Guards.Analyzers/Dybal.Utils.Guards.Analyzers.csproj --configuration ${{ matrix.configuration }} --no-restore
       - name: Build
         run: dotnet build --configuration ${{ matrix.configuration }} --no-restore  
