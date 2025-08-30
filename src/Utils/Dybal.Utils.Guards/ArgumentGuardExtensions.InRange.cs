@@ -2,7 +2,7 @@ namespace Dybal.Utils.Guards;
 
 public static partial class ArgumentGuardExtensions
 {
-    public static ArgumentGuard<T> InRange<T>(this ArgumentGuard<T> guard, T min, T max, bool inclusive = true)
+    public static ArgumentGuard<T> InRange<T>(this ArgumentGuard<T> guard, T min, T max, bool inclusive = true, string? message = null)
         where T : IComparable<T>
     {
         var value = guard.Argument.Value;
@@ -14,7 +14,7 @@ public static partial class ArgumentGuardExtensions
         {
             var rangeRepresentation = inclusive ? $"[{min}, {max}]" : $"({min}, {max})";
             var defaultMessage = $"Value of parameter '{guard.Argument.Name}' ({value}) must be in the range {rangeRepresentation}.";
-            ThrowHelper.Throw<ArgumentOutOfRangeException>(guard, defaultMessage);
+            ThrowHelper.Throw<ArgumentOutOfRangeException>(guard, message ?? defaultMessage);
         }
 
         return guard;
