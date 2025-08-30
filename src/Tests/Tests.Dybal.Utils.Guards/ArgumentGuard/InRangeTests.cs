@@ -94,5 +94,23 @@ public class InRangeTests : UnitTestsBase
         var ex = Assert.Throws<ArgumentOutOfRangeException>(Act);
         Assert.Equal("Value of parameter 'value' (10) must be in the range (1, 10). (Parameter 'value')", ex.Message);
     }
+
+    [Fact]
+    public void Throw_ArgumentOutOfRangeException_with_custom_message_When_was_used()
+    {
+        // Arrange
+        int value = 0;
+        var customMessage = "Custom message.";
+
+        // Act
+        void Act()
+        {
+            value = Guard.Argument(value).InRange(1, 10, message: customMessage);
+        }
+
+        // Assert
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(Act);
+        Assert.Equal($"{customMessage} (Parameter 'value')", ex.Message);
+    }
 }
 
