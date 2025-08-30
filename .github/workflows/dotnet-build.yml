@@ -1,6 +1,6 @@
 name: dotnet build and tests
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
@@ -11,18 +11,16 @@ jobs:
     strategy:
       matrix:
         configuration: [Release, Debug]
-        dotnet-version: [ '7.0.x' ]
+        dotnet-version: ['8.0.x']
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v2
+      - uses: actions/checkout@v5
+      - name: Setup .NET SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
         run: dotnet restore
-      - name: Build
-        run: dotnet build Utils/Dybal.Utils.TypedValues.SourceGenerators/Dybal.Utils.TypedValues.SourceGenerators.csproj --configuration ${{ matrix.configuration }} --no-restore
       - name: Build
         run: dotnet build Analyzers/Dybal.Utils.Guards.Analyzers/Dybal.Utils.Guards.Analyzers.csproj --configuration ${{ matrix.configuration }} --no-restore
       - name: Build
@@ -30,7 +28,7 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal --logger trx --results-directory "TestResults/${{ matrix.dotnet-version }}/${{ matrix.configuration }}"
       - name: Upload dotnet test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: dotnet-results-${{ matrix.dotnet-version }}-${{ matrix.configuration }}
           path: src/TestResults/${{ matrix.dotnet-version }}/${{ matrix.configuration }}

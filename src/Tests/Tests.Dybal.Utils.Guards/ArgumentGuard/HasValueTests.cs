@@ -71,14 +71,8 @@ public class HasValueTests : UnitTestsBase
         Assert.Equal("Nullable object must have a value.", customException.Message);
     }
 
-    class CustomException : Exception
+    class CustomException(string paramName, string? message) : Exception(message)
     {
-        public string ParamName { get; }
-
-        public CustomException(string paramName, string? message)
-            : base(message)
-        {
-            ParamName = paramName;
-        }
+        public string ParamName { get; } = paramName;
     }
 }
