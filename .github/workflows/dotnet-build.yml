@@ -11,11 +11,11 @@ jobs:
     strategy:
       matrix:
         configuration: [Release, Debug]
-        dotnet-version: [ '8.0.x' ]
+        dotnet-version: ['8.0.x']
 
     steps:
       - uses: actions/checkout@v5
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+      - name: Setup .NET SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
@@ -28,7 +28,7 @@ jobs:
       - name: Build
         run: dotnet build --configuration ${{ matrix.configuration }} --no-restore  
       - name: Test
-        run: dotnet test --no-restore --verbosity normal --logger trx --results-directory "TestResults/${{ matrix.dotnet-version }}/${{ matrix.configuration }}"
+        run: dotnet test --no-build --verbosity normal --logger trx --results-directory "TestResults/${{ matrix.dotnet-version }}/${{ matrix.configuration }}"
       - name: Upload dotnet test results
         uses: actions/upload-artifact@v4
         with:
