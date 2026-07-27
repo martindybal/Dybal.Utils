@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Dybal.Utils.Guards;
@@ -8,7 +9,7 @@ public static class ThrowHelper
     public delegate TException ExceptionFactory<out TException>(string paramName, string? message = null)
         where TException : Exception;
 
-    private static readonly Dictionary<Type, ExceptionFactory<Exception>> supportedExceptions = new();
+    private static readonly ConcurrentDictionary<Type, ExceptionFactory<Exception>> supportedExceptions = new();
 
     static ThrowHelper()
     {
