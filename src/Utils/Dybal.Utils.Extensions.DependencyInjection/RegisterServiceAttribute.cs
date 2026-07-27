@@ -2,7 +2,7 @@
 
 namespace Dybal.Utils.Extensions.DependencyInjection;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class RegisterServiceAttribute : Attribute
 {
     public ServiceLifetime Lifetime { get; }
@@ -15,7 +15,7 @@ public class RegisterServiceAttribute : Attribute
     }
 }
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class RegisterServiceAttribute<TAs> : RegisterServiceAttribute
 {
     public RegisterServiceAttribute(ServiceLifetime lifetime) : base(lifetime, typeof(TAs))

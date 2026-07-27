@@ -94,3 +94,34 @@ public class SomeScopedService
 ```
 
 These attributes register the service with their respective lifetimes. They can also be used with interfaces.
+
+### Register one implementation under multiple service types (shared instance)
+
+A single implementation can be registered under several service types by applying the registration attribute more than once. All service types that share the same lifetime resolve to a **single shared instance**.
+
+```C#
+[RegisterSingletonService<IReverseGeocodingService>]
+[RegisterSingletonService<IAddressSearchService>]
+public class MapyCzReverseGeocodingService : IReverseGeocodingService, IAddressSearchService
+{
+    // Implementation goes here...
+}
+```
+
+Both `IReverseGeocodingService` and `IAddressSearchService` resolve to the same `MapyCzReverseGeocodingService` singleton. The concrete type stays hidden from the container - it is not injectable on its own.
+
+If you also want the concrete type to be injectable, opt in explicitly with the parameterless attribute:
+
+```C#
+[RegisterSingletonService]
+[RegisterSingletonService<IReverseGeocodingService>]
+[RegisterSingletonService<IAddressSearchService>]
+public class MapyCzReverseGeocodingService : IReverseGeocodingService, IAddressSearchService
+{
+    // Implementation goes here...
+}
+```
+
+Now the concrete type and both interfaces all resolve to the same shared instance.
+
+The shared-instance guarantee is meaningful for `Singleton` and `Scoped` lifetimes (for `Scoped` the instance is shared within a scope). `Transient` produces a new instance per resolution by design, so each declared service type yields its own instance.
