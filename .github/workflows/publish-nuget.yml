@@ -1,29 +1,100 @@
-name: Upload packages to nuget
+name: Publish package to NuGet
+
+# One GitHub Release publishes exactly one package.
+# The release tag selects which package and which version to publish, using the
+# format "<PackageId>-<Version>", e.g. "Dybal.Utils.Guards-1.2.3".
+#
+# Authentication uses NuGet Trusted Publishing (OIDC) - no long-lived API key is
+# stored in the repository. See RELEASING.md for the one-time nuget.org setup.
 
 on:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
-  deploy:
+  publish:
+    name: Pack & push to NuGet
     runs-on: ubuntu-latest
-    strategy:
-        matrix:
-            project: ["src/Utils/Dybal.Utils.Guards", "src/Utils/Dybal.Utils.Guards.ObjectExtensions", "src/Utils/Dybal.Utils.Extensions.DependencyInjection"]
     permissions:
-      packages: write
+      id-token: write   # required to request the OIDC token for Trusted Publishing
       contents: read
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v3
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
-          source-url: https://nuget.pkg.github.com/martindybal/index.json
+
+      - name: Resolve package from release tag
+        id: pkg
+        shell: bash
         env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: dotnet build src/Dybal.Utils.sln --configuration Release
-      - name: Create the package
-        run: dotnet pack ${{ matrix.project }} --configuration Release
-      - name: Push Package to NuGet.org
-        continue-on-error: true
-        run: dotnet nuget push ${{ matrix.project }}/bin/Release/*.nupkg -k ${{ secrets.NUGET_ORG_API_KEY }} -s https://api.nuget.org/v3/index.json
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+
+          # The version starts at the first '-' followed by a digit, so package ids
+          # containing dots (and versions containing '-', e.g. pre-release tags) split
+          # correctly: "Dybal.Utils.TypedValues-1.0.0-pre-08" -> id + "1.0.0-pre-08".
+          package_id="$(printf '%s' "$TAG" | sed -E 's/-[0-9].*$//')"
+          version="${TAG#"${package_id}-"}"
+          project="src/Utils/${package_id}/${package_id}.csproj"
+
+          if [ "$package_id" = "$TAG" ] || [ -z "$version" ]; then
+            echo "::error::Release tag '$TAG' must use the '<PackageId>-<Version>' format (for example 'Dybal.Utils.Guards-1.2.3')."
+            exit 1
+          fi
+          if [ ! -f "$project" ]; then
+            echo "::error::No publishable project found for package '$package_id' (expected '$project')."
+            exit 1
+          fi
+
+          {
+            echo "package_id=$package_id"
+            echo "version=$version"
+            echo "project=$project"
+          } >> "$GITHUB_OUTPUT"
+          echo "Resolved release '$TAG' -> pack '$project' as version '$version'."
+
+      - name: Pack
+        shell: bash
+        env:
+          PROJECT: ${{ steps.pkg.outputs.project }}
+          PACKAGE_ID: ${{ steps.pkg.outputs.package_id }}
+          VERSION: ${{ steps.pkg.outputs.version }}
+          NUPKG_DIR: ${{ runner.temp }}/nupkg
+        run: |
+          set -euo pipefail
+          dotnet pack "$PROJECT" --configuration Release --output "$NUPKG_DIR"
+
+          # The <Version> in the project is the single source of truth for the package
+          # version (this keeps inter-package dependency versions correct). Fail loudly
+          # if the release tag does not match it.
+          expected="$NUPKG_DIR/${PACKAGE_ID}.${VERSION}.nupkg"
+          if [ ! -f "$expected" ]; then
+            echo "::error::Release tag version '$VERSION' does not match the <Version> in $PROJECT. Bump the project version to match the tag before releasing."
+            echo "Packed files were:"
+            ls -1 "$NUPKG_DIR"
+            exit 1
+          fi
+
+      - name: Authenticate to NuGet (Trusted Publishing / OIDC)
+        uses: NuGet/login@v1
+        id: nuget-login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push
+        shell: bash
+        env:
+          NUPKG_DIR: ${{ runner.temp }}/nupkg
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: |
+          set -euo pipefail
+          # Pushing the .nupkg also pushes the matching .snupkg symbols package.
+          dotnet nuget push "$NUPKG_DIR/*.nupkg" \
+            --api-key "$NUGET_API_KEY" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
