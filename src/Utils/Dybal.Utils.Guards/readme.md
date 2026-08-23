@@ -59,6 +59,73 @@ Foo(Guid? id, string bar)
 }
 ```
 
+## Common mistakes
+### ❌ Don't evaluate the check yourself and guard the result
+Spotted in the wild, on an enum parameter:
+
+```C#
+void SetState(State state)
+{
+    Guard.Argument(Enum.IsDefined(state)).EqualTo(true);
+}
+```
+
+It compiles, and it does throw for an invalid `state`, so it looks like it works. It doesn't - this is what the caller gets:
+
+```
+Value of parameter 'Enum.IsDefined(state)' (False) must be equal to value of parameter 'true' (True). (Parameter 'Enum.IsDefined(state)')
+```
+
+Three things went wrong, and all of them have the same root cause - **the guard never saw `state`, it only saw a `bool`**.
+
+1. **`ParamName` is garbage.** `Guard.Argument` fills the argument name from [`[CallerArgumentExpression]`](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/caller-information#callerargumentexpression-attribute), which captures the *source text of whatever you wrote inside the parentheses* - not the variable it happens to read. That text is `Enum.IsDefined(state)`, so `ArgumentException.ParamName` is literally `"Enum.IsDefined(state)"`. Anything that keys off the parameter name breaks, for example `catch (ArgumentException ex) when (ex.ParamName == nameof(state))`.
+2. **The offending value is lost.** By the time the guard runs, `state` has already collapsed into `false`. The message can say *that* something was invalid, but never *which* state was passed - so the exception is useless for diagnosing a production bug.
+3. **The intent is lost.** `EqualTo(true)` documents the mechanics of the check, not the rule being enforced.
+
+### ✅ Pass the argument itself and let the guard do the check
+
+```C#
+void SetState(State state)
+{
+    Guard.Argument(state).EnumDefined();
+}
+```
+
+```
+Value of parameter 'state' (7) must be defined in enum 'State'. (Parameter 'state')
+```
+
+Correct name, the actual invalid value, and the rule that was violated. `EnumDefined` also works on `State?`, where it rejects `null` too and hands back a non-nullable `State`:
+
+```C#
+void SetState(State? state)
+{
+    State value = Guard.Argument(state).EnumDefined();
+}
+```
+
+### The rule generalises beyond enums
+**Whatever you write inside `Guard.Argument(...)` becomes the reported parameter name.** Pass the argument, never an expression computed from it:
+
+```C#
+Guard.Argument(bar.Length).GreaterThan(5);   // ❌ ParamName is "bar.Length"
+Guard.Argument(bar).MinLength(5);            // ✅ ParamName is "bar"
+```
+
+If no guard fits your rule, [write your own extension](#extensible) rather than pre-computing a `bool` - that keeps the argument, and therefore its name and value, all the way to the exception.
+
+### `EnumDefined` and `[Flags]`
+`EnumDefined` is built on `Enum.IsDefined`, which only recognises values *declared* in the enum. A legitimate combination of flags is not declared, so it is reported as undefined:
+
+```C#
+[Flags]
+enum Permissions { Read = 1, Write = 2 }
+
+Guard.Argument(Permissions.Read | Permissions.Write).EnumDefined();   // throws
+```
+
+Don't use `EnumDefined` on `[Flags]` enums.
+
 ## Documentation
 ### Documentation written in C# may be harder to read, but it never lies and it's always up to date.
 https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.Guards
