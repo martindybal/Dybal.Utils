@@ -114,6 +114,17 @@ Guard.Argument(bar).MinLength(5);            // ✅ ParamName is "bar"
 
 If no guard fits your rule, [write your own extension](#extensible) rather than pre-computing a `bool` - that keeps the argument, and therefore its name and value, all the way to the exception.
 
+### You don't have to remember this
+The analyzer shipped inside this package reports it for you. Handing a guard a condition you evaluated yourself - a method call, a comparison, a negation, an `is` pattern - is **Guards04**:
+
+```
+warning Guards04: Guard received the condition "Enum.IsDefined(state)" instead of the argument itself,
+so "Enum.IsDefined(state)" will be reported as the parameter name and the offending value is lost.
+Pass the argument and let a guard do the check.
+```
+
+It covers `Guard.Argument(...)`, `Guard.Arguments(...)`, the `using static GuardProvider` shortcut and the `.Guard()` object extension. A plain `bool` argument - `Guard.Argument(isEnabled).True()` - is left alone.
+
 ### `EnumDefined` and `[Flags]`
 `EnumDefined` is built on `Enum.IsDefined`, which only recognises values *declared* in the enum. A legitimate combination of flags is not declared, so it is reported as undefined:
 

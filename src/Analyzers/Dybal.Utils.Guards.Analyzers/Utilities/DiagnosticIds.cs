@@ -7,4 +7,5 @@ public static class DiagnosticIds
 
     public const string ArgumentGuard_UseEqualToInsteadOfEquals = "Guards02";
     public const string MultipleArgumentGuard_DoNotUseEquals = "Guards03";
+    public const string Guard_DoNotGuardComputedCondition = "Guards04";
 }

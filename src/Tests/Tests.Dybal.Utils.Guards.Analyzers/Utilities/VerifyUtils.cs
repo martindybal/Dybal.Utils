@@ -1,4 +1,5 @@
 ﻿using Dybal.Utils.Guards;
+using Dybal.Utils.Guards.ObjectExtensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Testing;
@@ -17,7 +18,11 @@ public static class VerifyUtils<TAnalyzer>
             TestState =
             {
                 ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
-                AdditionalReferences = { MetadataReference.CreateFromFile(typeof(Guard).Assembly.Location) }
+                AdditionalReferences =
+                {
+                    MetadataReference.CreateFromFile(typeof(Guard).Assembly.Location),
+                    MetadataReference.CreateFromFile(typeof(GuardObjectExtensionsExtensions).Assembly.Location),
+                }
             }
         };
 
