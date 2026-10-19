@@ -2,6 +2,12 @@ namespace Dybal.Utils.Guards;
 
 public static partial class ArgumentGuardExtensions
 {
+    public static ArgumentGuard<IEnumerable<TItem>> NotNullOrEmpty<TItem>(this ICovariantArgumentGuard<IEnumerable<TItem>?> covariantGuard, string? message = null)
+    {
+        var guard = ArgumentGuard<IEnumerable<TItem>>.From(covariantGuard, covariantGuard.Argument!);
+        return guard.NotNullOrEmpty<IEnumerable<TItem>, TItem>(message);
+    }
+
     public static ArgumentGuard<TEnumerable> NotNullOrEmpty<TEnumerable, TItem>(this ICovariantArgumentGuard<TEnumerable> covariantGuard, string? message = null)
         where TEnumerable : IEnumerable<TItem>
     {

@@ -1,4 +1,4 @@
-﻿# Dybal.Utils.Guards
+# Dybal.Utils.Guards
 The primary purpose of Dybal.Utils.Guards is to simplify writing input data checks to the object.
 
 # Make your code readable as much as you can
@@ -59,6 +59,46 @@ Foo(Guid? id, string bar)
 }
 ```
 
+## Validation helpers
+
+Always pass the value being validated to `Guard.Argument`. Use a dedicated guard, or `Satisfies` for a rule specific to your application:
+
+```C#
+Guard.Argument(accuracy).Finite().GreaterThanOrEqualTo(0);
+Guard.Argument(state).EnumDefined();
+Guard.Argument(timestamp).Utc();
+Guard.Argument(callbackUri).Absolute();
+Guard.Argument(connectors).NotNull().UniqueBy(connector => connector.Key, StringComparer.Ordinal);
+Guard.Argument(status).OneOf(allowedStatuses);
+Guard.Argument(optionalLabel).NotWhiteSpaceIfNotNull();
+Guard.Argument(configuration).NotNull().Satisfies(value => value.Start < value.End);
+```
+
+| Guard | Behavior |
+| --- | --- |
+| `Finite` | Rejects NaN and both infinities for `double` and `float`. Nullable overloads allow null and preserve the nullable type. |
+| `Utc` | Requires `DateTimeKind.Utc`; does not convert the timestamp. Use `NotDefault` separately when needed. |
+| `Absolute` | Rejects null and relative URI values; does not restrict the URI scheme. |
+| `Unique`, `UniqueBy` | Reject duplicate items or keys, with an optional equality comparer. Enumerate the sequence once and keep its original reference. |
+| `OneOf` | Requires membership in the allowed values, with an optional equality comparer. |
+| `NotWhiteSpaceIfNotNull` | Allows null, rejects empty and whitespace strings. |
+| `ContainsOnly` | Requires every UTF-16 `char` to belong to the supplied alphabet. Empty text is allowed. |
+| `DoesNotContainDuplicateCharacters` | Rejects repeated UTF-16 `char` values. Empty text is allowed. |
+| `DivisibleBy` | Requires an integer to be divisible by a nonzero divisor. |
+| `Satisfies` | Runs the predicate against the original value and retains its parameter name and exception override. |
+
+`Guard.Arguments(text, attachmentUrl).AtLeastOneIsNotNullOrWhiteSpace()` requires at least one nonblank string. All supplied values must be strings or null.
+
+`EqualTo` and `NotEqualTo` use `EqualityComparer<T>.Default`, including for enums and nullable values. Equality does not prove that an enum value is defined.
+
+Collection guard results support enumeration directly:
+
+```C#
+List<Item> validatedItems = [.. Guard.Argument(items).NotNull().DoesNotContainNull()];
+```
+
+These guards validate sequences without materializing them. A later enumeration observes the source again, so a single-use iterator should first be materialized by the caller.
+
 ## Common mistakes
 ### ❌ Don't evaluate the check yourself and guard the result
 Spotted in the wild, on an enum parameter:
@@ -78,7 +118,7 @@ Value of parameter 'Enum.IsDefined(state)' (False) must be equal to value of par
 
 Three things went wrong, and all of them have the same root cause - **the guard never saw `state`, it only saw a `bool`**.
 
-1. **`ParamName` is garbage.** `Guard.Argument` fills the argument name from [`[CallerArgumentExpression]`](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/attributes/caller-information#callerargumentexpression-attribute), which captures the *source text of whatever you wrote inside the parentheses* - not the variable it happens to read. That text is `Enum.IsDefined(state)`, so `ArgumentException.ParamName` is literally `"Enum.IsDefined(state)"`. Anything that keys off the parameter name breaks, for example `catch (ArgumentException ex) when (ex.ParamName == nameof(state))`.
+1. **`ParamName` describes the condition.** `Guard.Argument` fills the argument name from `[CallerArgumentExpression]`, capturing the expression `Enum.IsDefined(state)`. An explicit `nameof(state)` can fix the name, but cannot recover the original value.
 2. **The offending value is lost.** By the time the guard runs, `state` has already collapsed into `false`. The message can say *that* something was invalid, but never *which* state was passed - so the exception is useless for diagnosing a production bug.
 3. **The intent is lost.** `EqualTo(true)` documents the mechanics of the check, not the rule being enforced.
 
@@ -109,21 +149,34 @@ void SetState(State? state)
 
 ```C#
 Guard.Argument(bar.Length).GreaterThan(5);   // ❌ ParamName is "bar.Length"
-Guard.Argument(bar).MinLength(5);            // ✅ ParamName is "bar"
+Guard.Argument(bar).MinLength(6);            // ✅ Same strict lower bound, original argument
 ```
 
-If no guard fits your rule, [write your own extension](#extensible) rather than pre-computing a `bool` - that keeps the argument, and therefore its name and value, all the way to the exception.
+If no guard fits your rule, use `Guard.Argument(value).Satisfies(predicate)` or [write your own extension](#extensible). The predicate runs inside the guard while the original argument remains available to report a failure.
 
 ### You don't have to remember this
-The analyzer shipped inside this package reports it for you. Handing a guard a condition you evaluated yourself - a method call, a comparison, a negation, an `is` pattern - is **Guards04**:
+The analyzers are bundled in the NuGet package and run during compilation:
 
-```
-warning Guards04: Guard received the condition "Enum.IsDefined(state)" instead of the argument itself,
-so "Enum.IsDefined(state)" will be reported as the parameter name and the offending value is lost.
-Pass the argument and let a guard do the check.
-```
+| Diagnostic | Incorrect usage | Correct usage |
+| --- | --- | --- |
+| `Guards02` | `guard.Equals(value)` | `guard.EqualTo(value)` |
+| `Guards03` | `multipleGuard.Equals(value)` | Validate the individual arguments explicitly |
+| `Guards04` | `Guard.Argument(double.IsFinite(accuracy), nameof(accuracy)).EqualTo(true)` | `Guard.Argument(accuracy).Finite()` |
+| `Guards05` | `Guard.Argument(isEnabled).EqualTo(true)` | `Guard.Argument(isEnabled).True()` |
+| `Guards06` | Guard a collection count, distinct count or string length | Use `Empty`, `NotEmpty`, `Unique`, `UniqueBy`, `MinLength` or `MaxLength` on the original value |
 
-It covers `Guard.Argument(...)`, `Guard.Arguments(...)`, the `using static GuardProvider` shortcut and the `.Guard()` object extension. A plain `bool` argument - `Guard.Argument(isEnabled).True()` - is left alone.
+Computed-condition detection covers `Guard.Argument(...)`, `Guard.Arguments(...)`, the `using static GuardProvider` shortcut and the `.Guard()` object extension, including explicit argument names. A plain `bool` argument or property, such as `Guard.Argument(options.IsEnabled).True()`, is valid. Replacing the terminal method alone does not repair `Guard.Argument(double.IsFinite(accuracy)).True()`.
+
+For nullable booleans, `True()` and `False()` both reject null. `NotEqualTo(true)` allows null, so the analyzer does not suggest replacing it with `False()`.
+
+Projects can enforce the diagnostics as errors in `.editorconfig`:
+
+```ini
+[*.cs]
+dotnet_diagnostic.Guards04.severity = error
+dotnet_diagnostic.Guards05.severity = error
+dotnet_diagnostic.Guards06.severity = error
+```
 
 ### `EnumDefined` and `[Flags]`
 `EnumDefined` is built on `Enum.IsDefined`, which only recognises values *declared* in the enum. A legitimate combination of flags is not declared, so it is reported as undefined:
