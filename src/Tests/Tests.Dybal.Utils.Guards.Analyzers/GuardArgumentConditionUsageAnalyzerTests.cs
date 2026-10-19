@@ -39,7 +39,7 @@ class Options
         var source = Usings + extraUsings + Types + @"
 class Program
 {
-    void Method(State state, bool flag, string text, int number, Options options)
+    void Method(State state, bool flag, bool? nullableFlag, string text, int number, double value, Options options)
     {
 " + body + @"
     }
@@ -171,5 +171,90 @@ class Program
     public async Task NoWarning_When_multiple_arguments_are_guarded_directly()
     {
         await Verify(@"        Guard.Arguments(text, options).AtLeastOneIsNotNull();");
+    }
+
+    [Theory]
+    [InlineData("(number > 5)")]
+    [InlineData("(bool)(number > 5)")]
+    [InlineData("(bool?)(number > 5)")]
+    [InlineData("(bool)(object)(number > 5)")]
+    [InlineData("nullableFlag & true")]
+    [InlineData("flag | options.IsEnabled")]
+    [InlineData("flag ^ options.IsEnabled")]
+    [InlineData("flag && options.IsEnabled")]
+    [InlineData("flag || options.IsEnabled")]
+    [InlineData("flag ? nullableFlag : false")]
+    [InlineData("nullableFlag ?? false")]
+    [InlineData("default(bool)")]
+    [InlineData("default(bool?)")]
+    [InlineData("text is object")]
+    [InlineData("text?.StartsWith(\"a\")")]
+    public async Task Warning_For_wrapped_nullable_and_other_computed_conditions(string expression)
+    {
+        await Verify("Guard.Argument({|#0:" + expression + "|});", Expected(expression));
+    }
+
+    [Fact]
+    public async Task Warning_With_explicit_argument_name()
+    {
+        await Verify(
+            @"Guard.Argument({|#0:double.IsFinite(value)|}, nameof(value)).EqualTo(true);",
+            Expected("double.IsFinite(value)"));
+    }
+
+    [Fact]
+    public async Task Warning_With_named_arguments_in_different_order()
+    {
+        await Verify(
+            @"Guard.Argument(argumentName: nameof(value), argumentValue: {|#0:double.IsFinite(value)|});",
+            Expected("double.IsFinite(value)"));
+    }
+
+    [Fact]
+    public async Task Warning_With_Guard_alias()
+    {
+        await Verify("using G = Dybal.Utils.Guards.Guard;", @"G.Argument({|#0:number > 0|});", Expected("number > 0"));
+    }
+
+    [Fact]
+    public async Task Warning_With_static_object_extension_invocation()
+    {
+        await Verify(
+            @"GuardObjectExtensionsExtensions.Guard({|#0:number > 0|}, nameof(number));",
+            Expected("number > 0"));
+    }
+
+    [Fact]
+    public async Task Warning_For_each_computed_argument_in_a_multiple_guard()
+    {
+        var second = new DiagnosticResult(GuardArgumentConditionUsageAnalyzer.DoNotGuardComputedConditionRule)
+            .WithLocation(1).WithArguments("number > 0");
+        await Verify(
+            @"Guard.Arguments(value2: {|#1:number > 0|}, value1: {|#0:double.IsFinite(value)|}, paramName1: nameof(value));",
+            Expected("double.IsFinite(value)"), second);
+    }
+
+    [Fact]
+    public async Task Warning_With_multiple_GuardProvider_arguments()
+    {
+        await Verify(GuardProviderUsing, @"Guard(text, {|#0:number > 0|});", Expected("number > 0"));
+    }
+
+    [Fact]
+    public async Task NoWarning_For_wrapped_direct_booleans_and_metadata()
+    {
+        await Verify(@"
+Guard.Argument((bool?)flag);
+Guard.Argument(nullableFlag);
+Guard.Argument(options?.IsEnabled);
+Guard.Argument(flag, argumentName: (string)(object)(number > 0));
+Guard.Arguments(flag, nullableFlag, paramName1: (string)(object)(number > 0));
+GuardObjectExtensionsExtensions.Guard(flag, (string)(object)(number > 0));");
+    }
+
+    [Fact]
+    public async Task NoWarning_For_an_unrelated_Guard_type()
+    {
+        await Verify("class OtherGuard { public static void Argument(bool value) { } }", @"OtherGuard.Argument(number > 0);");
     }
 }

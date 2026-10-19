@@ -1,13 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<PackageProjectUrl>https://github.com/martindybal/Dybal.Utils/tree/main/src/Utils/Dybal.Utils.Guards</PackageProjectUrl>
 		<Description>The primary purpose of Dybal.Utils.Guards is to simplify writing input data checks to the object.</Description>
-		<Version>1.0.1</Version>
+		<Version>1.1.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+		<ProjectReference Include="../../Analyzers/Dybal.Utils.Guards.Analyzers/Dybal.Utils.Guards.Analyzers.csproj" ReferenceOutputAssembly="false" PrivateAssets="all" />
 	</ItemGroup>
 	
 	<ItemGroup>
